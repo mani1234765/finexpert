@@ -8,11 +8,14 @@ from .quality_validator import (
     validate_required_content,
     check_duplicate,
 )
+from .similarity_validator import check_near_duplicate
 
 
 INPUT_FILE = "data/raw/finexpert.jsonl"
 VALIDATED_FILE = "data/processed/validated.jsonl"
 REJECTED_FILE = "data/rejected/rejected.jsonl"
+
+NEAR_DUPLICATE_THRESHOLD = 0.85
 
 
 def load_and_validate_data():
@@ -21,9 +24,11 @@ def load_and_validate_data():
     quality_valid = 0
     financial_valid = 0
     duplicates = 0
+    near_duplicates = 0
     rejected = 0
 
     existing_fingerprints = set()
+    existing_examples = []
 
     with (
         open(INPUT_FILE, "r") as input_file,
@@ -48,7 +53,6 @@ def load_and_validate_data():
                 schema_valid += 1
 
             except ValidationError as error:
-
                 rejected += 1
 
                 rejected_example = {
@@ -73,7 +77,6 @@ def load_and_validate_data():
             )
 
             if not quality_result["success"]:
-
                 rejected += 1
 
                 rejected_example = {
@@ -102,7 +105,6 @@ def load_and_validate_data():
             )
 
             if not financial_result["success"]:
-
                 rejected += 1
 
                 rejected_example = {
@@ -122,7 +124,7 @@ def load_and_validate_data():
             financial_valid += 1
 
             # -----------------------------------
-            # 4. Duplicate detection
+            # 4. Exact duplicate detection
             # -----------------------------------
 
             duplicate_result = check_duplicate(
@@ -131,7 +133,6 @@ def load_and_validate_data():
             )
 
             if not duplicate_result["success"]:
-
                 duplicates += 1
                 rejected += 1
 
@@ -150,12 +151,49 @@ def load_and_validate_data():
                 continue
 
             # -----------------------------------
-            # 5. Accept example
+            # 5. Near-duplicate detection
+            # -----------------------------------
+
+            near_duplicate_result = check_near_duplicate(
+                validated,
+                existing_examples,
+                threshold=NEAR_DUPLICATE_THRESHOLD,
+            )
+
+            if not near_duplicate_result["success"]:
+                near_duplicates += 1
+                rejected += 1
+
+                rejected_example = {
+                    "example_id": validated.example_id,
+                    "example": example,
+                    "rejection_stage": "near_duplicate_detection",
+                    "rejection_reason": near_duplicate_result[
+                        "reason"
+                    ],
+                    "similarity": near_duplicate_result[
+                        "similarity"
+                    ],
+                    "matched_example_id": near_duplicate_result[
+                        "matched_example_id"
+                    ],
+                }
+
+                rejected_file.write(
+                    json.dumps(rejected_example) + "\n"
+                )
+
+                continue
+
+            # -----------------------------------
+            # 6. Accept example
             # -----------------------------------
 
             existing_fingerprints.add(
                 duplicate_result["fingerprint"]
             )
+
+            existing_examples.append(validated)
 
             validated_file.write(
                 json.dumps(
@@ -168,14 +206,13 @@ def load_and_validate_data():
     # -----------------------------------
 
     print("\n========== DATA VALIDATION SUMMARY ==========")
-
     print(f"Total examples:       {total}")
     print(f"Schema valid:         {schema_valid}")
     print(f"Quality valid:        {quality_valid}")
     print(f"Financial valid:      {financial_valid}")
     print(f"Duplicates:           {duplicates}")
-    print(f"Rejected:             {rejected}")
-
+    print(f"Near duplicates:      {near_duplicates}")
+    print(f"Rejected:              {rejected}")
     print("=============================================")
 
 
