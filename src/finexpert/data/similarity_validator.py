@@ -1,41 +1,50 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
+from .schema import FinancialExample
 
-def normalize_financial_text(text):
+
+SIMILARITY_THRESHOLD = 0.85
+
+
+def normalize_text(text):
     """
-    Normalize common financial terminology before
-    calculating similarity.
+    Normalize financial terminology before
+    similarity comparison.
     """
 
     replacements = {
         "increased": "grew",
         "increases": "grew",
         "increase": "grew",
-        "rose": "grew",
+        "declined": "fell",
+        "decreased": "fell",
+        "decreases": "fell",
+        "decrease": "fell",
         "crore": "cr",
         "crores": "cr",
-        "lakhs": "lakh",
-        "million": "mn",
-        "billion": "bn",
+        "million": "m",
+        "billion": "b",
     }
 
-    normalized_text = text.lower()
+    normalized = text.lower()
 
-    for old_value, new_value in replacements.items():
-        normalized_text = normalized_text.replace(
-            old_value,
-            new_value,
+    for old, new in replacements.items():
+        normalized = normalized.replace(
+            old,
+            new,
         )
 
-    return " ".join(normalized_text.split())
+    return normalized
 
 
 def build_example_text(example):
     """
-    Combine the important textual fields of a financial example.
+    Convert a FinancialExample into the text used
+    for similarity comparison.
 
-    Returns the original text without normalization.
+    example_id is intentionally excluded because
+    IDs should not affect semantic similarity.
     """
 
     return " ".join(
@@ -47,69 +56,177 @@ def build_example_text(example):
     )
 
 
-def calculate_similarity(example_a, example_b):
+def _as_text(value):
     """
-    Calculate cosine similarity between two financial examples.
-
-    Financial text is normalized before calculating similarity.
-
-    Returns a value between 0 and 1.
-
-    1.0 -> identical textual representation
-    0.0 -> completely different
+    Convert either a string or FinancialExample
+    into comparable text.
     """
 
-    text_a = normalize_financial_text(
-        build_example_text(example_a)
+    if isinstance(value, FinancialExample):
+        return build_example_text(value)
+
+    if isinstance(value, str):
+        return value
+
+    raise TypeError(
+        "value must be a string or FinancialExample"
     )
 
-    text_b = normalize_financial_text(
-        build_example_text(example_b)
-    )
 
-    vectorizer = TfidfVectorizer()
+def calculate_similarity(
+    text_a,
+    text_b,
+):
+    """
+    Calculate cosine similarity between two strings
+    or FinancialExample objects.
+    """
+
+    text_a = _as_text(text_a)
+    text_b = _as_text(text_b)
+
+    normalized_a = normalize_text(text_a)
+    normalized_b = normalize_text(text_b)
+
+    # Avoid floating-point values such as
+    # 1.0000000000000004 for identical text.
+    if normalized_a == normalized_b:
+        return 1.0
+
+    vectorizer = TfidfVectorizer(
+        lowercase=True,
+        ngram_range=(1, 2),
+    )
 
     vectors = vectorizer.fit_transform(
-        [text_a, text_b]
+        [
+            normalized_a,
+            normalized_b,
+        ]
     )
 
     similarity = cosine_similarity(
-        vectors[0],
-        vectors[1],
+        vectors[0:1],
+        vectors[1:2],
     )[0][0]
 
-    return float(similarity)
+    similarity = float(
+        round(
+            similarity,
+            10,
+        )
+    )
+
+    # Protect against tiny floating-point overflow.
+    if similarity > 1.0:
+        similarity = 1.0
+
+    if similarity < 0.0:
+        similarity = 0.0
+
+    return similarity
+
+
+def build_similarity_matrix(
+    examples,
+):
+    """
+    Build a TF-IDF cosine similarity matrix.
+    """
+
+    if not examples:
+        return []
+
+    texts = [
+        normalize_text(
+            build_example_text(example)
+        )
+        for example in examples
+    ]
+
+    vectorizer = TfidfVectorizer(
+        lowercase=True,
+        ngram_range=(1, 2),
+    )
+
+    vectors = vectorizer.fit_transform(
+        texts
+    )
+
+    return cosine_similarity(
+        vectors
+    )
 
 
 def check_near_duplicate(
     example,
     existing_examples,
-    threshold=0.85,
+    threshold=SIMILARITY_THRESHOLD,
 ):
     """
-    Check whether an example is too similar
-    to an existing example.
+    Check whether an example is a near duplicate
+    of any existing example.
     """
 
-    for existing_example in existing_examples:
+    if not existing_examples:
+        return {
+            "success": True,
+            "reason": None,
+            "similarity": 0.0,
+            "matched_example_id": None,
+        }
 
-        similarity = calculate_similarity(
-            example,
-            existing_example,
-        )
+    all_examples = [
+        *existing_examples,
+        example,
+    ]
 
-        if similarity >= threshold:
+    similarity_matrix = build_similarity_matrix(
+        all_examples
+    )
 
-            return {
-                "success": False,
-                "reason": "near_duplicate_example",
-                "similarity": similarity,
-                "matched_example_id": (
-                    existing_example.example_id
-                ),
-            }
+    new_index = len(all_examples) - 1
+
+    similarities = similarity_matrix[
+        new_index,
+        :-1,
+    ]
+
+    if len(similarities) == 0:
+        return {
+            "success": True,
+            "reason": None,
+            "similarity": 0.0,
+            "matched_example_id": None,
+        }
+
+    max_index = int(
+        similarities.argmax()
+    )
+
+    max_similarity = float(
+        similarities[max_index]
+    )
+
+    matched_example = existing_examples[
+        max_index
+    ]
+
+    matched_example_id = (
+        matched_example.example_id
+    )
+
+    if max_similarity >= threshold:
+        return {
+            "success": False,
+            "reason": "near_duplicate_example",
+            "similarity": max_similarity,
+            "matched_example_id": matched_example_id,
+        }
 
     return {
         "success": True,
         "reason": None,
+        "similarity": max_similarity,
+        "matched_example_id": None,
     }
