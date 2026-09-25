@@ -59,6 +59,22 @@ def _validate_growth_claim(
             "reason": "no_financial_claims_found",
         }
 
+    # Group input claims by metric, preserving the order they appear
+    # in the text. A metric can legitimately appear more than once
+    # (e.g. "revenue" once for the primary scenario and again inside
+    # an appended related-scenario context). Matching every output
+    # claim against the *first* same-named input claim -- regardless
+    # of which occurrence it actually belongs to -- caused primary
+    # and related claims to be cross-checked against each other's
+    # numbers, producing false "incorrect_financial_claim" failures.
+    # Consuming claims in appearance order keeps each output claim
+    # paired with the correct occurrence instead.
+    remaining_by_metric = {}
+    for input_claim in input_claims:
+        remaining_by_metric.setdefault(
+            input_claim["metric"], []
+        ).append(input_claim)
+
     validated_claims = []
 
     for output_claim in output_claims:
@@ -72,16 +88,12 @@ def _validate_growth_claim(
                 "metric": metric,
             }
 
-        matching_input_claim = None
+        bucket = remaining_by_metric.get(metric)
 
-        for input_claim in input_claims:
-
-            if input_claim["metric"] == metric:
-                matching_input_claim = input_claim
-                break
-
-        if matching_input_claim is None:
+        if not bucket:
             continue
+
+        matching_input_claim = bucket.pop(0)
 
         calculated = percentage_change(
             matching_input_claim["previous_value"],

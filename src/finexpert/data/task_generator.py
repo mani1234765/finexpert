@@ -408,20 +408,16 @@ def _report_output(
 
 
 def _normalize_legacy_input(base, scenario_type, scenario):
-    if scenario_type == "debt_leverage":
-        previous_debt = scenario["metrics"]["previous_debt"]
-        current_debt = scenario["metrics"]["current_debt"]
-        direction = (
-            "increased"
-            if current_debt > previous_debt
-            else "declined"
-            if current_debt < previous_debt
-            else "remained"
-        )
-        base["input"] = base["input"].replace(
-            "total debt moved from",
-            f"total debt {direction} from",
-        )
+    # NOTE: debt_leverage input text intentionally keeps the neutral
+    # "moved from X to Y" wording. Rewriting it to "increased/declined
+    # from" makes the claim parser treat debt as a value-change claim,
+    # which then requires a matching *output* growth claim in a
+    # supported metric -- but "debt" is deliberately excluded from
+    # SUPPORTED_GROWTH_METRICS (see example_validator.py). That
+    # combination made every debt_leverage example unconditionally
+    # fail financial validation. Do not "fix" this by re-adding a
+    # debt-specific rewrite here without also revisiting
+    # SUPPORTED_GROWTH_METRICS.
 
     if scenario_type in {
         "multi_metric_comparison",
@@ -452,7 +448,8 @@ def _append_debt_claim(base, scenario):
         direction = "remained unchanged"
 
     base["expected_output"] += (
-        f" Total debt {direction} by {abs(debt_change):.1f}%."
+        f" Total debt {direction} by approximately "
+        f"{abs(debt_change):.1f} percent."
     )
 
 

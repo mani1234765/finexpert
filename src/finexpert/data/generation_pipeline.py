@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+from .consistency_validator import validate_input_output_consistency
 from .example_validator import validate_financial_example
 from .quality_validator import (
     check_duplicate,
@@ -147,6 +148,8 @@ def generate_and_validate_examples(
     schema_errors = 0
     quality_errors = 0
     generation_errors = 0
+    repeated_scenario_numerics = 0
+    consistency_errors = 0
 
     with output_file.open("w", encoding="utf-8") as file:
         for scenario_type in SCENARIO_TYPES:
@@ -207,6 +210,7 @@ def generate_and_validate_examples(
                     # used by different training tasks, and cross-task duplicates
                     # should not consume the dataset's diversity budget.
                     if metric_fingerprint in scenario_metric_fingerprints[scenario_type]:
+                        repeated_scenario_numerics += 1
                         rejected += 1
                         continue
 
@@ -277,6 +281,21 @@ def generate_and_validate_examples(
                             f"financial error: {financial_reason}"
                         )
                         continue
+
+                consistency_result = validate_input_output_consistency(
+                    example_id=example.example_id,
+                    input_text=example.input,
+                    expected_output=example.expected_output,
+                )
+                if not consistency_result["success"]:
+                    consistency_errors += 1
+                    rejected += 1
+                    print(
+                        f"[REJECTED] {scenario_type} | "
+                        f"consistency error: "
+                        f"{consistency_result['untraceable_metrics']}"
+                    )
+                    continue
 
                 duplicate_result = check_duplicate(
                     example,
@@ -356,6 +375,8 @@ def generate_and_validate_examples(
     print(f"Schema errors:       {schema_errors}")
     print(f"Quality errors:      {quality_errors}")
     print(f"Generation errors:   {generation_errors}")
+    print(f"Consistency errors:  {consistency_errors}")
+    print(f"Repeated numerics:   {repeated_scenario_numerics}")
 
     print("\n------------- SCENARIOS -------------")
     for scenario in SCENARIO_TYPES:
@@ -382,6 +403,8 @@ def generate_and_validate_examples(
         "schema_errors": schema_errors,
         "quality_errors": quality_errors,
         "generation_errors": generation_errors,
+        "consistency_errors": consistency_errors,
+        "repeated_scenario_numerics": repeated_scenario_numerics,
         "scenario_counts": scenario_counts,
         "task_counts": task_counts,
         "difficulty_counts": difficulty_counts,

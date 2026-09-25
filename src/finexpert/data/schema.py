@@ -19,7 +19,6 @@ class ReasoningType(str, Enum):
     RISK_ANALYSIS = "risk_analysis"
     COMPARISON = "comparison"
     CAUSAL_REASONING = "causal_reasoning"
-reasoning_type: list[ReasoningType] = Field(min_length=1)
 class FinancialExample(BaseModel):
     example_id: str
     instruction: str
