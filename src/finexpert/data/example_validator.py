@@ -15,6 +15,7 @@ SUPPORTED_GROWTH_METRICS = {
     "earnings",
     "expenses",
     "operating expenses",
+    "cash flow",
 }
 
 
@@ -31,21 +32,34 @@ def _validate_growth_claim(
         input_text
     )
 
+    output_claims = extract_growth_claims(
+        expected_output
+    )
+
+    if not input_claims and not output_claims:
+        # Nothing quantified in either the input or the
+        # output (e.g. a purely ratio-based explanation
+        # with no period-over-period change). There is no
+        # growth claim to verify, so this is trivially valid.
+        return {
+            "success": True,
+            "reason": None,
+            "details": {"claim_count": 0},
+        }
+
     if not input_claims:
         return {
             "success": False,
             "reason": "no_value_change_claims_found",
         }
 
-    output_claims = extract_growth_claims(
-        expected_output
-    )
-
     if not output_claims:
         return {
             "success": False,
-            "reason": "no_growth_claims_found",
+            "reason": "no_financial_claims_found",
         }
+
+    validated_claims = []
 
     for output_claim in output_claims:
 
@@ -95,23 +109,33 @@ def _validate_growth_claim(
         ):
             return {
                 "success": False,
-                "reason": "incorrect_calculation",
+                "reason": "incorrect_financial_claim",
                 "metric": metric,
                 "calculated_change": calculated_change,
                 "claimed_change": claimed_change,
             }
 
-        return {
-            "success": True,
-            "reason": None,
+        validated_claims.append({
             "metric": metric,
             "calculated_change": calculated_change,
             "claimed_change": claimed_change,
+        })
+
+    if not validated_claims:
+        return {
+            "success": False,
+            "reason": "no_matching_growth_claim_found",
         }
 
+    details = {
+        **validated_claims[-1],
+        "claim_count": len(validated_claims),
+    }
+
     return {
-        "success": False,
-        "reason": "no_matching_growth_claim_found",
+        "success": True,
+        "reason": None,
+        "details": details,
     }
 
 
