@@ -4,7 +4,7 @@ import re
 DIFFICULTY_RULES = {
     "easy": {
         "min_metrics": 1,
-        "max_metrics": 2,
+        "max_metrics": 3,
         "min_reasoning": 1,
         "min_complexity": 1,
     },
@@ -38,6 +38,9 @@ METRIC_PATTERNS = {
         r"\bnet income\b",
         r"\bearnings\b",
     ],
+    "profit": [
+        r"(?<!operating )(?<!net )\bprofit\b",
+    ],
     "expenses": [
         r"\bexpenses?\b",
         r"\bcosts?\b",
@@ -52,7 +55,7 @@ METRIC_PATTERNS = {
         r"\bcash reserves?\b",
     ],
     "assets": [
-        r"\bassets?\b",
+        r"(?<!current )\bassets?\b",
     ],
     "equity": [
         r"\bequity\b",

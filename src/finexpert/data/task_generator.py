@@ -556,27 +556,41 @@ def _classification_for(
             / metrics["revenue"]
         )
 
-        cash_debt = (
-            metrics["cash"]
-            / metrics["debt"]
-        )
-
-        margin = (
-            metrics["operating_profit"]
-            / metrics["revenue"]
-        )
-
         risk_points = int(
             leverage >= 1.0
         )
 
-        risk_points += int(
-            cash_debt < 0.20
+        positive_points = int(
+            leverage < 1.0
         )
 
-        risk_points += int(
-            margin < 0.10
-        )
+        if "cash" in metrics:
+            cash_debt = (
+                metrics["cash"]
+                / metrics["debt"]
+            )
+
+            risk_points += int(
+                cash_debt < 0.20
+            )
+
+            positive_points += int(
+                cash_debt >= 0.20
+            )
+
+        if "operating_profit" in metrics:
+            margin = (
+                metrics["operating_profit"]
+                / metrics["revenue"]
+            )
+
+            risk_points += int(
+                margin < 0.10
+            )
+
+            positive_points += int(
+                margin >= 0.10
+            )
 
         if risk_points >= 2:
             return "High Risk"

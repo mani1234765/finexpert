@@ -424,6 +424,31 @@ def _enrich_comprehensive(
     )
 
 
+def _enrich_risk_analysis(
+    metrics,
+    difficulty,
+):
+    """
+    The base risk_analysis scenario already includes
+    all four metrics (revenue, debt, cash, operating
+    profit). Unlike the other enrichers, this one trims
+    metrics DOWN for lower difficulties instead of adding
+    to them, so that an "easy" risk_analysis example only
+    covers leverage (debt vs. revenue), a "medium" example
+    adds liquidity (cash vs. debt), and a "hard" example
+    covers all four metrics including operating margin.
+    """
+
+    if difficulty == "easy":
+        metrics.pop("cash", None)
+        metrics.pop("operating_profit", None)
+
+    elif difficulty == "medium":
+        metrics.pop("operating_profit", None)
+
+    # hard: keep all four metrics as generated.
+
+
 # ============================================================
 # ENRICHER REGISTRY
 # ============================================================
@@ -444,6 +469,7 @@ ENRICHERS = {
     "liquidity": _enrich_liquidity,
     "cash_flow": _enrich_cash_flow,
     "efficiency": _enrich_efficiency,
+    "risk_analysis": _enrich_risk_analysis,
     "multi_metric_comparison": (
         _enrich_multi_metric
     ),
@@ -699,17 +725,28 @@ def _build_efficiency_input(
 def _build_risk_input(
     company,
     metrics,
+    difficulty=None,
 ):
-    return (
+    text = (
         f"{company} reported debt of "
-        f"₹{metrics['debt']:g} Cr, "
+        f"₹{metrics['debt']:g} Cr and "
         f"revenue of "
-        f"₹{metrics['revenue']:g} Cr, "
-        f"cash of "
-        f"₹{metrics['cash']:g} Cr, "
-        f"and operating profit of "
-        f"₹{metrics['operating_profit']:g} Cr."
+        f"₹{metrics['revenue']:g} Cr."
     )
+
+    if "cash" in metrics:
+        text += (
+            f" Cash was "
+            f"₹{metrics['cash']:g} Cr."
+        )
+
+    if "operating_profit" in metrics:
+        text += (
+            f" Operating profit was "
+            f"₹{metrics['operating_profit']:g} Cr."
+        )
+
+    return text
 
 
 def _build_multi_input(
@@ -1083,6 +1120,7 @@ def build_difficulty_scenario(
         difficulty_input = builder(
             company,
             metrics,
+            difficulty,
         )
     else:
         difficulty_input = builder(
