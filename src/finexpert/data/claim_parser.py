@@ -9,14 +9,38 @@ def extract_percentage_claims(text):
         Revenue increased by 15%.
         Profit declined by 8.5%.
         Margin increased to 16.4%.
+        Revenue increasing by 10%.
+        Profit declining by 5%.
     """
 
     claims = []
 
     pattern = (
         r"(?P<direction>"
-        r"increased|increases|grew|growth|rose|"
-        r"declined|decreased|decreases|fell|drop|dropped"
+        r"increased|"
+        r"increasing|"
+        r"increase|"
+        r"increases|"
+        r"grew|"
+        r"growing|"
+        r"growth|"
+        r"grow|"
+        r"rose|"
+        r"rising|"
+        r"rise|"
+        r"declined|"
+        r"declining|"
+        r"decline|"
+        r"decreased|"
+        r"decreasing|"
+        r"decrease|"
+        r"decreases|"
+        r"fell|"
+        r"falling|"
+        r"fall|"
+        r"drop|"
+        r"dropped|"
+        r"dropping"
         r")?"
         r"\s*"
         r"(?:by\s*)?"
@@ -31,22 +55,32 @@ def extract_percentage_claims(text):
     )
 
     for match in matches:
+
         value = float(
             match.group("value")
         )
 
-        direction = match.group("direction")
+        direction = match.group(
+            "direction"
+        )
 
         if direction:
             direction = direction.lower()
 
             negative_words = {
                 "declined",
+                "declining",
+                "decline",
                 "decreased",
+                "decreasing",
+                "decrease",
                 "decreases",
                 "fell",
+                "falling",
+                "fall",
                 "drop",
                 "dropped",
+                "dropping",
             }
 
             if (
@@ -94,11 +128,14 @@ def extract_money_values(text):
     )
 
     for match in matches:
+
         value = float(
             match.group("value")
         )
 
-        unit = match.group("unit")
+        unit = match.group(
+            "unit"
+        )
 
         if unit:
             unit = unit.lower()
@@ -116,23 +153,21 @@ def extract_money_values(text):
 
 def extract_growth_claims(text):
     """
-    Extract financial growth claims.
+    Extract metric-specific growth claims.
 
     Examples:
         Revenue increased by 15%.
+        Revenue increasing by 15%.
         Net profit declined by 8.6%.
         Operating expenses increased by 10%.
     """
 
     claims = []
 
-    # IMPORTANT:
-    # Longer metric names must come before shorter
-    # metric names. Otherwise "expenses" would match
-    # inside "operating expenses".
     pattern = (
         r"(?P<metric>"
         r"operating expenses|"
+        r"operating expense|"
         r"operating profit|"
         r"net profit|"
         r"cash reserves|"
@@ -146,9 +181,29 @@ def extract_growth_claims(text):
         r")"
         r"\s+"
         r"(?P<direction>"
-        r"increased|increases|grew|rose|"
-        r"declined|decreased|decreases|fell|"
-        r"dropped|drop"
+        r"increased|"
+        r"increasing|"
+        r"increase|"
+        r"increases|"
+        r"grew|"
+        r"growing|"
+        r"grow|"
+        r"rose|"
+        r"rising|"
+        r"rise|"
+        r"declined|"
+        r"declining|"
+        r"decline|"
+        r"decreased|"
+        r"decreasing|"
+        r"decrease|"
+        r"decreases|"
+        r"fell|"
+        r"falling|"
+        r"fall|"
+        r"dropped|"
+        r"dropping|"
+        r"drop"
         r")"
         r"\s+"
         r"(?:by\s+)?"
@@ -163,6 +218,7 @@ def extract_growth_claims(text):
     )
 
     for match in matches:
+
         metric = match.group(
             "metric"
         ).lower()
@@ -177,10 +233,17 @@ def extract_growth_claims(text):
 
         negative_words = {
             "declined",
+            "declining",
+            "decline",
             "decreased",
+            "decreasing",
+            "decrease",
             "decreases",
             "fell",
+            "falling",
+            "fall",
             "dropped",
+            "dropping",
             "drop",
         }
 
@@ -204,16 +267,19 @@ def extract_value_change_claims(text):
 
     Examples:
         Revenue increased from ₹100 Cr to ₹130 Cr.
+        Revenue increasing from ₹100 Cr to ₹130 Cr.
+        Revenue grew from ₹100 Cr to ₹130 Cr.
         Operating profit declined from ₹20 Cr to ₹15 Cr.
+        Operating profit declining from ₹20 Cr to ₹15 Cr.
         Operating expenses increased from ₹40 Cr to ₹50 Cr.
     """
 
     claims = []
 
-    # Longer metric names must come first.
     pattern = (
         r"(?P<metric>"
         r"operating expenses|"
+        r"operating expense|"
         r"operating profit|"
         r"net profit|"
         r"cash reserves|"
@@ -227,9 +293,29 @@ def extract_value_change_claims(text):
         r")"
         r"\s+"
         r"(?P<direction>"
-        r"increased|increases|grew|rose|"
-        r"declined|decreased|decreases|fell|"
-        r"dropped|drop"
+        r"increased|"
+        r"increasing|"
+        r"increase|"
+        r"increases|"
+        r"grew|"
+        r"growing|"
+        r"grow|"
+        r"rose|"
+        r"rising|"
+        r"rise|"
+        r"declined|"
+        r"declining|"
+        r"decline|"
+        r"decreased|"
+        r"decreasing|"
+        r"decrease|"
+        r"decreases|"
+        r"fell|"
+        r"falling|"
+        r"fall|"
+        r"dropped|"
+        r"dropping|"
+        r"drop"
         r")"
         r"\s+"
         r"from\s+"
@@ -255,16 +341,21 @@ def extract_value_change_claims(text):
     )
 
     for match in matches:
+
         metric = match.group(
             "metric"
         ).lower()
 
         previous_value = float(
-            match.group("previous_value")
+            match.group(
+                "previous_value"
+            )
         )
 
         current_value = float(
-            match.group("current_value")
+            match.group(
+                "current_value"
+            )
         )
 
         previous_unit = match.group(
@@ -276,10 +367,14 @@ def extract_value_change_claims(text):
         )
 
         if previous_unit:
-            previous_unit = previous_unit.lower()
+            previous_unit = (
+                previous_unit.lower()
+            )
 
         if current_unit:
-            current_unit = current_unit.lower()
+            current_unit = (
+                current_unit.lower()
+            )
 
         claims.append(
             {
@@ -288,7 +383,9 @@ def extract_value_change_claims(text):
                 "current_value": current_value,
                 "previous_unit": previous_unit,
                 "current_unit": current_unit,
-                "text": match.group(0).strip(),
+                "text": match.group(
+                    0
+                ).strip(),
             }
         )
 
@@ -301,7 +398,7 @@ def extract_margin_claims(text):
 
     Examples:
         Operating profit margin increased from 15% to 16.4%.
-        Operating profit margin decreased from 20% to 14.8%.
+        Operating profit margin declined from 20% to 14.8%.
         Net profit margin increased from 8% to 10%.
     """
 
@@ -315,9 +412,31 @@ def extract_margin_claims(text):
         r")"
         r"\s+"
         r"(?P<direction>"
-        r"increased|increases|grew|rose|"
-        r"declined|decreased|decreases|fell|"
-        r"dropped|drop|changed"
+        r"increased|"
+        r"increasing|"
+        r"increase|"
+        r"increases|"
+        r"grew|"
+        r"growing|"
+        r"grow|"
+        r"rose|"
+        r"rising|"
+        r"rise|"
+        r"declined|"
+        r"declining|"
+        r"decline|"
+        r"decreased|"
+        r"decreasing|"
+        r"decrease|"
+        r"decreases|"
+        r"fell|"
+        r"falling|"
+        r"fall|"
+        r"dropped|"
+        r"dropping|"
+        r"drop|"
+        r"changed|"
+        r"changing"
         r")?"
         r"\s*"
         r"(?:from\s+)?"
@@ -335,18 +454,25 @@ def extract_margin_claims(text):
     )
 
     for match in matches:
+
         claims.append(
             {
                 "metric": match.group(
                     "metric"
                 ).lower(),
                 "previous_value": float(
-                    match.group("previous_value")
+                    match.group(
+                        "previous_value"
+                    )
                 ),
                 "current_value": float(
-                    match.group("current_value")
+                    match.group(
+                        "current_value"
+                    )
                 ),
-                "text": match.group(0).strip(),
+                "text": match.group(
+                    0
+                ).strip(),
             }
         )
 
@@ -356,9 +482,6 @@ def extract_margin_claims(text):
 def extract_ratio_claims(text):
     """
     Extract financial ratio claims.
-
-    Supports ratios expressed using 'x' or
-    plain decimal values.
 
     Examples:
         Debt-to-equity ratio is 1.50.
@@ -394,6 +517,7 @@ def extract_ratio_claims(text):
     )
 
     for match in matches:
+
         metric = match.group(
             "metric"
         ).lower()
@@ -402,14 +526,18 @@ def extract_ratio_claims(text):
             match.group("value")
         )
 
-        unit = match.group("unit")
+        unit = match.group(
+            "unit"
+        )
 
         claims.append(
             {
                 "metric": metric,
                 "value": value,
                 "unit": unit,
-                "text": match.group(0).strip(),
+                "text": match.group(
+                    0
+                ).strip(),
             }
         )
 

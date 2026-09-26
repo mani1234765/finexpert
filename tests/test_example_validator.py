@@ -65,7 +65,7 @@ def test_no_expected_financial_claims():
     assert result["reason"] == "no_financial_claims_found"
 
 
-def test_unsupported_growth_metric():
+def test_supported_debt_growth_metric():
 
     result = validate_financial_example(
         example_id="test_6",
@@ -73,8 +73,7 @@ def test_unsupported_growth_metric():
         expected_output="Debt increased by 50%.",
     )
 
-    assert result["success"] is False
-    assert result["reason"] == "unsupported_growth_metric"
+    assert result["success"] is True
 
 
 def test_multiple_claims_all_valid():

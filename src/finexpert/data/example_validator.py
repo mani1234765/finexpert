@@ -1,5 +1,3 @@
-import re
-
 from .claim_parser import (
     extract_growth_claims,
     extract_value_change_claims,
@@ -16,6 +14,9 @@ SUPPORTED_GROWTH_METRICS = {
     "expenses",
     "operating expenses",
     "cash flow",
+    "debt",
+    "cash",
+    "cash reserves",
 }
 
 
@@ -37,14 +38,12 @@ def _validate_growth_claim(
     )
 
     if not input_claims and not output_claims:
-        # Nothing quantified in either the input or the
-        # output (e.g. a purely ratio-based explanation
-        # with no period-over-period change). There is no
-        # growth claim to verify, so this is trivially valid.
         return {
             "success": True,
             "reason": None,
-            "details": {"claim_count": 0},
+            "details": {
+                "claim_count": 0,
+            },
         }
 
     if not input_claims:
@@ -59,22 +58,6 @@ def _validate_growth_claim(
             "reason": "no_financial_claims_found",
         }
 
-    # Group input claims by metric, preserving the order they appear
-    # in the text. A metric can legitimately appear more than once
-    # (e.g. "revenue" once for the primary scenario and again inside
-    # an appended related-scenario context). Matching every output
-    # claim against the *first* same-named input claim -- regardless
-    # of which occurrence it actually belongs to -- caused primary
-    # and related claims to be cross-checked against each other's
-    # numbers, producing false "incorrect_financial_claim" failures.
-    # Consuming claims in appearance order keeps each output claim
-    # paired with the correct occurrence instead.
-    remaining_by_metric = {}
-    for input_claim in input_claims:
-        remaining_by_metric.setdefault(
-            input_claim["metric"], []
-        ).append(input_claim)
-
     validated_claims = []
 
     for output_claim in output_claims:
@@ -88,12 +71,16 @@ def _validate_growth_claim(
                 "metric": metric,
             }
 
-        bucket = remaining_by_metric.get(metric)
+        matching_input_claim = None
 
-        if not bucket:
+        for input_claim in input_claims:
+
+            if input_claim["metric"] == metric:
+                matching_input_claim = input_claim
+                break
+
+        if matching_input_claim is None:
             continue
-
-        matching_input_claim = bucket.pop(0)
 
         calculated = percentage_change(
             matching_input_claim["previous_value"],
