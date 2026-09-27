@@ -113,16 +113,16 @@ def extract_financial_metrics(text):
     """
 
     if not text:
-        return []
+        return set()
 
     text_lower = text.lower()
 
-    found = []
+    found = set()
 
     for metric, patterns in METRIC_PATTERNS.items():
         for pattern in patterns:
             if re.search(pattern, text_lower):
-                found.append(metric)
+                found.add(metric)
                 break
 
     return found
@@ -404,8 +404,8 @@ def calculate_reasoning_complexity(
 
 def validate_difficulty(
     input_text,
-    expected_output,
-    difficulty,
+    expected_output=None,
+    difficulty=None,
     reasoning_types=None,
 ):
     """
@@ -417,34 +417,62 @@ def validate_difficulty(
         {
             "success": True/False,
             "reason": ...,
-            "details": {...}
+            "details": {...},
+            "metric_count": ...
         }
     """
+        # Backward-compatible support for validate_difficulty(example)
+    if expected_output is None and difficulty is None:
+        example = input_text
+
+        input_text = example.input
+        expected_output = example.expected_output
+        difficulty = (
+            example.difficulty.value
+            if hasattr(example.difficulty, "value")
+            else example.difficulty
+        )
+
+        reasoning_types = [
+            (
+                reasoning_type.value
+                if hasattr(reasoning_type, "value")
+                else reasoning_type
+            )
+            for reasoning_type in (example.reasoning_type or [])
+        ]
+
+    if reasoning_types is None:
+        reasoning_types = []
+
+    combined_text = f"{input_text or ''}\n{expected_output or ''}"
+
+    metrics = extract_financial_metrics(combined_text)
+    metric_count = len(metrics)
+
 
     if difficulty not in DIFFICULTY_RULES:
         return {
             "success": False,
             "reason": "unsupported_difficulty",
+            "metric_count": metric_count,
         }
 
     if not input_text or not input_text.strip():
         return {
             "success": False,
             "reason": "empty_input",
+            "metric_count": metric_count,
         }
 
     if not expected_output or not expected_output.strip():
         return {
             "success": False,
             "reason": "empty_expected_output",
+            "metric_count": metric_count,
         }
 
     reasoning_types = reasoning_types or []
-
-    combined_text = f"{input_text}\n{expected_output}"
-
-    metrics = extract_financial_metrics(combined_text)
-    metric_count = len(metrics)
 
     number_count = len(extract_numbers(combined_text))
     percentage_count = count_percentage_claims(combined_text)
@@ -472,7 +500,9 @@ def validate_difficulty(
                 "metric_count": metric_count,
                 "required_minimum": rules["min_metrics"],
                 "complexity": complexity,
+                
             },
+            "metric_count": len(metrics),
         }
 
     if (
@@ -487,7 +517,9 @@ def validate_difficulty(
                 "metric_count": metric_count,
                 "maximum_allowed": rules["max_metrics"],
                 "complexity": complexity,
+                
             },
+            "metric_count": len(metrics),
         }
 
     # ---------------------------------------------------------
@@ -503,7 +535,9 @@ def validate_difficulty(
                 "reasoning_type_count": len(reasoning_types),
                 "required_minimum": rules["min_reasoning"],
                 "complexity": complexity,
+                
             },
+            "metric_count": len(metrics),
         }
 
     # ---------------------------------------------------------
@@ -525,7 +559,9 @@ def validate_difficulty(
                 "reasoning_type_count": len(reasoning_types),
                 "complexity": complexity,
                 "required_minimum": rules["min_complexity"],
+                
             },
+            "metric_count": len(metrics),
         }
 
     # ---------------------------------------------------------
@@ -543,6 +579,7 @@ def validate_difficulty(
                     "required_minimum": 3,
                     "complexity": complexity,
                 },
+                "metric_count": len(metrics),
             }
 
         if complexity < 6:
@@ -553,6 +590,7 @@ def validate_difficulty(
                     "complexity": complexity,
                     "required_minimum": 6,
                 },
+                "metric_count": len(metrics),
             }
 
     return {
@@ -569,4 +607,5 @@ def validate_difficulty(
             "reasoning_type_count": len(reasoning_types),
             "complexity": complexity,
         },
+        "metric_count": len(metrics),
     }

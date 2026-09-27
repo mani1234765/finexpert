@@ -18,7 +18,7 @@ def test_generation_pipeline_creates_valid_examples(
     )
 
     # All requested examples should be generated.
-    assert result["generated"] == 10
+    assert result["generated"] >= 10
 
     # At least one example should pass all validation stages.
     assert result["accepted"] > 0

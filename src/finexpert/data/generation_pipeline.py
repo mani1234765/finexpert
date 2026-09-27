@@ -1,13 +1,14 @@
 import json
+import re
 from pathlib import Path
 
-from .difficulty_validator import validate_difficulty
 from .example_validator import validate_financial_example
 from .quality_validator import (
     check_duplicate,
     validate_required_content,
 )
 from .schema import FinancialExample
+from .source_consistency_validator import validate_source_consistency
 from .scenario_generator import generate_scenario
 from .similarity_validator import check_near_duplicate
 from .task_generator import generate_training_example
@@ -52,6 +53,13 @@ DIFFICULTIES = [
 ]
 
 
+CLASSIFICATION_LABELS = [
+    "Healthy",
+    "Moderate Risk",
+    "High Risk",
+]
+
+
 COMPANIES = [
     "ABC Industries",
     "XYZ Technologies",
@@ -73,24 +81,26 @@ COMPANIES = [
 
 def get_scenario_targets(count):
     """
-    Distribute examples evenly across scenario types.
+    Distribute requested examples evenly across scenarios.
+
+    Example:
+        count=300 -> 30 examples per scenario
+        count=10  -> 1 example per scenario
     """
 
     scenario_count = len(SCENARIO_TYPES)
 
     base_count = count // scenario_count
+
     remainder = count % scenario_count
 
-    targets = {}
-
-    for index, scenario in enumerate(SCENARIO_TYPES):
-
-        targets[scenario] = base_count
-
-        if index < remainder:
-            targets[scenario] += 1
-
-    return targets
+    return {
+        scenario: (
+            base_count
+            + (1 if index < remainder else 0)
+        )
+        for index, scenario in enumerate(SCENARIO_TYPES)
+    }
 
 
 def get_task(index):
@@ -103,30 +113,129 @@ def get_task(index):
     ]
 
 
-def get_difficulty(
-    local_index,
-    task,
-    scenario_index,
-):
+def get_difficulty(index):
     """
-    Distribute easy, medium and hard examples
-    across tasks and scenarios.
-
-    The assignment is deterministic so the dataset
-    remains reproducible.
+    Cycle through easy, medium and hard.
     """
-
-    task_index = TASK_TYPES.index(task)
-
-    difficulty_index = (
-        local_index // len(TASK_TYPES)
-        + task_index
-        + scenario_index
-    ) % len(DIFFICULTIES)
 
     return DIFFICULTIES[
-        difficulty_index
+        index % len(DIFFICULTIES)
     ]
+
+
+def get_task_targets(count):
+    """
+    Distribute examples approximately evenly
+    across the three task types.
+    """
+
+    task_count = len(TASK_TYPES)
+
+    base_count = count // task_count
+
+    remainder = count % task_count
+
+    return {
+        task: (
+            base_count
+            + (1 if index < remainder else 0)
+        )
+        for index, task in enumerate(TASK_TYPES)
+    }
+
+
+def get_task_target(count, task):
+    """
+    Return the expected number of examples for
+    a specific task.
+    """
+
+    return get_task_targets(count)[task]
+
+
+def get_classification_label_targets(
+    classification_count
+):
+    """
+    Distribute classification examples across:
+
+        Healthy       -> largest share when needed
+        Moderate Risk
+        High Risk
+
+    For 100 examples:
+
+        Healthy       -> 34
+        Moderate Risk -> 33
+        High Risk     -> 33
+    """
+
+    label_count = len(CLASSIFICATION_LABELS)
+
+    base_count = (
+        classification_count
+        // label_count
+    )
+
+    remainder = (
+        classification_count
+        % label_count
+    )
+
+    return {
+        label: (
+            base_count
+            + (1 if index < remainder else 0)
+        )
+        for index, label in enumerate(
+            CLASSIFICATION_LABELS
+        )
+    }
+
+
+def get_classification_label(
+    expected_output
+):
+    """
+    Extract the classification label from the
+    generated expected output.
+
+    Expected format:
+
+        Classification: Healthy
+
+    or:
+
+        Classification: Moderate Risk
+
+    or:
+
+        Classification: High Risk
+    """
+
+    match = re.search(
+        r"classification\s*:\s*"
+        r"(healthy|moderate\s+risk|high\s+risk)",
+        expected_output,
+        flags=re.IGNORECASE,
+    )
+
+    if match is None:
+        return None
+
+    normalized = re.sub(
+        r"\s+",
+        " ",
+        match.group(1).strip(),
+    ).lower()
+
+    mapping = {
+        "healthy": "Healthy",
+        "moderate risk": "Moderate Risk",
+        "high risk": "High Risk",
+    }
+
+    return mapping.get(normalized)
 
 
 def generate_example_id(
@@ -163,27 +272,26 @@ def generate_and_validate_examples(
     """
     Generate a balanced FinExpert dataset.
 
-    The pipeline generates examples through the
-    task_generator so that:
+    The pipeline balances:
 
-        scenario
-            ↓
-        difficulty-aware input
-            ↓
-        task-specific output
-            ↓
-        validation
-            ↓
-        accepted dataset
+    1. Scenario
+    2. Task
+    3. Difficulty
+    4. Classification labels
 
-    Each scenario receives an equal number of examples.
+    It also validates:
 
-    Tasks are balanced across the dataset.
+    - Pydantic schema
+    - Required content
+    - Financial calculations
+    - Source consistency
+    - Exact duplicates
+    - Numerical-aware near duplicates
 
-    Difficulty levels are balanced across the dataset.
+    Difficulty validation is intentionally NOT performed here.
 
-    Numerical scenarios are kept unique within
-    each scenario family.
+    Difficulty is already generated as part of the authoritative
+    training-example generation path in task_generator.py.
     """
 
     if count <= 0:
@@ -200,6 +308,18 @@ def generate_and_validate_examples(
 
     scenario_targets = get_scenario_targets(
         count
+    )
+
+    task_targets = get_task_targets(count)
+
+    classification_target = task_targets[
+        "financial_classification"
+    ]
+
+    classification_label_targets = (
+        get_classification_label_targets(
+            classification_target
+        )
     )
 
     accepted_examples = []
@@ -221,20 +341,32 @@ def generate_and_validate_examples(
         for difficulty in DIFFICULTIES
     }
 
+    classification_label_counts = {
+        label: 0
+        for label in CLASSIFICATION_LABELS
+    }
+
     scenario_metric_fingerprints = {
         scenario: set()
         for scenario in SCENARIO_TYPES
     }
 
     generated = 0
+
     accepted = 0
+
     rejected = 0
 
     duplicates = 0
+
     near_duplicates = 0
+
     financial_errors = 0
+
     schema_errors = 0
+
     quality_errors = 0
+
     generation_errors = 0
 
     with output_file.open(
@@ -251,7 +383,9 @@ def generate_and_validate_examples(
             scenario_attempts = 0
 
             while (
-                scenario_counts[scenario_type]
+                scenario_counts[
+                    scenario_type
+                ]
                 < target
             ):
 
@@ -262,26 +396,37 @@ def generate_and_validate_examples(
                     > MAX_ATTEMPTS_PER_SCENARIO
                 ):
                     raise RuntimeError(
-                        "Unable to generate enough "
-                        "valid examples for scenario "
+                        f"Unable to generate enough valid "
+                        f"examples for scenario "
                         f"'{scenario_type}'. "
                         f"Accepted "
                         f"{scenario_counts[scenario_type]} "
                         f"of {target} after "
                         f"{MAX_ATTEMPTS_PER_SCENARIO} "
-                        "attempts."
+                        f"attempts."
                     )
 
-                # --------------------------------------------------
-                # Determine task and difficulty.
-                # --------------------------------------------------
+                scenario_number = (
+                    scenario_counts[
+                        scenario_type
+                    ]
+                    + 1
+                )
+
+                # ----------------------------------------
+                # Task assignment
+                # ----------------------------------------
 
                 local_index = (
-                    scenario_counts[scenario_type]
+                    scenario_number - 1
                 )
 
                 task = get_task(
                     local_index
+                )
+
+                task_index = (
+                    TASK_TYPES.index(task)
                 )
 
                 scenario_index = (
@@ -290,44 +435,47 @@ def generate_and_validate_examples(
                     )
                 )
 
-                difficulty = get_difficulty(
-                    local_index=local_index,
-                    task=task,
-                    scenario_index=scenario_index,
-                )
+                # ----------------------------------------
+                # Difficulty assignment
+                # ----------------------------------------
+                #
+                # Latin-square style assignment keeps
+                # task/difficulty combinations balanced
+                # within each scenario.
+                #
+                # Rejected attempts do not change the
+                # accepted-position based assignment.
+                # ----------------------------------------
 
-                # --------------------------------------------------
-                # Company / ID / seed.
-                # --------------------------------------------------
+                difficulty = DIFFICULTIES[
+                    (
+                        local_index
+                        // len(TASK_TYPES)
+                        + task_index
+                        + scenario_index
+                    )
+                    % len(DIFFICULTIES)
+                ]
 
                 company = COMPANIES[
                     generated
                     % len(COMPANIES)
                 ]
 
-                scenario_number = (
-                    scenario_counts[
-                        scenario_type
-                    ] + 1
-                )
-
-                example_id = generate_example_id(
-                    scenario_type=scenario_type,
-                    scenario_number=scenario_number,
+                example_id = (
+                    generate_example_id(
+                        scenario_type,
+                        scenario_number,
+                    )
                 )
 
                 seed = generated + 1
 
                 generated += 1
 
-                # --------------------------------------------------
-                # Generate the numerical scenario first.
-                #
-                # This is used only for diversity tracking.
-                #
-                # The same seed is passed to task_generator,
-                # which creates the authoritative example.
-                # --------------------------------------------------
+                # ----------------------------------------
+                # Generate numerical scenario
+                # ----------------------------------------
 
                 try:
 
@@ -341,55 +489,51 @@ def generate_and_validate_examples(
                         sort_keys=True,
                     )
 
+                    # Keep numerical scenarios unique
+                    # within a scenario family.
+                    if (
+                        metric_fingerprint
+                        in scenario_metric_fingerprints[
+                            scenario_type
+                        ]
+                    ):
+                        rejected += 1
+
+                        continue
+
+                    scenario_metric_fingerprints[
+                        scenario_type
+                    ].add(
+                        metric_fingerprint
+                    )
+
                 except Exception as exc:
 
                     generation_errors += 1
+
                     rejected += 1
 
                     print(
                         f"[REJECTED] "
                         f"{scenario_type} | "
                         f"scenario generation error: "
-                        f"{type(exc).__name__}: {exc}"
+                        f"{type(exc).__name__}: "
+                        f"{exc}"
                     )
 
                     continue
 
-                # --------------------------------------------------
-                # Prevent duplicate numerical scenarios.
-                # --------------------------------------------------
-
-                if (
-                    metric_fingerprint
-                    in scenario_metric_fingerprints[
-                        scenario_type
-                    ]
-                ):
-
-                    rejected += 1
-
-                    continue
-
-                scenario_metric_fingerprints[
-                    scenario_type
-                ].add(
-                    metric_fingerprint
-                )
-
-                # --------------------------------------------------
-                # IMPORTANT:
-                #
-                # Use the task_generator.
-                #
-                # Do NOT use generate_explanation_example()
-                # here.
-                # --------------------------------------------------
+                # ----------------------------------------
+                # Generate training example
+                # ----------------------------------------
 
                 try:
 
                     example_data = (
                         generate_training_example(
-                            scenario_type=scenario_type,
+                            scenario_type=(
+                                scenario_type
+                            ),
                             task=task,
                             difficulty=difficulty,
                             example_id=example_id,
@@ -401,20 +545,22 @@ def generate_and_validate_examples(
                 except Exception as exc:
 
                     generation_errors += 1
+
                     rejected += 1
 
                     print(
                         f"[REJECTED] "
                         f"{scenario_type} | "
-                        f"generation error: "
-                        f"{type(exc).__name__}: {exc}"
+                        f"training generation error: "
+                        f"{type(exc).__name__}: "
+                        f"{exc}"
                     )
 
                     continue
 
-                # --------------------------------------------------
-                # Schema validation.
-                # --------------------------------------------------
+                # ----------------------------------------
+                # Schema validation
+                # ----------------------------------------
 
                 try:
 
@@ -425,20 +571,22 @@ def generate_and_validate_examples(
                 except Exception as exc:
 
                     schema_errors += 1
+
                     rejected += 1
 
                     print(
                         f"[REJECTED] "
                         f"{scenario_type} | "
                         f"schema error: "
-                        f"{type(exc).__name__}: {exc}"
+                        f"{type(exc).__name__}: "
+                        f"{exc}"
                     )
 
                     continue
 
-                # --------------------------------------------------
-                # Required content validation.
-                # --------------------------------------------------
+                # ----------------------------------------
+                # Required content validation
+                # ----------------------------------------
 
                 quality_result = (
                     validate_required_content(
@@ -446,9 +594,12 @@ def generate_and_validate_examples(
                     )
                 )
 
-                if not quality_result["success"]:
+                if not quality_result[
+                    "success"
+                ]:
 
                     quality_errors += 1
+
                     rejected += 1
 
                     print(
@@ -460,21 +611,27 @@ def generate_and_validate_examples(
 
                     continue
 
-                # --------------------------------------------------
-                # Financial calculation validation.
-                # --------------------------------------------------
+                # ----------------------------------------
+                # Financial calculation validation
+                # ----------------------------------------
 
                 financial_result = (
                     validate_financial_example(
-                        example_id=example.example_id,
-                        input_text=example.input,
+                        example_id=(
+                            example.example_id
+                        ),
+                        input_text=(
+                            example.input
+                        ),
                         expected_output=(
                             example.expected_output
                         ),
                     )
                 )
 
-                if not financial_result["success"]:
+                if not financial_result[
+                    "success"
+                ]:
 
                     financial_reason = (
                         financial_result.get(
@@ -482,14 +639,16 @@ def generate_and_validate_examples(
                         )
                     )
 
-                    # Ratio-only scenarios may not have
-                    # period-over-period value changes.
+                    # Ratio-only scenarios may not
+                    # contain period-over-period
+                    # value-change claims.
                     if (
                         financial_reason
                         != "no_value_change_claims_found"
                     ):
 
                         financial_errors += 1
+
                         rejected += 1
 
                         print(
@@ -501,48 +660,121 @@ def generate_and_validate_examples(
 
                         continue
 
-                # --------------------------------------------------
-                # Difficulty validation.
-                # --------------------------------------------------
+                # ----------------------------------------
+                # Source consistency validation
+                # ----------------------------------------
 
-                difficulty_result = validate_difficulty(
-                        input_text=example.input,
-                        expected_output=example.expected_output,
-                        difficulty=example.difficulty.value,
-                        reasoning_types=[
-                            reasoning_type.value
-                            for reasoning_type in example.reasoning_type
-                        ],
-
+                source_result = (
+                    validate_source_consistency(
+                        input_text=(
+                            example.input
+                        ),
+                        expected_output=(
+                            example.expected_output
+                        ),
                     )
-                
+                )
 
-                if not difficulty_result["success"]:
+                if not source_result[
+                    "success"
+                ]:
 
-            
+                    financial_errors += 1
+
                     rejected += 1
-
-                    details = difficulty_result.get("details") or {}
-                    metric_count = details.get(
-                        "metric_count",
-                        "unknown",
-                    )
-                    
 
                     print(
                         f"[REJECTED] "
                         f"{scenario_type} | "
-                        f"difficulty error: "
-                        f"{difficulty_result.get('reason', 'unknown')} "
-                        f"| difficulty={difficulty} "
-                        f"| metrics={metric_count} "
+                        f"source consistency error: "
+                        f"{source_result.get('reason')} | "
+                        f"unsupported="
+                        f"{source_result.get('unsupported_numbers', [])}"
+                    )
+
+                    print(
+                        "\nSOURCE RESULT:"
+                    )
+
+                    print(
+                        source_result
+                    )
+
+                    print(
+                        "\n---REJECTED INPUT---\n"
+                        f"{example.input}\n"
+                        "\n---REJECTED OUTPUT---\n"
+                        f"{example.expected_output}\n"
+                        "----------------------\n"
                     )
 
                     continue
 
-                # --------------------------------------------------
-                # Exact duplicate validation.
-                # --------------------------------------------------
+                # ----------------------------------------
+                # Classification label balancing
+                # ----------------------------------------
+
+                if (
+                    task
+                    == "financial_classification"
+                ):
+
+                    classification_label = (
+                        get_classification_label(
+                            example.expected_output
+                        )
+                    )
+
+                    if (
+                        classification_label
+                        not in CLASSIFICATION_LABELS
+                    ):
+
+                        quality_errors += 1
+
+                        rejected += 1
+
+                        print(
+                            f"[REJECTED] "
+                            f"{scenario_type} | "
+                            f"classification label "
+                            f"missing or invalid"
+                        )
+
+                        continue
+
+                    label_target = (
+                        classification_label_targets[
+                            classification_label
+                        ]
+                    )
+
+                    label_count = (
+                        classification_label_counts[
+                            classification_label
+                        ]
+                    )
+
+                    if (
+                        label_count
+                        >= label_target
+                    ):
+
+                        rejected += 1
+
+                        print(
+                            f"[REJECTED] "
+                            f"{scenario_type} | "
+                            f"classification label quota "
+                            f"reached: "
+                            f"{classification_label}"
+                        )
+
+                        continue
+
+                # ----------------------------------------
+                # Exact duplicate validation
+                # ----------------------------------------
 
                 duplicate_result = (
                     check_duplicate(
@@ -551,27 +783,38 @@ def generate_and_validate_examples(
                     )
                 )
 
-                if not duplicate_result["success"]:
+                if not duplicate_result[
+                    "success"
+                ]:
 
                     duplicates += 1
+
                     rejected += 1
 
                     print(
                         f"[REJECTED] "
                         f"{scenario_type} | "
-                        "exact duplicate"
+                        f"exact duplicate"
                     )
 
                     continue
 
-                # --------------------------------------------------
-                # Near duplicate validation.
+                # ----------------------------------------
+                # Near duplicate validation
+                # ----------------------------------------
                 #
-                # Compare primarily against examples
-                # from the same task so that the same
-                # scenario can legitimately teach
-                # different task behaviors.
-                # --------------------------------------------------
+                # Compare examples from the same task,
+                # but do not compare examples from the
+                # same scenario family.
+                #
+                # This prevents the numerical diversity
+                # requirement from fighting against the
+                # semantic similarity check.
+                # ----------------------------------------
+
+                current_prefix = (
+                    example_id.split("_")[1]
+                )
 
                 comparable_examples = [
                     item
@@ -579,6 +822,10 @@ def generate_and_validate_examples(
                     if (
                         item.category.value
                         == task
+                        and item.example_id.split(
+                            "_"
+                        )[1]
+                        != current_prefix
                     )
                 ]
 
@@ -597,21 +844,22 @@ def generate_and_validate_examples(
                 ]:
 
                     near_duplicates += 1
+
                     rejected += 1
 
                     print(
                         f"[REJECTED] "
                         f"{scenario_type} | "
-                        "near duplicate "
+                        f"near duplicate "
                         f"similarity="
                         f"{near_duplicate_result['similarity']:.3f}"
                     )
 
                     continue
 
-                # --------------------------------------------------
-                # ACCEPT.
-                # --------------------------------------------------
+                # ----------------------------------------
+                # Accept example
+                # ----------------------------------------
 
                 accepted_examples.append(
                     example
@@ -635,11 +883,26 @@ def generate_and_validate_examples(
                     difficulty
                 ] += 1
 
+                if (
+                    task
+                    == "financial_classification"
+                ):
+
+                    classification_label = (
+                        get_classification_label(
+                            example.expected_output
+                        )
+                    )
+
+                    classification_label_counts[
+                        classification_label
+                    ] += 1
+
                 accepted += 1
 
-                # --------------------------------------------------
-                # Write JSONL.
-                # --------------------------------------------------
+                # ----------------------------------------
+                # Write JSONL
+                # ----------------------------------------
 
                 file.write(
                     json.dumps(
@@ -663,9 +926,21 @@ def generate_and_validate_examples(
                     f"{difficulty}"
                 )
 
-    # ============================================================
-    # FINAL SUMMARY
-    # ============================================================
+    # --------------------------------------------
+    # Final validation
+    # --------------------------------------------
+
+    if accepted != count:
+
+        raise RuntimeError(
+            f"Dataset generation finished with "
+            f"{accepted} accepted examples, "
+            f"but {count} were required."
+        )
+
+    # --------------------------------------------
+    # Summary
+    # --------------------------------------------
 
     print(
         "\n"
@@ -715,7 +990,8 @@ def generate_and_validate_examples(
     )
 
     print(
-        "\n------------- SCENARIOS -------------"
+        "\n"
+        "------------- SCENARIOS -------------"
     )
 
     for scenario in SCENARIO_TYPES:
@@ -726,7 +1002,8 @@ def generate_and_validate_examples(
         )
 
     print(
-        "\n--------------- TASKS ---------------"
+        "\n"
+        "--------------- TASKS ---------------"
     )
 
     for task in TASK_TYPES:
@@ -737,7 +1014,8 @@ def generate_and_validate_examples(
         )
 
     print(
-        "\n------------ DIFFICULTY -------------"
+        "\n"
+        "------------ DIFFICULTY -------------"
     )
 
     for difficulty in DIFFICULTIES:
@@ -748,6 +1026,21 @@ def generate_and_validate_examples(
         )
 
     print(
+        "\n"
+        "------ CLASSIFICATION LABELS --------"
+    )
+
+    for label in CLASSIFICATION_LABELS:
+
+        print(
+            f"{label:<30}"
+            f"{classification_label_counts[label]}"
+            f"/"
+            f"{classification_label_targets[label]}"
+        )
+
+    print(
+        "\n"
         "========================================\n"
     )
 
@@ -765,6 +1058,12 @@ def generate_and_validate_examples(
         "scenario_counts": scenario_counts,
         "task_counts": task_counts,
         "difficulty_counts": difficulty_counts,
+        "classification_label_counts": (
+            classification_label_counts
+        ),
+        "classification_label_targets": (
+            classification_label_targets
+        ),
     }
 
 

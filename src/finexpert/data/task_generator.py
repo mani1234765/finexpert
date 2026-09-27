@@ -1,5 +1,9 @@
 from .difficulty_scenarios import build_difficulty_scenario
 
+from .classification_rules import (
+    classify_financial_health,
+)
+
 
 from .schema import ReasoningType
 
@@ -347,140 +351,551 @@ def _build_hard_explanation(metrics):
 # ============================================================
 
 
-def _classification_from_enriched_metrics(metrics):
-    risk_points = 0
+def _add_change_signal(
+    metrics,
+    previous_key,
+    current_key,
+    positive_points,
+    risk_points,
+    positive_weight=1,
+    negative_weight=1,
+    strong_negative_threshold=None,
+    strong_negative_weight=None,
+):
+    """
+    Add a classification signal from a previous/current metric pair.
+
+    Returns updated:
+        positive_points
+        risk_points
+    """
+
+    if (
+        previous_key not in metrics
+        or current_key not in metrics
+    ):
+        return (
+            positive_points,
+            risk_points,
+        )
+
+    previous_value = metrics[previous_key]
+    current_value = metrics[current_key]
+
+    change = _percentage(
+        previous_value,
+        current_value,
+    )
+
+    if change is None:
+        return (
+            positive_points,
+            risk_points,
+        )
+
+    if change > 0:
+
+        positive_points += positive_weight
+
+    elif change < 0:
+
+        if (
+            strong_negative_threshold is not None
+            and change <= strong_negative_threshold
+            and strong_negative_weight is not None
+        ):
+            risk_points += strong_negative_weight
+        else:
+            risk_points += negative_weight
+
+    return (
+        positive_points,
+        risk_points,
+    )
+
+
+def _classification_from_all_metrics(metrics):
+    """
+    Classify overall financial health using every
+    relevant financial signal available in the scenario.
+
+    This function is specifically used for the
+    financial_classification task.
+
+    The important principle is:
+
+        classification should reflect the full
+        information provided in the input.
+
+    Signals considered when available:
+
+        Revenue
+        Operating profit
+        Net profit
+        Generic profit
+        Debt
+        Cash
+        Cash flow
+        Operating expenses
+        Current ratio
+        Asset turnover
+        ROA
+        Debt-to-revenue
+        Cash-to-debt
+        Operating margin
+
+    Scoring:
+
+        Positive signals add positive points.
+
+        Risk signals add risk points.
+
+        Large negative signals receive higher risk weight.
+
+    Final labels:
+
+        risk >= positive + 2
+            -> High Risk
+
+        positive >= risk + 2
+            -> Healthy
+
+        otherwise
+            -> Moderate Risk
+    """
+
     positive_points = 0
+    risk_points = 0
 
-    # Revenue
+    # --------------------------------------------------------
+    # REVENUE
+    # --------------------------------------------------------
+
+    (
+        positive_points,
+        risk_points,
+    ) = _add_change_signal(
+        metrics=metrics,
+        previous_key="previous_revenue",
+        current_key="current_revenue",
+        positive_points=positive_points,
+        risk_points=risk_points,
+        positive_weight=1,
+        negative_weight=1,
+    )
+
+    # --------------------------------------------------------
+    # OPERATING PROFIT
+    # --------------------------------------------------------
+
+    (
+        positive_points,
+        risk_points,
+    ) = _add_change_signal(
+        metrics=metrics,
+        previous_key="previous_operating_profit",
+        current_key="current_operating_profit",
+        positive_points=positive_points,
+        risk_points=risk_points,
+        positive_weight=2,
+        negative_weight=2,
+        strong_negative_threshold=-20,
+        strong_negative_weight=3,
+    )
+
+    # --------------------------------------------------------
+    # NET PROFIT
+    # --------------------------------------------------------
+
+    (
+        positive_points,
+        risk_points,
+    ) = _add_change_signal(
+        metrics=metrics,
+        previous_key="previous_net_profit",
+        current_key="current_net_profit",
+        positive_points=positive_points,
+        risk_points=risk_points,
+        positive_weight=2,
+        negative_weight=2,
+        strong_negative_threshold=-20,
+        strong_negative_weight=3,
+    )
+
+    # --------------------------------------------------------
+    # GENERIC PROFIT
+    #
+    # Only use this when net profit and operating profit
+    # are not already available.
+    # --------------------------------------------------------
+
     if (
-        "previous_revenue" in metrics
-        and "current_revenue" in metrics
+        "previous_net_profit" not in metrics
+        and "current_net_profit" not in metrics
+        and "previous_operating_profit" not in metrics
+        and "current_operating_profit" not in metrics
     ):
-        change = _percentage(
-            metrics["previous_revenue"],
-            metrics["current_revenue"],
+        (
+            positive_points,
+            risk_points,
+        ) = _add_change_signal(
+            metrics=metrics,
+            previous_key="previous_profit",
+            current_key="current_profit",
+            positive_points=positive_points,
+            risk_points=risk_points,
+            positive_weight=2,
+            negative_weight=2,
+            strong_negative_threshold=-20,
+            strong_negative_weight=3,
         )
 
-        if change > 0:
-            positive_points += 1
-        elif change < 0:
-            risk_points += 1
+    # --------------------------------------------------------
+    # DEBT
+    # --------------------------------------------------------
 
-    # Operating profit
-    if (
-        "previous_operating_profit" in metrics
-        and "current_operating_profit" in metrics
-    ):
-        change = _percentage(
-            metrics["previous_operating_profit"],
-            metrics["current_operating_profit"],
-        )
-
-        if change > 0:
-            positive_points += 2
-        elif change < 0:
-            risk_points += 2
-
-    # Net profit
-    if (
-        "previous_net_profit" in metrics
-        and "current_net_profit" in metrics
-    ):
-        change = _percentage(
-            metrics["previous_net_profit"],
-            metrics["current_net_profit"],
-        )
-
-        if change > 0:
-            positive_points += 2
-        elif change < 0:
-            risk_points += 2
-
-    # Profit
-    elif (
-        "previous_profit" in metrics
-        and "current_profit" in metrics
-    ):
-        change = _percentage(
-            metrics["previous_profit"],
-            metrics["current_profit"],
-        )
-
-        if change > 0:
-            positive_points += 2
-        elif change < 0:
-            risk_points += 2
-
-    # Debt
     if (
         "previous_debt" in metrics
         and "current_debt" in metrics
     ):
-        change = _percentage(
+
+        debt_change = _percentage(
             metrics["previous_debt"],
             metrics["current_debt"],
         )
 
-        if change >= 30:
-            risk_points += 2
-        elif change > 10:
-            risk_points += 1
-        elif change <= 0:
-            positive_points += 1
+        if debt_change is not None:
 
-    # Cash
+            if debt_change >= 30:
+                risk_points += 3
+
+            elif debt_change > 10:
+                risk_points += 1
+
+            elif debt_change <= 0:
+                positive_points += 1
+
+    # --------------------------------------------------------
+    # CASH
+    # --------------------------------------------------------
+
     if (
         "previous_cash" in metrics
         and "current_cash" in metrics
     ):
-        change = _percentage(
+
+        cash_change = _percentage(
             metrics["previous_cash"],
             metrics["current_cash"],
         )
 
-        if change < -10:
-            risk_points += 2
-        elif change < 0:
-            risk_points += 1
-        elif change > 0:
-            positive_points += 1
+        if cash_change is not None:
 
-    # Cash flow
+            if cash_change <= -10:
+                risk_points += 2
+
+            elif cash_change < 0:
+                risk_points += 1
+
+            elif cash_change > 0:
+                positive_points += 1
+
+    # --------------------------------------------------------
+    # CASH FLOW
+    # --------------------------------------------------------
+
     if (
         "previous_cash_flow" in metrics
         and "current_cash_flow" in metrics
     ):
-        change = _percentage(
-            metrics["previous_cash_flow"],
-            metrics["current_cash_flow"],
+
+        previous_cash_flow = metrics[
+            "previous_cash_flow"
+        ]
+
+        current_cash_flow = metrics[
+            "current_cash_flow"
+        ]
+
+        cash_flow_change = _percentage(
+            previous_cash_flow,
+            current_cash_flow,
         )
 
-        if (
-            metrics["current_cash_flow"] <= 0
-            or change <= -20
+        if current_cash_flow <= 0:
+
+            risk_points += 3
+
+        elif (
+            cash_flow_change is not None
+            and cash_flow_change <= -20
         ):
+
             risk_points += 2
-        elif change < 0:
+
+        elif (
+            cash_flow_change is not None
+            and cash_flow_change < 0
+        ):
+
             risk_points += 1
-        elif change > 0:
+
+        elif (
+            cash_flow_change is not None
+            and cash_flow_change > 0
+        ):
+
             positive_points += 1
 
-    # Operating expenses
+    # --------------------------------------------------------
+    # OPERATING EXPENSES
+    # --------------------------------------------------------
+
     if (
         "previous_operating_expenses" in metrics
         and "current_operating_expenses" in metrics
     ):
-        change = _percentage(
-            metrics["previous_operating_expenses"],
-            metrics["current_operating_expenses"],
+
+        expense_change = _percentage(
+            metrics[
+                "previous_operating_expenses"
+            ],
+            metrics[
+                "current_operating_expenses"
+            ],
         )
 
-        if change >= 25:
-            risk_points += 2
-        elif change > 10:
-            risk_points += 1
-        elif change <= 0:
-            positive_points += 1
+        if expense_change is not None:
+
+            if expense_change >= 25:
+                risk_points += 2
+
+            elif expense_change > 10:
+                risk_points += 1
+
+            elif expense_change <= 0:
+                positive_points += 1
+
+    # --------------------------------------------------------
+    # CURRENT RATIO
+    # --------------------------------------------------------
+
+    if (
+        "current_assets" in metrics
+        and "current_liabilities" in metrics
+    ):
+
+        current_liabilities = metrics[
+            "current_liabilities"
+        ]
+
+        if current_liabilities != 0:
+
+            current_ratio = (
+                metrics["current_assets"]
+                / current_liabilities
+            )
+
+            if current_ratio >= 1.5:
+
+                positive_points += 2
+
+            elif current_ratio < 1:
+
+                risk_points += 2
+
+    # --------------------------------------------------------
+    # ASSET TURNOVER
+    # --------------------------------------------------------
+
+    if (
+        "revenue" in metrics
+        and "total_assets" in metrics
+    ):
+
+        total_assets = metrics[
+            "total_assets"
+        ]
+
+        if total_assets != 0:
+
+            asset_turnover = (
+                metrics["revenue"]
+                / total_assets
+            )
+
+            if asset_turnover >= 1.5:
+
+                positive_points += 2
+
+            elif asset_turnover < 0.75:
+
+                risk_points += 2
+
+    # --------------------------------------------------------
+    # RETURN ON ASSETS
+    # --------------------------------------------------------
+
+    if (
+        "net_income" in metrics
+        and "total_assets" in metrics
+    ):
+
+        total_assets = metrics[
+            "total_assets"
+        ]
+
+        if total_assets != 0:
+
+            roa = (
+                metrics["net_income"]
+                / total_assets
+            ) * 100
+
+            if roa >= 10:
+
+                positive_points += 2
+
+            elif roa < 5:
+
+                risk_points += 2
+
+    # --------------------------------------------------------
+    # DEBT-TO-REVENUE
+    # --------------------------------------------------------
+
+    if (
+        "debt" in metrics
+        and "revenue" in metrics
+    ):
+
+        revenue = metrics["revenue"]
+
+        if revenue != 0:
+
+            debt_to_revenue = (
+                metrics["debt"]
+                / revenue
+            )
+
+            if debt_to_revenue >= 1:
+
+                risk_points += 2
+
+            elif debt_to_revenue >= 0.75:
+
+                risk_points += 1
+
+            elif debt_to_revenue < 0.5:
+
+                positive_points += 1
+
+    # --------------------------------------------------------
+    # CASH-TO-DEBT
+    # --------------------------------------------------------
+
+    if (
+        "cash" in metrics
+        and "debt" in metrics
+    ):
+
+        debt = metrics["debt"]
+
+        if debt != 0:
+
+            cash_to_debt = (
+                metrics["cash"]
+                / debt
+            )
+
+            if cash_to_debt < 0.20:
+
+                risk_points += 2
+
+            elif cash_to_debt < 0.50:
+
+                risk_points += 1
+
+            else:
+
+                positive_points += 1
+
+    # --------------------------------------------------------
+    # OPERATING MARGIN
+    # --------------------------------------------------------
+
+    if (
+        "operating_profit" in metrics
+        and "revenue" in metrics
+    ):
+
+        revenue = metrics["revenue"]
+
+        if revenue != 0:
+
+            operating_margin = (
+                metrics["operating_profit"]
+                / revenue
+            ) * 100
+
+            if operating_margin < 10:
+
+                risk_points += 2
+
+            elif operating_margin >= 20:
+
+                positive_points += 1
+
+    # --------------------------------------------------------
+    # PERIOD-BASED OPERATING MARGIN CHANGE
+    # --------------------------------------------------------
+
+    if (
+        "previous_operating_profit" in metrics
+        and "current_operating_profit" in metrics
+        and "previous_revenue" in metrics
+        and "current_revenue" in metrics
+    ):
+
+        previous_revenue = metrics[
+            "previous_revenue"
+        ]
+
+        current_revenue = metrics[
+            "current_revenue"
+        ]
+
+        if (
+            previous_revenue != 0
+            and current_revenue != 0
+        ):
+
+            previous_margin = (
+                metrics["previous_operating_profit"]
+                / previous_revenue
+            ) * 100
+
+            current_margin = (
+                metrics["current_operating_profit"]
+                / current_revenue
+            ) * 100
+
+            margin_change = (
+                current_margin
+                - previous_margin
+            )
+
+            if margin_change <= -5:
+
+                risk_points += 1
+
+            elif margin_change >= 5:
+
+                positive_points += 1
+
+    # --------------------------------------------------------
+    # FINAL CLASSIFICATION
+    # --------------------------------------------------------
 
     if risk_points >= positive_points + 2:
         return "High Risk"
@@ -495,112 +910,22 @@ def _classification_for(
     scenario_type,
     metrics,
 ):
-    enriched_period_metrics = (
-        "previous_revenue" in metrics
-        or "previous_profit" in metrics
-        or "previous_operating_profit" in metrics
-        or "previous_debt" in metrics
-        or "previous_cash" in metrics
-        or "previous_cash_flow" in metrics
-        or "previous_operating_expenses" in metrics
-        or "previous_net_profit" in metrics
+    """
+    Return the dataset classification label.
+
+    For training classification tasks, use ALL available
+    financial signals instead of allowing the scenario type
+    to determine the label.
+
+    The scenario-specific classification rules remain
+    available in classification_rules.py for testing and
+    future scenario-level validation, but the training
+    classification target represents overall financial health.
+    """
+
+    return _classification_from_all_metrics(
+        metrics
     )
-
-    if enriched_period_metrics:
-        return _classification_from_enriched_metrics(
-            metrics
-        )
-
-    if scenario_type == "liquidity":
-        ratio = (
-            metrics["current_assets"]
-            / metrics["current_liabilities"]
-        )
-
-        if ratio >= 1.5:
-            return "Healthy"
-
-        if ratio < 1.0:
-            return "High Risk"
-
-        return "Moderate Risk"
-
-    if scenario_type == "efficiency":
-        asset_turnover = (
-            metrics["revenue"]
-            / metrics["total_assets"]
-        )
-
-        roa = (
-            metrics["net_income"]
-            / metrics["total_assets"]
-        ) * 100
-
-        if (
-            asset_turnover >= 1.5
-            and roa >= 10
-        ):
-            return "Healthy"
-
-        if (
-            asset_turnover < 0.75
-            or roa < 5
-        ):
-            return "High Risk"
-
-        return "Moderate Risk"
-
-    if scenario_type == "risk_analysis":
-        leverage = (
-            metrics["debt"]
-            / metrics["revenue"]
-        )
-
-        risk_points = int(
-            leverage >= 1.0
-        )
-
-        positive_points = int(
-            leverage < 1.0
-        )
-
-        if "cash" in metrics:
-            cash_debt = (
-                metrics["cash"]
-                / metrics["debt"]
-            )
-
-            risk_points += int(
-                cash_debt < 0.20
-            )
-
-            positive_points += int(
-                cash_debt >= 0.20
-            )
-
-        if "operating_profit" in metrics:
-            margin = (
-                metrics["operating_profit"]
-                / metrics["revenue"]
-            )
-
-            risk_points += int(
-                margin < 0.10
-            )
-
-            positive_points += int(
-                margin >= 0.10
-            )
-
-        if risk_points >= 2:
-            return "High Risk"
-
-        if risk_points == 0:
-            return "Healthy"
-
-        return "Moderate Risk"
-
-    return "Moderate Risk"
 
 
 # ============================================================
@@ -620,33 +945,87 @@ def _reasoning_types(
         for item in base_reasoning
     ]
 
+    # --------------------------------------------------
+    # Medium examples
+    # --------------------------------------------------
+
+    if difficulty == "medium":
+
+        if "trend_analysis" not in values:
+            values.append(
+                "trend_analysis"
+            )
+
+        if "comparison" not in values:
+            values.append(
+                "comparison"
+            )
+
+    # --------------------------------------------------
+    # Classification
+    # --------------------------------------------------
+
     if task == "financial_classification":
+
         if "risk_analysis" not in values:
-            values.append("risk_analysis")
+            values.append(
+                "risk_analysis"
+            )
+
+    # --------------------------------------------------
+    # Report generation
+    # --------------------------------------------------
 
     if task == "financial_report_generation":
-        if "comparison" not in values:
-            values.append("comparison")
 
-        if difficulty == "hard":
+        if "comparison" not in values:
+            values.append(
+                "comparison"
+            )
+
+        if difficulty in {
+            "medium",
+            "hard",
+        }:
+
             if "risk_analysis" not in values:
-                values.append("risk_analysis")
+                values.append(
+                    "risk_analysis"
+                )
+
+    # --------------------------------------------------
+    # Hard examples
+    # --------------------------------------------------
 
     if difficulty == "hard":
+
         if "numerical_reasoning" not in values:
-            values.append("numerical_reasoning")
+            values.append(
+                "numerical_reasoning"
+            )
 
         if "comparison" not in values:
-            values.append("comparison")
+            values.append(
+                "comparison"
+            )
 
         if "risk_analysis" not in values:
-            values.append("risk_analysis")
+            values.append(
+                "risk_analysis"
+            )
+
+    # --------------------------------------------------
+    # Preserve order and remove duplicates
+    # --------------------------------------------------
 
     ordered = []
 
     for value in values:
+
         if value not in ordered:
-            ordered.append(value)
+            ordered.append(
+                value
+            )
 
     return [
         ReasoningType(value)
