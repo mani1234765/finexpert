@@ -12,6 +12,10 @@ from .source_consistency_validator import validate_source_consistency
 from .scenario_generator import generate_scenario
 from .similarity_validator import check_near_duplicate
 from .task_generator import generate_training_example
+from .classification_rules import (
+    classify_financial_health,
+)
+from .difficulty_scenarios import build_difficulty_scenario
 
 
 OUTPUT_FILE = Path(
@@ -236,6 +240,59 @@ def get_classification_label(
     }
 
     return mapping.get(normalized)
+
+def find_classification_scenario(
+    scenario_type,
+    desired_label,
+    difficulty,
+    company,
+    start_seed,
+    existing_fingerprints,
+    max_search=1000,
+):
+    """
+    Find a numerical scenario that produces the requested
+    classification label using the same enriched scenario
+    generation path used by generate_training_example().
+    """
+
+    for seed in range(
+        start_seed,
+        start_seed + max_search,
+    ):
+        difficulty_result = build_difficulty_scenario(
+            scenario_type=scenario_type,
+            difficulty=difficulty,
+            seed=seed,
+            company=company,
+        )
+
+        scenario = difficulty_result["scenario"]
+
+        label = classify_financial_health(
+            scenario_type=scenario_type,
+            metrics=scenario["metrics"],
+        )
+
+        if label != desired_label:
+            continue
+
+        metric_fingerprint = json.dumps(
+            scenario["metrics"],
+            sort_keys=True,
+        )
+
+        if metric_fingerprint in existing_fingerprints:
+            continue
+
+        return seed, scenario
+
+    raise RuntimeError(
+        f"Unable to find a new {scenario_type} scenario "
+        f"producing classification label '{desired_label}' "
+        f"for difficulty '{difficulty}' "
+        f"after {max_search} seed attempts."
+    )
 
 
 def generate_example_id(
@@ -469,56 +526,100 @@ def generate_and_validate_examples(
                     )
                 )
 
-                seed = generated + 1
-
-                generated += 1
-
                 # ----------------------------------------
                 # Generate numerical scenario
                 # ----------------------------------------
 
                 try:
+                    if task == "financial_classification":
+                        scenario_supported_labels ={
+                            "cash_flow": {
+                                "Moderate Risk",
+                                "High Risk",
+                            }
+                        }
 
-                    scenario = generate_scenario(
-                        scenario_type=scenario_type,
-                        seed=seed,
-                    )
+                        supported_labels = scenario_supported_labels.get(
+                            scenario_type,
+                            set(CLASSIFICATION_LABELS),
+                        )
+
+                        remaining_labels = [
+                            label
+                            for label in CLASSIFICATION_LABELS
+                            if (
+                                label in supported_labels
+                                and classification_label_counts[label]
+                                <classification_label_targets[label]
+                            )
+                        ]
+
+                        if not remaining_labels:
+                            raise RuntimeError(
+                                f"No feasible classification label remains for"
+                                f"scenario '{scenario_type}' ."
+
+                            )
+
+                        desired_label = max(
+                            remaining_labels,
+                            key=lambda label:
+                                classification_label_targets[label]
+                                - classification_label_counts[label],
+                        )
+
+                        seed, scenario = find_classification_scenario(
+                            scenario_type=scenario_type,
+                            desired_label=desired_label,
+                            difficulty=difficulty,
+                            company=company,
+                            start_seed=generated + 1,
+                            existing_fingerprints=
+                                scenario_metric_fingerprints[scenario_type]
+
+
+                        )
+                    else:
+                        seed = generated + 1
+
+                        scenario = generate_scenario(
+                            scenario_type=scenario_type,
+                            seed=seed,
+                        )
+
+                    generated += 1
 
                     metric_fingerprint = json.dumps(
                         scenario["metrics"],
                         sort_keys=True,
                     )
 
-                    # Keep numerical scenarios unique
-                    # within a scenario family.
-                    if (
-                        metric_fingerprint
-                        in scenario_metric_fingerprints[
-                            scenario_type
-                        ]
+                    if metric_fingerprint in (
+                        scenario_metric_fingerprints[scenario_type]
                     ):
                         rejected += 1
-
                         continue
 
-                    scenario_metric_fingerprints[
-                        scenario_type
-                    ].add(
+                    scenario_metric_fingerprints[scenario_type].add(
                         metric_fingerprint
                     )
 
+                    example_data = generate_training_example(
+                        scenario_type=scenario_type,
+                        task=task,
+                        difficulty=difficulty,
+                        example_id=example_id,
+                        company=company,
+                        seed=seed,
+                    )
                 except Exception as exc:
-
                     generation_errors += 1
-
                     rejected += 1
 
                     print(
-                        f"[REJECTED] "
-                        f"{scenario_type} | "
-                        f"scenario generation error: "
-                        f"{type(exc).__name__}: "
-                        f"{exc}"
+                        f"[REJECTED] {scenario_type} |"
+                        f"generation error: "
+                        f"{type(exc).__name__}: {exc}"
                     )
 
                     continue
