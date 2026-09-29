@@ -329,15 +329,15 @@ def generate_cash_flow_scenario(rng):
 
 def generate_efficiency_scenario(rng):
     revenue = rng.choice(
-        [300, 400, 500, 600, 800]
+        list(range(300, 925, 50))
     )
 
     total_assets = rng.choice(
-        [200, 300, 400, 500]
+        list(range(200, 650, 50))
     )
 
     net_income = rng.choice(
-        [20, 30, 40, 50, 60]
+        list(range(20, 95, 5))
     )
 
     return {

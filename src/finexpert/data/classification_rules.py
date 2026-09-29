@@ -403,6 +403,15 @@ def _classify_efficiency(metrics):
         "roa"
     )
 
+    total_assets = metrics.get("total_assets")
+
+    if total_assets:
+        if asset_turnover is None and "revenue" in metrics:
+            asset_turnover = metrics["revenue"] / total_assets
+
+        if roa is None and "net_income" in metrics:
+            roa = metrics["net_income"] / total_assets * 100
+
     if (
         asset_turnover is None
         or roa is None
