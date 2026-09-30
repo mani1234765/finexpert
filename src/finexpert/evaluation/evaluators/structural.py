@@ -9,7 +9,8 @@ from ..finding import Finding
 SECTION_RE = re.compile(
     r"(?im)^\s*(Executive Summary|Quantitative Analysis|Key Observations|"
     r"Potential Risks and Opportunities|Risks and Opportunities|"
-    r"Areas Requiring Further Investigation|Conclusion)\s*:"
+    r"Areas Requiring Further Investigation|Conclusion|"
+    r"Classification|Evidence|Basis)\s*:"
 )
 
 ALIASES = {
@@ -31,9 +32,21 @@ class StructuralEvaluator:
         return sections
 
     def evaluate(self, context: EvaluationContext) -> list[Finding]:
-        if context.category != "financial_report_generation":
-            return []
-
+        # Required sections are derived from the REFERENCE text itself,
+        # not a hardcoded per-category/per-difficulty list. This
+        # generalizes across all three task types for free:
+        #   - financial_classification always has Classification/
+        #     Evidence/Basis, so it's always checked.
+        #   - financial_report_generation has 3-5 sections depending
+        #     on difficulty; whatever the reference actually contains
+        #     is what gets required.
+        #   - financial_explanation is unstructured prose at "easy"
+        #     difficulty (the reference has zero labeled sections), so
+        #     expected comes back empty and this evaluator correctly
+        #     imposes no structural requirement there -- only
+        #     medium/hard, which open with "Quantitative Analysis:",
+        #     get a real check. No difficulty branching needed here;
+        #     it falls out of reading the reference.
         expected = self.extract_sections(context.expected_text)
         generated = self.extract_sections(context.prediction_text)
         present = expected & generated

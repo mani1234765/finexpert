@@ -141,3 +141,54 @@ def test_structural_section_coverage_is_explicit():
         "areas requiring further investigation"
     ]
     assert result.details["coverage"] == pytest.approx(5 / 6)
+
+
+def test_structural_evaluator_checks_classification_sections():
+    from finexpert.evaluation.evaluators.structural import StructuralEvaluator
+    from finexpert.evaluation.context import EvaluationContext
+
+    ctx = EvaluationContext(
+        example_id="c1",
+        category="financial_classification",
+        difficulty="easy",
+        source_text="Revenue is ₹500 Cr.",
+        expected_text="Classification: Healthy\nEvidence: ...\nBasis: ...",
+        prediction_text="Classification: Healthy\nEvidence: ...",  # missing Basis
+    )
+    findings = StructuralEvaluator().evaluate(ctx)
+    assert any(not f.passed for f in findings)
+    assert "basis" in findings[0].details["missing_sections"]
+
+
+def test_structural_evaluator_allows_unstructured_easy_explanation():
+    from finexpert.evaluation.evaluators.structural import StructuralEvaluator
+    from finexpert.evaluation.context import EvaluationContext
+
+    # Easy financial_explanation references are plain prose with no
+    # labeled sections -- this must not be flagged as missing structure.
+    ctx = EvaluationContext(
+        example_id="e1",
+        category="financial_explanation",
+        difficulty="easy",
+        source_text="Revenue increased from ₹500 Cr to ₹575 Cr.",
+        expected_text="Revenue increased by 15%.",
+        prediction_text="Revenue went up by fifteen percent.",
+    )
+    findings = StructuralEvaluator().evaluate(ctx)
+    assert all(f.passed for f in findings)
+
+
+def test_structural_evaluator_requires_quantitative_header_at_hard_explanation():
+    from finexpert.evaluation.evaluators.structural import StructuralEvaluator
+    from finexpert.evaluation.context import EvaluationContext
+
+    ctx = EvaluationContext(
+        example_id="e2",
+        category="financial_explanation",
+        difficulty="hard",
+        source_text="Revenue increased from ₹500 Cr to ₹575 Cr.",
+        expected_text="Quantitative analysis: Revenue increased by 15%.",
+        prediction_text="Revenue increased by 15%, no header here.",
+    )
+    findings = StructuralEvaluator().evaluate(ctx)
+    assert any(not f.passed for f in findings)
