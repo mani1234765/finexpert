@@ -1,92 +1,59 @@
-"""
-Pure, model-agnostic scoring functions for finexpert generations.
+"""Backwards-compatible low-level helpers.
 
-Nothing here touches a model or a GPU: every function takes plain
-strings (a reference answer, a model prediction, a prompt) and
-returns a bool/float/set. That means the same code can score
-predictions produced in Colab, in a local script, or from a
-different model entirely -- you only need a predictions file.
+The evaluation pipeline itself now uses the evaluator/Finding contract.
+These small helpers remain so existing tests or scripts that imported the
+previous API do not break while callers migrate to the structured evaluators.
 """
 
 import re
 from collections import Counter
 
 LABEL_RE = re.compile(
-    r"^\s*Classification:\s*(Healthy|Moderate Risk|High Risk)",
+    r"^\s*Classification\s*:\s*(Healthy|Moderate\s+Risk|High\s+Risk)",
     re.IGNORECASE,
 )
-
-FIGURE_RE = re.compile(r"₹\s*(\d+(?:\.\d+)?)\s*Cr", re.IGNORECASE)
-
-# Any standalone number, currency or not -- used for the stricter
-# "did the model change a digit" check (catches things like a
-# 0.40 ratio being written as 0.040, which FIGURE_RE alone misses
-# because it only looks at ₹...Cr amounts).
+CURRENCY_RE = re.compile(
+    r"₹\s*(\d+(?:\.\d+)?)\s*(?:Cr|crore|crores|Lakh|Lakhs|Million|Billion)",
+    re.IGNORECASE,
+)
 NUMBER_RE = re.compile(r"\d+(?:\.\d+)?")
 
 
-def extract_label(text):
-    """Return 'Healthy' / 'Moderate Risk' / 'High Risk', or None."""
-
+def extract_label(text: str) -> str | None:
     match = LABEL_RE.match(text.strip())
+    if not match:
+        return None
+    value = re.sub(r"\s+", " ", match.group(1).strip()).lower()
+    return {
+        "healthy": "Healthy",
+        "moderate risk": "Moderate Risk",
+        "high risk": "High Risk",
+    }[value]
 
-    return match.group(1) if match else None
 
-
-def is_correct_label(reference, prediction):
+def is_correct_label(reference: str, prediction: str) -> bool:
     ref_label = extract_label(reference)
     pred_label = extract_label(prediction)
-
     if ref_label is None:
-        raise ValueError(
-            "reference has no 'Classification: <label>' line -- "
-            "is_correct_label should only be called on "
-            "financial_classification examples"
-        )
-
+        raise ValueError("reference has no valid Classification line")
     return pred_label is not None and pred_label.lower() == ref_label.lower()
 
 
-def is_format_ok(prediction):
-    """True if the prediction starts with 'Classification: <label>'."""
-
+def is_format_ok(prediction: str) -> bool:
     return extract_label(prediction) is not None
 
 
-def extract_currency_figures(text):
-    return {float(v) for v in FIGURE_RE.findall(text)}
+def _currency_figures(text: str) -> Counter[float]:
+    return Counter(float(value) for value in CURRENCY_RE.findall(text))
 
 
-def figures_are_grounded(prediction, reference, prompt):
-    """
-    True if every ₹...Cr figure in `prediction` also appears in
-    `reference` or `prompt`. Catches invented currency figures.
-    """
-
-    allowed = extract_currency_figures(reference) | extract_currency_figures(prompt)
-    predicted = extract_currency_figures(prediction)
-
-    return predicted <= allowed
+def figures_are_grounded(prediction: str, reference: str, prompt: str) -> bool:
+    allowed = _currency_figures(reference) | _currency_figures(prompt)
+    return _currency_figures(prediction) <= allowed
 
 
-def numeric_mismatch(reference, prediction):
-    """
-    Return the sorted list of numbers (any number, not just currency)
-    that appear in `prediction` more often than in `reference`.
-
-    This is stricter than figures_are_grounded: it also catches a
-    ratio or percentage being stated wrong (e.g. reference says
-    "0.40" and the model says "0.040"), which the currency-only
-    check can't see since neither value has a ₹/Cr around it.
-
-    An empty list means every number the model wrote is accounted
-    for in the reference -- not proof the model calculated anything,
-    just that it didn't drift from the reference's own figures.
-    """
-
+def numeric_mismatch(reference: str, prediction: str) -> list[str]:
     ref_counts = Counter(NUMBER_RE.findall(reference))
     pred_counts = Counter(NUMBER_RE.findall(prediction))
-
     extra = pred_counts - ref_counts
-
     return sorted(extra.elements(), key=float)

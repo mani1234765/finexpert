@@ -9,7 +9,7 @@ from finexpert.evaluation.metrics import (
 
 def test_extract_label_variants():
     assert extract_label("Classification: Healthy\nEvidence: ...") == "Healthy"
-    assert extract_label("classification: moderate risk") == "moderate risk"
+    assert extract_label("classification: moderate risk") == "Moderate Risk"
     assert extract_label("No label here") is None
 
 
