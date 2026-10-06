@@ -12,6 +12,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
+from .classification_metrics import classification_metrics
 from .context import EvaluationContext
 from .evaluators import (
     GroundingEvaluator,
@@ -91,6 +92,9 @@ def evaluate_example(row: dict[str, Any], prediction: Any) -> dict[str, Any]:
         "example_id": context.example_id,
         "category": context.category,
         "difficulty": context.difficulty,
+        # Diagnostic only: a verbatim copy of the reference is not a quality
+        # metric, but a high rate shows the model reproducing templates.
+        "reference_exact_match": context.prediction_text.strip() == context.expected_text.strip(),
         "findings": [finding.to_dict() for finding in findings],
     }
 
@@ -132,6 +136,40 @@ def _aggregate_label(results: list[dict[str, Any]]) -> dict[str, Any] | None:
     return {
         "n": len(items),
         "accuracy": sum(item["passed"] for item in items) / len(items),
+    }
+
+
+def _label_pairs(results: list[dict[str, Any]]) -> list[tuple[str, str | None]]:
+    pairs = []
+    for result in results:
+        for item in _summary_findings(result, "label"):
+            expected = item["details"].get("expected_label")
+            if expected is not None:
+                pairs.append((expected, item["details"].get("predicted_label")))
+    return pairs
+
+
+def _classification_breakdown(results: list[dict[str, Any]]) -> dict[str, Any]:
+    """Accuracy by expected label, and by difficulty x expected label."""
+    by_label: defaultdict[str, list[bool]] = defaultdict(list)
+    by_difficulty_label: defaultdict[str, list[bool]] = defaultdict(list)
+    for result in results:
+        for item in _summary_findings(result, "label"):
+            expected = item["details"].get("expected_label")
+            if expected is None:
+                continue
+            by_label[expected].append(item["passed"])
+            by_difficulty_label[f"{result['difficulty']} | {expected}"].append(item["passed"])
+
+    def summarize(groups: dict[str, list[bool]]) -> dict[str, Any]:
+        return {
+            key: {"n": len(values), "correct": sum(values), "accuracy": sum(values) / len(values)}
+            for key, values in sorted(groups.items())
+        }
+
+    return {
+        "by_expected_label": summarize(by_label),
+        "by_difficulty_and_label": summarize(by_difficulty_label),
     }
 
 
@@ -204,10 +242,12 @@ def _failure_breakdown(results: list[dict[str, Any]]) -> dict[str, Any]:
 def _summarize(results: list[dict[str, Any]]) -> dict[str, Any]:
     by_category: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
     by_difficulty: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
+    by_category_difficulty: defaultdict[str, list[dict[str, Any]]] = defaultdict(list)
 
     for result in results:
         by_category[result["category"]].append(result)
         by_difficulty[result["difficulty"]].append(result)
+        by_category_difficulty[f"{result['category']} | {result['difficulty']}"].append(result)
 
     numeric = _aggregate_numeric(results)
     label = _aggregate_label(results)
@@ -238,6 +278,16 @@ def _summarize(results: list[dict[str, Any]]) -> dict[str, Any]:
             difficulty: category_summary(items)
             for difficulty, items in sorted(by_difficulty.items())
         },
+        "by_category_and_difficulty": {
+            key: category_summary(items)
+            for key, items in sorted(by_category_difficulty.items())
+        },
+        "classification_metrics": classification_metrics(_label_pairs(results)),
+        "classification_breakdown": _classification_breakdown(results),
+        "reference_exact_match_rate": (
+            sum(result["reference_exact_match"] for result in results) / len(results)
+            if results else None
+        ),
         "failure_breakdown": _failure_breakdown(results),
         "semantic_evaluation": SEMANTIC_EVALUATION_STATUS,
     }
@@ -298,6 +348,39 @@ def format_report(report: dict[str, Any]) -> str:
         lines.append(f"Section coverage:     {structure['section_coverage'] * 100:.2f}%")
 
     lines.append("Semantic evaluation:  deferred")
+    if summary.get("reference_exact_match_rate") is not None:
+        lines.append(
+            f"Verbatim ref. match: {summary['reference_exact_match_rate'] * 100:.2f}%  (diagnostic, not a quality score)"
+        )
+
+    metrics = summary.get("classification_metrics")
+    if metrics:
+        low, high = metrics["accuracy_ci95"]
+        lines.append("\n------------ CLASSIFICATION ------------")
+        lines.append(
+            f"Accuracy:     {metrics['accuracy'] * 100:.2f}%  ({metrics['correct']}/{metrics['n']}, "
+            f"95% CI {low * 100:.1f}-{high * 100:.1f}%)"
+        )
+        lines.append(
+            "Macro    P/R/F1: "
+            + " / ".join(f"{metrics['macro'][m]:.3f}" for m in ("precision", "recall", "f1"))
+        )
+        lines.append(
+            "Weighted P/R/F1: "
+            + " / ".join(f"{metrics['weighted'][m]:.3f}" for m in ("precision", "recall", "f1"))
+        )
+        lines.append(f"\n  {'label':<15}{'P':>7}{'R':>7}{'F1':>7}{'support':>9}")
+        for label, values in metrics["per_label"].items():
+            lines.append(
+                f"  {label:<15}{values['precision']:>7.3f}{values['recall']:>7.3f}"
+                f"{values['f1']:>7.3f}{values['support']:>9}"
+            )
+        matrix = metrics["confusion_matrix"]
+        short = {"Healthy": "Healthy", "Moderate Risk": "Moderate", "High Risk": "High", "<missing>": "Missing"}
+        lines.append("\n  Confusion matrix (rows = expected, cols = predicted)")
+        lines.append("  " + " " * 15 + "".join(f"{short[c]:>10}" for c in matrix["columns_predicted"]))
+        for label, row in zip(matrix["rows_expected"], matrix["counts"]):
+            lines.append(f"  {label:<15}" + "".join(f"{count:>10}" for count in row))
 
     lines.append("\n---------------- BY TASK ----------------")
     for category, values in summary["by_category"].items():
@@ -313,6 +396,23 @@ def format_report(report: dict[str, Any]) -> str:
             lines.append(f"  Classification acc.: {values['classification']['accuracy'] * 100:.2f}%")
         if values["structure"]:
             lines.append(f"  Section coverage:    {values['structure']['section_coverage'] * 100:.2f}%")
+
+    lines.append("\n------------- BY DIFFICULTY -------------")
+    for difficulty, values in summary["by_difficulty"].items():
+        parts = [f"n={values['examples']}"]
+        if values["grounding"]["figure_fidelity"] is not None:
+            parts.append(f"fidelity={values['grounding']['figure_fidelity'] * 100:.1f}%")
+        if values["numerical"]["numeric_recall"] is not None:
+            parts.append(f"num_recall={values['numerical']['numeric_recall'] * 100:.1f}%")
+        if values["classification"]:
+            parts.append(f"cls_acc={values['classification']['accuracy'] * 100:.1f}%")
+        lines.append(f"{difficulty:<8}" + "  ".join(parts))
+
+    breakdown = summary.get("classification_breakdown") or {}
+    if breakdown.get("by_difficulty_and_label"):
+        lines.append("\n------- CLASSIFICATION: DIFFICULTY x LABEL -------")
+        for key, values in breakdown["by_difficulty_and_label"].items():
+            lines.append(f"{key:<26}{values['correct']}/{values['n']}")
 
     failures = summary["failure_breakdown"]
     lines.append("\n------------- ERROR BREAKDOWN -------------")

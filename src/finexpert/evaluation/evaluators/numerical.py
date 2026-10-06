@@ -20,6 +20,17 @@ from ..finding import Finding
 PERCENT_TOLERANCE = 0.15  # percentage points
 RATIO_TOLERANCE = 0.015
 VALUE_TOLERANCE = 0.01
+# Percent-valued ratios (ROA, margins) are written to 1 decimal place, so a
+# correct value can differ from the exact recomputation by up to 0.05 pp.
+PERCENT_RATIO_TOLERANCE = 0.06
+PERCENT_RATIOS = {
+    "return_on_assets",
+    "return_on_equity",
+    "operating_margin",
+    "net_profit_margin",
+    "profit_margin",
+    "operating_expense_ratio",
+}
 
 NEGATIVE_DIRECTIONS = {
     "declined",
@@ -28,7 +39,18 @@ NEGATIVE_DIRECTIONS = {
     "fell",
     "dropped",
     "drop",
+    "decreasing",
+    "declining",
+    "falling",
 }
+
+# Past-tense verbs appear in answers; present participles appear in the
+# dataset inputs ("reported revenue changing/increasing from ... to ...").
+DIRECTIONS = (
+    "increased|increases|increasing|grew|growing|rose|rising|"
+    "declined|declining|decreased|decreases|decreasing|fell|falling|"
+    "dropped|drop|changed|changing"
+)
 
 METRICS = (
     "operating expenses|operating expense|operating profit|net profit|"
@@ -38,7 +60,7 @@ METRICS = (
 
 VALUE_RE = re.compile(
     rf"(?P<metric>{METRICS})\s+"
-    r"(?P<direction>increased|increases|grew|rose|declined|decreased|decreases|fell|dropped|drop|changed)"
+    rf"(?P<direction>{DIRECTIONS})"
     r"\s+from\s+₹?\s*(?P<old>\d+(?:\.\d+)?)"
     r"(?:\s*(?:Cr|crore|crores|Lakh|Lakhs|Million|Billion))?"
     r"\s+to\s+₹?\s*(?P<new>\d+(?:\.\d+)?)"
@@ -54,7 +76,7 @@ STATIC_VALUE_RE = re.compile(
 
 PERCENT_RE = re.compile(
     rf"(?P<metric>{METRICS})\s+"
-    r"(?P<direction>increased|increases|grew|rose|declined|decreased|decreases|fell|dropped|drop|changed)"
+    rf"(?P<direction>{DIRECTIONS})"
     r"\s+(?:by\s+)?(?P<value>-?\d+(?:\.\d+)?)\s*%",
     re.IGNORECASE,
 )
@@ -136,6 +158,10 @@ class NumericalEvaluator:
     def _normalize_metric(metric: str) -> str:
         metric = re.sub(r"\s+", " ", metric.strip().lower())
         return ALIASES.get(metric, metric.replace("-", "_"))
+
+    @staticmethod
+    def _ratio_tolerance(metric: str) -> float:
+        return PERCENT_RATIO_TOLERANCE if metric in PERCENT_RATIOS else RATIO_TOLERANCE
 
     @staticmethod
     def _close(a: float, b: float, tolerance: float) -> bool:
@@ -323,8 +349,9 @@ class NumericalEvaluator:
             if not allowed:
                 return False, "RATIO_SOURCE_NOT_FOUND", {}
 
+            tolerance = cls._ratio_tolerance(claim.metric)
             for expected in allowed:
-                if cls._close(claim.value or 0.0, expected, RATIO_TOLERANCE):
+                if cls._close(claim.value or 0.0, expected, tolerance):
                     return True, "RATIO_MATH_MATCH", {"recomputed": expected}
 
             return False, "RATIO_MATH_ERROR", {"recomputed": allowed}
@@ -342,7 +369,10 @@ class NumericalEvaluator:
                 and cls._close(expected.new or 0.0, generated.new or 0.0, VALUE_TOLERANCE)
             )
 
-        tolerance = PERCENT_TOLERANCE if expected.type == "percentage_change" else RATIO_TOLERANCE
+        if expected.type == "percentage_change":
+            tolerance = PERCENT_TOLERANCE
+        else:
+            tolerance = cls._ratio_tolerance(expected.metric)
         return cls._close(expected.value or 0.0, generated.value or 0.0, tolerance)
 
     def evaluate(self, context: EvaluationContext) -> list[Finding]:

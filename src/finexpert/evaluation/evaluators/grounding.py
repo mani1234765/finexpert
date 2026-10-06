@@ -24,6 +24,9 @@ class GroundingEvaluator:
 
     @staticmethod
     def _figures(text: str) -> Counter[tuple[float, str]]:
+        # Counts are kept for reporting only. Grounding itself is a set check:
+        # repeating a supported figure (e.g. in both an executive summary and a
+        # quantitative section) is not an invented figure.
         figures: Counter[tuple[float, str]] = Counter()
         for match in CURRENCY_RE.finditer(text):
             figures[(float(match.group("value")), match.group("unit").lower())] += 1
@@ -36,7 +39,9 @@ class GroundingEvaluator:
         allowed = self._figures(context.source_text) | self._figures(context.expected_text)
         predicted = self._figures(context.prediction_text)
 
-        unsupported = predicted - allowed
+        unsupported = Counter(
+            {figure: count for figure, count in predicted.items() if figure not in allowed}
+        )
 
         details = {
             "predicted_figures": [
