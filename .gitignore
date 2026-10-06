@@ -34,3 +34,8 @@ mlruns/
 
 # OS files
 .DS_Store
+
+# External datasets: sources are cloned, converted files are rebuilt by
+# scripts/build_external_dataset.py (audit.json and SAMPLES.md are committed)
+data/external/raw/
+data/external/**/*.jsonl

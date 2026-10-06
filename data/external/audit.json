@@ -1,0 +1,144 @@
+{
+  "max_train_tokens_estimate": 2048,
+  "sources": {
+    "finqa": {
+      "source_dir": "data/external/raw/FinQA",
+      "source_commit": "0f16e2867befa6840783e58be38c9efb9229d742",
+      "splits": {
+        "train": {
+          "total": 6251,
+          "answer_types": {
+            "arithmetic": 6127,
+            "yes_no": 124
+          },
+          "difficulty": {
+            "medium": 2013,
+            "hard": 521,
+            "easy": 3717
+          },
+          "would_be_excluded": {
+            "written_answer_inconsistent": 827,
+            "too_long": 856
+          },
+          "kept": 4679,
+          "excluded": 1572,
+          "kept_answer_types": {
+            "arithmetic": 4584,
+            "yes_no": 95
+          }
+        },
+        "validation": {
+          "total": 883,
+          "answer_types": {
+            "arithmetic": 873,
+            "yes_no": 10
+          },
+          "difficulty": {
+            "easy": 523,
+            "medium": 287,
+            "hard": 73
+          },
+          "would_be_excluded": {
+            "written_answer_inconsistent": 110,
+            "too_long": 133
+          }
+        },
+        "test": {
+          "total": 1147,
+          "answer_types": {
+            "arithmetic": 1127,
+            "yes_no": 20
+          },
+          "difficulty": {
+            "easy": 654,
+            "medium": 409,
+            "hard": 84
+          },
+          "would_be_excluded": {
+            "written_answer_inconsistent": 134,
+            "too_long": 163
+          }
+        }
+      },
+      "sha256": {
+        "test.jsonl": "b1c565cb1b2451d6e9d90c9bf4c89cbe6c4275bd79c055edf8f8ad003eb98e35",
+        "train.jsonl": "8fabe611823113d8833dad1588fa80b03944f3510091d690dbd5461365e2e4c9",
+        "train_excluded.jsonl": "8643a3b8c7c9bd8816259ce9edd565a63518732546c9a3065f2d3d60c507ccf5",
+        "validation.jsonl": "ab5693420167e80e84289c00aec9f5a143a675d60ce4b953f8c23b2f31c04716"
+      }
+    },
+    "tatqa": {
+      "source_dir": "data/external/raw/TAT-QA",
+      "source_commit": "870accc41953dcde885aabeb963d94aabdc0fbc3",
+      "splits": {
+        "train": {
+          "total": 13215,
+          "answer_types": {
+            "multi-span": 1645,
+            "span": 5722,
+            "arithmetic": 5543,
+            "count": 305
+          },
+          "difficulty": {
+            "medium": 3990,
+            "easy": 8835,
+            "hard": 390
+          },
+          "would_be_excluded": {
+            "too_long": 324,
+            "derivation_inconsistent": 18
+          },
+          "kept": 12873,
+          "excluded": 342,
+          "kept_answer_types": {
+            "multi-span": 1596,
+            "span": 5586,
+            "arithmetic": 5394,
+            "count": 297
+          }
+        },
+        "validation": {
+          "total": 1668,
+          "answer_types": {
+            "span": 701,
+            "multi-span": 217,
+            "arithmetic": 718,
+            "count": 32
+          },
+          "difficulty": {
+            "easy": 1082,
+            "medium": 521,
+            "hard": 65
+          },
+          "would_be_excluded": {
+            "too_long": 38,
+            "derivation_inconsistent": 1
+          }
+        },
+        "test": {
+          "total": 1663,
+          "answer_types": {
+            "span": 714,
+            "multi-span": 210,
+            "arithmetic": 699,
+            "count": 40
+          },
+          "difficulty": {
+            "easy": 1040,
+            "medium": 422,
+            "hard": 201
+          },
+          "would_be_excluded": {
+            "too_long": 30
+          }
+        }
+      },
+      "sha256": {
+        "test.jsonl": "bfec48fb1d4f8a3e43c5ef061ab9a3fff37a56021bad9d33abc4677533b96eee",
+        "train.jsonl": "2ca84c69fd77d8a11bfcc9aac8a6eae8c66ac2407e0bf42808d1e6fad581f1a0",
+        "train_excluded.jsonl": "f6bdc8f48fac17c5667d6f56ca2781a138cf64ca36815128b40a7af718836ffb",
+        "validation.jsonl": "ed4df5c5d1120917ee86a57d99800ad42d693045f71b2e94904fa4cdaf8ebd85"
+      }
+    }
+  }
+}
