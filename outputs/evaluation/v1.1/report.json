@@ -1,0 +1,4844 @@
+{
+  "evaluation_config": {
+    "framework": "Finding-based deterministic evaluators",
+    "evaluators": [
+      "label",
+      "grounding",
+      "numerical",
+      "structural"
+    ],
+    "semantic_evaluation": {
+      "status": "deferred",
+      "reason": "No validated semantic rubric is implemented yet. An LLM-as-judge or similar proxy could appear to measure meaning while mainly measuring style or agreement, so semantic scoring is deferred until a testable rubric and validation protocol exist."
+    },
+    "number_validation": "recompute-from-input",
+    "section_validation": "reference-template coverage with canonical aliases"
+  },
+  "summary": {
+    "examples": 30,
+    "grounding": {
+      "n": 30,
+      "figure_fidelity": 1.0
+    },
+    "numerical": {
+      "expected_claims": 77,
+      "generated_claims": 77,
+      "valid_generated_claims": 76,
+      "matched_expected_claims": 76,
+      "numeric_precision": 0.987012987012987,
+      "numeric_recall": 0.987012987012987
+    },
+    "classification": {
+      "n": 10,
+      "accuracy": 0.6
+    },
+    "structure": {
+      "n": 30,
+      "section_coverage": 1.0,
+      "complete_reports": 1.0
+    },
+    "by_category": {
+      "financial_classification": {
+        "examples": 10,
+        "grounding": {
+          "n": 10,
+          "figure_fidelity": 1.0
+        },
+        "numerical": {
+          "expected_claims": 26,
+          "generated_claims": 26,
+          "valid_generated_claims": 26,
+          "matched_expected_claims": 26,
+          "numeric_precision": 1.0,
+          "numeric_recall": 1.0
+        },
+        "structure": {
+          "n": 10,
+          "section_coverage": 1.0,
+          "complete_reports": 1.0
+        },
+        "classification": {
+          "n": 10,
+          "accuracy": 0.6
+        }
+      },
+      "financial_explanation": {
+        "examples": 10,
+        "grounding": {
+          "n": 10,
+          "figure_fidelity": 1.0
+        },
+        "numerical": {
+          "expected_claims": 25,
+          "generated_claims": 25,
+          "valid_generated_claims": 25,
+          "matched_expected_claims": 25,
+          "numeric_precision": 1.0,
+          "numeric_recall": 1.0
+        },
+        "structure": {
+          "n": 10,
+          "section_coverage": 1.0,
+          "complete_reports": 1.0
+        },
+        "classification": null
+      },
+      "financial_report_generation": {
+        "examples": 10,
+        "grounding": {
+          "n": 10,
+          "figure_fidelity": 1.0
+        },
+        "numerical": {
+          "expected_claims": 26,
+          "generated_claims": 26,
+          "valid_generated_claims": 25,
+          "matched_expected_claims": 25,
+          "numeric_precision": 0.9615384615384616,
+          "numeric_recall": 0.9615384615384616
+        },
+        "structure": {
+          "n": 10,
+          "section_coverage": 1.0,
+          "complete_reports": 1.0
+        },
+        "classification": null
+      }
+    },
+    "by_difficulty": {
+      "easy": {
+        "examples": 10,
+        "grounding": {
+          "n": 10,
+          "figure_fidelity": 1.0
+        },
+        "numerical": {
+          "expected_claims": 16,
+          "generated_claims": 16,
+          "valid_generated_claims": 16,
+          "matched_expected_claims": 16,
+          "numeric_precision": 1.0,
+          "numeric_recall": 1.0
+        },
+        "structure": {
+          "n": 10,
+          "section_coverage": 1.0,
+          "complete_reports": 1.0
+        },
+        "classification": {
+          "n": 3,
+          "accuracy": 0.0
+        }
+      },
+      "hard": {
+        "examples": 10,
+        "grounding": {
+          "n": 10,
+          "figure_fidelity": 1.0
+        },
+        "numerical": {
+          "expected_claims": 37,
+          "generated_claims": 37,
+          "valid_generated_claims": 37,
+          "matched_expected_claims": 37,
+          "numeric_precision": 1.0,
+          "numeric_recall": 1.0
+        },
+        "structure": {
+          "n": 10,
+          "section_coverage": 1.0,
+          "complete_reports": 1.0
+        },
+        "classification": {
+          "n": 5,
+          "accuracy": 0.8
+        }
+      },
+      "medium": {
+        "examples": 10,
+        "grounding": {
+          "n": 10,
+          "figure_fidelity": 1.0
+        },
+        "numerical": {
+          "expected_claims": 24,
+          "generated_claims": 24,
+          "valid_generated_claims": 23,
+          "matched_expected_claims": 23,
+          "numeric_precision": 0.9583333333333334,
+          "numeric_recall": 0.9583333333333334
+        },
+        "structure": {
+          "n": 10,
+          "section_coverage": 1.0,
+          "complete_reports": 1.0
+        },
+        "classification": {
+          "n": 2,
+          "accuracy": 1.0
+        }
+      }
+    },
+    "by_category_and_difficulty": {
+      "financial_classification | easy": {
+        "examples": 3,
+        "grounding": {
+          "n": 3,
+          "figure_fidelity": 1.0
+        },
+        "numerical": {
+          "expected_claims": 3,
+          "generated_claims": 3,
+          "valid_generated_claims": 3,
+          "matched_expected_claims": 3,
+          "numeric_precision": 1.0,
+          "numeric_recall": 1.0
+        },
+        "structure": {
+          "n": 3,
+          "section_coverage": 1.0,
+          "complete_reports": 1.0
+        },
+        "classification": {
+          "n": 3,
+          "accuracy": 0.0
+        }
+      },
+      "financial_classification | hard": {
+        "examples": 5,
+        "grounding": {
+          "n": 5,
+          "figure_fidelity": 1.0
+        },
+        "numerical": {
+          "expected_claims": 18,
+          "generated_claims": 18,
+          "valid_generated_claims": 18,
+          "matched_expected_claims": 18,
+          "numeric_precision": 1.0,
+          "numeric_recall": 1.0
+        },
+        "structure": {
+          "n": 5,
+          "section_coverage": 1.0,
+          "complete_reports": 1.0
+        },
+        "classification": {
+          "n": 5,
+          "accuracy": 0.8
+        }
+      },
+      "financial_classification | medium": {
+        "examples": 2,
+        "grounding": {
+          "n": 2,
+          "figure_fidelity": 1.0
+        },
+        "numerical": {
+          "expected_claims": 5,
+          "generated_claims": 5,
+          "valid_generated_claims": 5,
+          "matched_expected_claims": 5,
+          "numeric_precision": 1.0,
+          "numeric_recall": 1.0
+        },
+        "structure": {
+          "n": 2,
+          "section_coverage": 1.0,
+          "complete_reports": 1.0
+        },
+        "classification": {
+          "n": 2,
+          "accuracy": 1.0
+        }
+      },
+      "financial_explanation | easy": {
+        "examples": 3,
+        "grounding": {
+          "n": 3,
+          "figure_fidelity": 1.0
+        },
+        "numerical": {
+          "expected_claims": 4,
+          "generated_claims": 4,
+          "valid_generated_claims": 4,
+          "matched_expected_claims": 4,
+          "numeric_precision": 1.0,
+          "numeric_recall": 1.0
+        },
+        "structure": {
+          "n": 3,
+          "section_coverage": 1.0,
+          "complete_reports": 1.0
+        },
+        "classification": null
+      },
+      "financial_explanation | hard": {
+        "examples": 3,
+        "grounding": {
+          "n": 3,
+          "figure_fidelity": 1.0
+        },
+        "numerical": {
+          "expected_claims": 11,
+          "generated_claims": 11,
+          "valid_generated_claims": 11,
+          "matched_expected_claims": 11,
+          "numeric_precision": 1.0,
+          "numeric_recall": 1.0
+        },
+        "structure": {
+          "n": 3,
+          "section_coverage": 1.0,
+          "complete_reports": 1.0
+        },
+        "classification": null
+      },
+      "financial_explanation | medium": {
+        "examples": 4,
+        "grounding": {
+          "n": 4,
+          "figure_fidelity": 1.0
+        },
+        "numerical": {
+          "expected_claims": 10,
+          "generated_claims": 10,
+          "valid_generated_claims": 10,
+          "matched_expected_claims": 10,
+          "numeric_precision": 1.0,
+          "numeric_recall": 1.0
+        },
+        "structure": {
+          "n": 4,
+          "section_coverage": 1.0,
+          "complete_reports": 1.0
+        },
+        "classification": null
+      },
+      "financial_report_generation | easy": {
+        "examples": 4,
+        "grounding": {
+          "n": 4,
+          "figure_fidelity": 1.0
+        },
+        "numerical": {
+          "expected_claims": 9,
+          "generated_claims": 9,
+          "valid_generated_claims": 9,
+          "matched_expected_claims": 9,
+          "numeric_precision": 1.0,
+          "numeric_recall": 1.0
+        },
+        "structure": {
+          "n": 4,
+          "section_coverage": 1.0,
+          "complete_reports": 1.0
+        },
+        "classification": null
+      },
+      "financial_report_generation | hard": {
+        "examples": 2,
+        "grounding": {
+          "n": 2,
+          "figure_fidelity": 1.0
+        },
+        "numerical": {
+          "expected_claims": 8,
+          "generated_claims": 8,
+          "valid_generated_claims": 8,
+          "matched_expected_claims": 8,
+          "numeric_precision": 1.0,
+          "numeric_recall": 1.0
+        },
+        "structure": {
+          "n": 2,
+          "section_coverage": 1.0,
+          "complete_reports": 1.0
+        },
+        "classification": null
+      },
+      "financial_report_generation | medium": {
+        "examples": 4,
+        "grounding": {
+          "n": 4,
+          "figure_fidelity": 1.0
+        },
+        "numerical": {
+          "expected_claims": 9,
+          "generated_claims": 9,
+          "valid_generated_claims": 8,
+          "matched_expected_claims": 8,
+          "numeric_precision": 0.8888888888888888,
+          "numeric_recall": 0.8888888888888888
+        },
+        "structure": {
+          "n": 4,
+          "section_coverage": 1.0,
+          "complete_reports": 1.0
+        },
+        "classification": null
+      }
+    },
+    "classification_metrics": {
+      "n": 10,
+      "correct": 6,
+      "accuracy": 0.6,
+      "accuracy_ci95": [
+        0.3126695474501864,
+        0.8318224187964902
+      ],
+      "macro": {
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5
+      },
+      "weighted": {
+        "precision": 0.6,
+        "recall": 0.6,
+        "f1": 0.6
+      },
+      "per_label": {
+        "Healthy": {
+          "precision": 0.75,
+          "recall": 0.75,
+          "f1": 0.75,
+          "support": 4,
+          "predicted": 4
+        },
+        "Moderate Risk": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 2,
+          "predicted": 2
+        },
+        "High Risk": {
+          "precision": 0.75,
+          "recall": 0.75,
+          "f1": 0.75,
+          "support": 4,
+          "predicted": 4
+        }
+      },
+      "confusion_matrix": {
+        "rows_expected": [
+          "Healthy",
+          "Moderate Risk",
+          "High Risk"
+        ],
+        "columns_predicted": [
+          "Healthy",
+          "Moderate Risk",
+          "High Risk"
+        ],
+        "counts": [
+          [
+            3,
+            1,
+            0
+          ],
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            0,
+            1,
+            3
+          ]
+        ]
+      },
+      "missing_predictions": 0
+    },
+    "classification_breakdown": {
+      "by_expected_label": {
+        "Healthy": {
+          "n": 4,
+          "correct": 3,
+          "accuracy": 0.75
+        },
+        "High Risk": {
+          "n": 4,
+          "correct": 3,
+          "accuracy": 0.75
+        },
+        "Moderate Risk": {
+          "n": 2,
+          "correct": 0,
+          "accuracy": 0.0
+        }
+      },
+      "by_difficulty_and_label": {
+        "easy | High Risk": {
+          "n": 1,
+          "correct": 0,
+          "accuracy": 0.0
+        },
+        "easy | Moderate Risk": {
+          "n": 2,
+          "correct": 0,
+          "accuracy": 0.0
+        },
+        "hard | Healthy": {
+          "n": 3,
+          "correct": 2,
+          "accuracy": 0.6666666666666666
+        },
+        "hard | High Risk": {
+          "n": 2,
+          "correct": 2,
+          "accuracy": 1.0
+        },
+        "medium | Healthy": {
+          "n": 1,
+          "correct": 1,
+          "accuracy": 1.0
+        },
+        "medium | High Risk": {
+          "n": 1,
+          "correct": 1,
+          "accuracy": 1.0
+        }
+      }
+    },
+    "reference_exact_match_rate": 0.6666666666666666,
+    "failure_breakdown": {
+      "finding_codes": {
+        "PERCENTAGE_MATH_ERROR": 1,
+        "MISSING_EXPECTED_METRIC": 1
+      },
+      "missing_expected_metrics": {
+        "revenue": 1
+      },
+      "classification_errors": [
+        {
+          "example_id": "fin_cash_011",
+          "expected": "Moderate Risk",
+          "generated": "High Risk"
+        },
+        {
+          "example_id": "fin_debt_017",
+          "expected": "Moderate Risk",
+          "generated": "Healthy"
+        },
+        {
+          "example_id": "fin_eff_014",
+          "expected": "Healthy",
+          "generated": "Moderate Risk"
+        },
+        {
+          "example_id": "fin_risk_023",
+          "expected": "High Risk",
+          "generated": "Moderate Risk"
+        }
+      ],
+      "structural_errors": []
+    },
+    "semantic_evaluation": {
+      "status": "deferred",
+      "reason": "No validated semantic rubric is implemented yet. An LLM-as-judge or similar proxy could appear to measure meaning while mainly measuring style or agreement, so semantic scoring is deferred until a testable rubric and validation protocol exist."
+    }
+  },
+  "examples": [
+    {
+      "example_id": "fin_cash_006",
+      "category": "financial_report_generation",
+      "difficulty": "hard",
+      "reference_exact_match": true,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 10.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 14.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 15.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 20.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 40.0,
+                "unit": "cr",
+                "count": 4
+              },
+              {
+                "value": 100.0,
+                "unit": "cr",
+                "count": 4
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 4,
+            "generated_claim_count": 4,
+            "valid_generated_claim_count": 4,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 4,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "cash_flow calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "cash_flow",
+            "value": -30.0,
+            "old": null,
+            "new": null,
+            "direction": "declined",
+            "text": "Cash flow declined by 30.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": -30.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "debt_to_revenue calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "debt_to_revenue",
+            "value": 0.4,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Debt-to-revenue is 0.40",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 0.4
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "cash_to_debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "cash_to_debt",
+            "value": 0.25,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Cash-to-debt is 0.25",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 0.25
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "operating_margin calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "operating_margin",
+            "value": 15.0,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Operating margin is 15.0%",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 15.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "areas requiring further investigation",
+              "conclusion",
+              "executive summary",
+              "key observations",
+              "quantitative analysis",
+              "risks and opportunities"
+            ],
+            "present_sections": [
+              "areas requiring further investigation",
+              "conclusion",
+              "executive summary",
+              "key observations",
+              "quantitative analysis",
+              "risks and opportunities"
+            ],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_cash_011",
+      "category": "financial_classification",
+      "difficulty": "easy",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "label",
+          "code": "LABEL_INCORRECT",
+          "passed": false,
+          "message": "Expected Moderate Risk; model predicted High Risk.",
+          "level": "summary",
+          "details": {
+            "expected_label": "Moderate Risk",
+            "predicted_label": "High Risk"
+          }
+        },
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 54.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 60.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 1,
+            "generated_claim_count": 1,
+            "valid_generated_claim_count": 1,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 1,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "cash_flow calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "cash_flow",
+            "value": -10.0,
+            "old": null,
+            "new": null,
+            "direction": "declined",
+            "text": "Cash flow declined by 10.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": -10.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "present_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_cash_016",
+      "category": "financial_explanation",
+      "difficulty": "medium",
+      "reference_exact_match": true,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 30.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 32.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 40.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 200.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 2,
+            "generated_claim_count": 2,
+            "valid_generated_claim_count": 2,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 2,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "cash_flow calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "cash_flow",
+            "value": -20.0,
+            "old": null,
+            "new": null,
+            "direction": "declined",
+            "text": "Cash flow declined by 20.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": -20.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "operating_margin calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "operating_margin",
+            "value": 15.0,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Operating margin is 15.0%",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 15.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "quantitative analysis"
+            ],
+            "present_sections": [
+              "quantitative analysis"
+            ],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_comp_005",
+      "category": "financial_classification",
+      "difficulty": "hard",
+      "reference_exact_match": true,
+      "findings": [
+        {
+          "evaluator": "label",
+          "code": "LABEL_CORRECT",
+          "passed": true,
+          "message": "Classification label matches: Healthy.",
+          "level": "summary",
+          "details": {
+            "expected_label": "Healthy",
+            "predicted_label": "Healthy"
+          }
+        },
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 49.5,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 75.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 100.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 120.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 135.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 150.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 500.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 550.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 4,
+            "generated_claim_count": 4,
+            "valid_generated_claim_count": 4,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 4,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "revenue calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "revenue",
+            "value": 10.0,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "Revenue increased by 10.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 10.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "profit calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "profit",
+            "value": 20.0,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "Profit increased by 20.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 20.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "debt",
+            "value": -10.0,
+            "old": null,
+            "new": null,
+            "direction": "declined",
+            "text": "debt declined by 10.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": -10.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "cash calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "cash",
+            "value": -34.0,
+            "old": null,
+            "new": null,
+            "direction": "declined",
+            "text": "Cash declined by 34.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": -34.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "present_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_comp_013",
+      "category": "financial_explanation",
+      "difficulty": "medium",
+      "reference_exact_match": true,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 108.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 120.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 180.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 200.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 500.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 575.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 3,
+            "generated_claim_count": 3,
+            "valid_generated_claim_count": 3,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 3,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "revenue calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "revenue",
+            "value": 15.0,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "Revenue increased by 15.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 15.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "profit calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "profit",
+            "value": -10.0,
+            "old": null,
+            "new": null,
+            "direction": "declined",
+            "text": "Profit declined by 10.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": -10.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "debt",
+            "value": -10.0,
+            "old": null,
+            "new": null,
+            "direction": "declined",
+            "text": "debt declined by 10.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": -10.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "quantitative analysis"
+            ],
+            "present_sections": [
+              "quantitative analysis"
+            ],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_comp_024",
+      "category": "financial_report_generation",
+      "difficulty": "easy",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 72.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 80.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 200.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 220.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 600.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 690.0,
+                "unit": "cr",
+                "count": 2
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 3,
+            "generated_claim_count": 3,
+            "valid_generated_claim_count": 3,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 3,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "revenue calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "revenue",
+            "value": 15.0,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "Revenue increased by 15.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 15.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "profit calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "profit",
+            "value": -10.0,
+            "old": null,
+            "new": null,
+            "direction": "declined",
+            "text": "Profit declined by 10.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": -10.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "debt",
+            "value": 10.0,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "debt increased by 10.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 10.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "conclusion",
+              "executive summary",
+              "key observations"
+            ],
+            "present_sections": [
+              "conclusion",
+              "executive summary",
+              "key observations"
+            ],
+            "missing_sections": [],
+            "extra_sections": [
+              "areas requiring further investigation",
+              "quantitative analysis",
+              "risks and opportunities"
+            ],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_debt_009",
+      "category": "financial_report_generation",
+      "difficulty": "medium",
+      "reference_exact_match": true,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 150.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 195.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 375.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 429.0,
+                "unit": "cr",
+                "count": 2
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 2,
+            "generated_claim_count": 2,
+            "valid_generated_claim_count": 2,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 2,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "revenue calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "revenue",
+            "value": 14.4,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "Revenue increased by 14.4%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 14.399999999999999
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "debt",
+            "value": 30.0,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "debt increased by 30.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 30.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "areas requiring further investigation",
+              "conclusion",
+              "executive summary",
+              "key observations",
+              "quantitative analysis",
+              "risks and opportunities"
+            ],
+            "present_sections": [
+              "areas requiring further investigation",
+              "conclusion",
+              "executive summary",
+              "key observations",
+              "quantitative analysis",
+              "risks and opportunities"
+            ],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_debt_017",
+      "category": "financial_classification",
+      "difficulty": "easy",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "label",
+          "code": "LABEL_INCORRECT",
+          "passed": false,
+          "message": "Expected Moderate Risk; model predicted Healthy.",
+          "level": "summary",
+          "details": {
+            "expected_label": "Moderate Risk",
+            "predicted_label": "Healthy"
+          }
+        },
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 240.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 300.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 1,
+            "generated_claim_count": 1,
+            "valid_generated_claim_count": 1,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 1,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "debt",
+            "value": -20.0,
+            "old": null,
+            "new": null,
+            "direction": "declined",
+            "text": "debt declined by 20.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": -20.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "present_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_debt_025",
+      "category": "financial_explanation",
+      "difficulty": "hard",
+      "reference_exact_match": true,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 58.5,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 62.5,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 85.8,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 93.75,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 250.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 325.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 625.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 715.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 4,
+            "generated_claim_count": 4,
+            "valid_generated_claim_count": 4,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 4,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "revenue calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "revenue",
+            "value": 14.4,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "Revenue increased by 14.4%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 14.399999999999999
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "operating_profit calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "operating_profit",
+            "value": -8.5,
+            "old": null,
+            "new": null,
+            "direction": "declined",
+            "text": "Operating profit declined by 8.5%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": -8.480000000000002
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "debt",
+            "value": 30.0,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "debt increased by 30.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 30.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "cash calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "cash",
+            "value": -6.4,
+            "old": null,
+            "new": null,
+            "direction": "declined",
+            "text": "Cash declined by 6.4%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": -6.4
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "quantitative analysis"
+            ],
+            "present_sections": [
+              "quantitative analysis"
+            ],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_eff_014",
+      "category": "financial_classification",
+      "difficulty": "hard",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "label",
+          "code": "LABEL_INCORRECT",
+          "passed": false,
+          "message": "Expected Healthy; model predicted Moderate Risk.",
+          "level": "summary",
+          "details": {
+            "expected_label": "Healthy",
+            "predicted_label": "Moderate Risk"
+          }
+        },
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 40.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 180.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 400.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 800.0,
+                "unit": "cr",
+                "count": 2
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 4,
+            "generated_claim_count": 4,
+            "valid_generated_claim_count": 4,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 4,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "asset_turnover calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "asset_turnover",
+            "value": 2.0,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Asset turnover is 2.00",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 2.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "return_on_assets calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "return_on_assets",
+            "value": 10.0,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Return on assets is 10.0%",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 10.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "debt_to_revenue calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "debt_to_revenue",
+            "value": 0.23,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Debt-to-revenue is 0.23",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 0.225
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "cash_to_debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "cash_to_debt",
+            "value": 0.22,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Cash-to-debt is 0.22",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 0.2222222222222222
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "present_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_eff_019",
+      "category": "financial_explanation",
+      "difficulty": "easy",
+      "reference_exact_match": true,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 50.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 200.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 800.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 2,
+            "generated_claim_count": 2,
+            "valid_generated_claim_count": 2,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 2,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "asset_turnover calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "asset_turnover",
+            "value": 4.0,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Asset turnover is 4.00",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 4.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "return_on_assets calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "return_on_assets",
+            "value": 25.0,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Return on assets is 25.0%",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 25.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [],
+            "present_sections": [],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_eff_027",
+      "category": "financial_report_generation",
+      "difficulty": "medium",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 50.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 180.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 400.0,
+                "unit": "cr",
+                "count": 8
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 3,
+            "generated_claim_count": 3,
+            "valid_generated_claim_count": 3,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 3,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "asset_turnover calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "asset_turnover",
+            "value": 1.0,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Asset turnover is 1.00",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 1.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "return_on_assets calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "return_on_assets",
+            "value": 12.5,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Return on assets is 12.5%",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 12.5
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "debt_to_revenue calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "debt_to_revenue",
+            "value": 0.45,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Debt-to-revenue is 0.45",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 0.45
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "areas requiring further investigation",
+              "conclusion",
+              "executive summary",
+              "key observations",
+              "quantitative analysis",
+              "risks and opportunities"
+            ],
+            "present_sections": [
+              "areas requiring further investigation",
+              "conclusion",
+              "executive summary",
+              "key observations",
+              "quantitative analysis",
+              "risks and opportunities"
+            ],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_liq_010",
+      "category": "financial_explanation",
+      "difficulty": "medium",
+      "reference_exact_match": true,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 41.25,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 165.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 325.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 455.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 2,
+            "generated_claim_count": 2,
+            "valid_generated_claim_count": 2,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 2,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "current_ratio calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "current_ratio",
+            "value": 0.51,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Current ratio is 0.51",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 0.5076923076923077
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "cash_to_debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "cash_to_debt",
+            "value": 0.09,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Cash-to-debt is 0.09",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 0.09065934065934066
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "quantitative analysis"
+            ],
+            "present_sections": [
+              "quantitative analysis"
+            ],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_liq_020",
+      "category": "financial_classification",
+      "difficulty": "hard",
+      "reference_exact_match": true,
+      "findings": [
+        {
+          "evaluator": "label",
+          "code": "LABEL_CORRECT",
+          "passed": true,
+          "message": "Classification label matches: Healthy.",
+          "level": "summary",
+          "details": {
+            "expected_label": "Healthy",
+            "predicted_label": "Healthy"
+          }
+        },
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 60.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 70.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 98.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 240.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 2,
+            "generated_claim_count": 2,
+            "valid_generated_claim_count": 2,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 2,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "current_ratio calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "current_ratio",
+            "value": 3.43,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Current ratio is 3.43",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 3.4285714285714284
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "cash_to_debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "cash_to_debt",
+            "value": 0.61,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Cash-to-debt is 0.61",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 0.6122448979591837
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "present_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_liq_021",
+      "category": "financial_report_generation",
+      "difficulty": "easy",
+      "reference_exact_match": true,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 90.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 375.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 1,
+            "generated_claim_count": 1,
+            "valid_generated_claim_count": 1,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 1,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "current_ratio calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "current_ratio",
+            "value": 4.17,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Current ratio is 4.17",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 4.166666666666667
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "conclusion",
+              "executive summary",
+              "key observations"
+            ],
+            "present_sections": [
+              "conclusion",
+              "executive summary",
+              "key observations"
+            ],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_multi_009",
+      "category": "financial_report_generation",
+      "difficulty": "easy",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 48.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 60.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 150.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 165.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 300.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 360.0,
+                "unit": "cr",
+                "count": 2
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 3,
+            "generated_claim_count": 3,
+            "valid_generated_claim_count": 3,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 3,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "revenue calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "revenue",
+            "value": 20.0,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "Revenue increased by 20.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 20.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "profit calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "profit",
+            "value": -20.0,
+            "old": null,
+            "new": null,
+            "direction": "declined",
+            "text": "Profit declined by 20.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": -20.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "debt",
+            "value": 10.0,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "debt increased by 10.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 10.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "conclusion",
+              "executive summary",
+              "key observations"
+            ],
+            "present_sections": [
+              "conclusion",
+              "executive summary",
+              "key observations"
+            ],
+            "missing_sections": [],
+            "extra_sections": [
+              "areas requiring further investigation",
+              "quantitative analysis",
+              "risks and opportunities"
+            ],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_multi_016",
+      "category": "financial_explanation",
+      "difficulty": "medium",
+      "reference_exact_match": true,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 64.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 80.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 150.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 180.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 300.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 360.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 3,
+            "generated_claim_count": 3,
+            "valid_generated_claim_count": 3,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 3,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "revenue calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "revenue",
+            "value": 20.0,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "Revenue increased by 20.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 20.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "profit calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "profit",
+            "value": -20.0,
+            "old": null,
+            "new": null,
+            "direction": "declined",
+            "text": "Profit declined by 20.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": -20.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "debt",
+            "value": 20.0,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "debt increased by 20.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 20.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "quantitative analysis"
+            ],
+            "present_sections": [
+              "quantitative analysis"
+            ],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_multi_017",
+      "category": "financial_classification",
+      "difficulty": "hard",
+      "reference_exact_match": true,
+      "findings": [
+        {
+          "evaluator": "label",
+          "code": "LABEL_CORRECT",
+          "passed": true,
+          "message": "Classification label matches: High Risk.",
+          "level": "summary",
+          "details": {
+            "expected_label": "High Risk",
+            "predicted_label": "High Risk"
+          }
+        },
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 36.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 45.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 48.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 60.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 150.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 165.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 300.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 360.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 4,
+            "generated_claim_count": 4,
+            "valid_generated_claim_count": 4,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 4,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "revenue calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "revenue",
+            "value": 20.0,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "Revenue increased by 20.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 20.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "profit calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "profit",
+            "value": -20.0,
+            "old": null,
+            "new": null,
+            "direction": "declined",
+            "text": "Profit declined by 20.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": -20.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "debt",
+            "value": 10.0,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "debt increased by 10.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 10.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "cash calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "cash",
+            "value": -20.0,
+            "old": null,
+            "new": null,
+            "direction": "declined",
+            "text": "Cash declined by 20.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": -20.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "present_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_opex_013",
+      "category": "financial_explanation",
+      "difficulty": "easy",
+      "reference_exact_match": true,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 108.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 120.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 1,
+            "generated_claim_count": 1,
+            "valid_generated_claim_count": 1,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 1,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "operating_expenses calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "operating_expenses",
+            "value": -10.0,
+            "old": null,
+            "new": null,
+            "direction": "declined",
+            "text": "Operating expenses declined by 10.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": -10.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [],
+            "present_sections": [],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_opex_015",
+      "category": "financial_report_generation",
+      "difficulty": "hard",
+      "reference_exact_match": true,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 60.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 120.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 150.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 210.0,
+                "unit": "cr",
+                "count": 4
+              },
+              {
+                "value": 450.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 480.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 600.0,
+                "unit": "cr",
+                "count": 2
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 4,
+            "generated_claim_count": 4,
+            "valid_generated_claim_count": 4,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 4,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "operating_profit calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "operating_profit",
+            "value": -6.2,
+            "old": null,
+            "new": null,
+            "direction": "declined",
+            "text": "Operating profit declined by 6.2%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": -6.25
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "operating_expenses calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "operating_expenses",
+            "value": 25.0,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "Operating expenses increased by 25.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 25.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "debt_to_revenue calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "debt_to_revenue",
+            "value": 0.35,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Debt-to-revenue is 0.35",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 0.35
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "cash_to_debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "cash_to_debt",
+            "value": 0.29,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Cash-to-debt is 0.29",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 0.2857142857142857
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "areas requiring further investigation",
+              "conclusion",
+              "executive summary",
+              "key observations",
+              "quantitative analysis",
+              "risks and opportunities"
+            ],
+            "present_sections": [
+              "areas requiring further investigation",
+              "conclusion",
+              "executive summary",
+              "key observations",
+              "quantitative analysis",
+              "risks and opportunities"
+            ],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_opex_023",
+      "category": "financial_classification",
+      "difficulty": "medium",
+      "reference_exact_match": true,
+      "findings": [
+        {
+          "evaluator": "label",
+          "code": "LABEL_CORRECT",
+          "passed": true,
+          "message": "Classification label matches: Healthy.",
+          "level": "summary",
+          "details": {
+            "expected_label": "Healthy",
+            "predicted_label": "Healthy"
+          }
+        },
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 90.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 100.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 200.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 210.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 2,
+            "generated_claim_count": 2,
+            "valid_generated_claim_count": 2,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 2,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "operating_profit calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "operating_profit",
+            "value": 5.0,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "Operating profit increased by 5.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 5.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "operating_expenses calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "operating_expenses",
+            "value": -10.0,
+            "old": null,
+            "new": null,
+            "direction": "declined",
+            "text": "Operating expenses declined by 10.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": -10.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "present_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_profit_008",
+      "category": "financial_classification",
+      "difficulty": "medium",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "label",
+          "code": "LABEL_CORRECT",
+          "passed": true,
+          "message": "Classification label matches: High Risk.",
+          "level": "summary",
+          "details": {
+            "expected_label": "High Risk",
+            "predicted_label": "High Risk"
+          }
+        },
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 45.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 60.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 120.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 198.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 400.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 440.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 3,
+            "generated_claim_count": 3,
+            "valid_generated_claim_count": 3,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 3,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "revenue calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "revenue",
+            "value": 10.0,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "Revenue increased by 10.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 10.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "profit calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "profit",
+            "value": -25.0,
+            "old": null,
+            "new": null,
+            "direction": "declined",
+            "text": "Profit declined by 25.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": -25.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "debt",
+            "value": 65.0,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "debt increased by 65.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 65.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "present_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_profit_012",
+      "category": "financial_report_generation",
+      "difficulty": "easy",
+      "reference_exact_match": true,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 50.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 62.5,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 300.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 330.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 2,
+            "generated_claim_count": 2,
+            "valid_generated_claim_count": 2,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 2,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "revenue calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "revenue",
+            "value": 10.0,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "Revenue increased by 10.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 10.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "profit calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "profit",
+            "value": 25.0,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "Profit increased by 25.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 25.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "conclusion",
+              "executive summary",
+              "key observations"
+            ],
+            "present_sections": [
+              "conclusion",
+              "executive summary",
+              "key observations"
+            ],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_profit_022",
+      "category": "financial_explanation",
+      "difficulty": "hard",
+      "reference_exact_match": true,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 27.6,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 36.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 51.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 60.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 90.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 155.25,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 300.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 345.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 4,
+            "generated_claim_count": 4,
+            "valid_generated_claim_count": 4,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 4,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "revenue calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "revenue",
+            "value": 15.0,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "Revenue increased by 15.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 15.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "profit calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "profit",
+            "value": -15.0,
+            "old": null,
+            "new": null,
+            "direction": "declined",
+            "text": "Profit declined by 15.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": -15.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "debt",
+            "value": 72.5,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "debt increased by 72.5%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 72.5
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "cash calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "cash",
+            "value": -23.3,
+            "old": null,
+            "new": null,
+            "direction": "declined",
+            "text": "Cash declined by 23.3%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": -23.33333333333333
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "quantitative analysis"
+            ],
+            "present_sections": [
+              "quantitative analysis"
+            ],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_rev_014",
+      "category": "financial_classification",
+      "difficulty": "hard",
+      "reference_exact_match": true,
+      "findings": [
+        {
+          "evaluator": "label",
+          "code": "LABEL_CORRECT",
+          "passed": true,
+          "message": "Classification label matches: High Risk.",
+          "level": "summary",
+          "details": {
+            "expected_label": "High Risk",
+            "predicted_label": "High Risk"
+          }
+        },
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 15.52,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 18.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 29.33,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 30.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 45.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 69.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 150.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 172.5,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 4,
+            "generated_claim_count": 4,
+            "valid_generated_claim_count": 4,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 4,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "revenue calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "revenue",
+            "value": 15.0,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "Revenue increased by 15.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 15.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "operating_profit calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "operating_profit",
+            "value": -2.2,
+            "old": null,
+            "new": null,
+            "direction": "declined",
+            "text": "Operating profit declined by 2.2%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": -2.2333333333333387
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "debt",
+            "value": 53.3,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "debt increased by 53.3%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 53.333333333333336
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "cash calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "cash",
+            "value": -13.8,
+            "old": null,
+            "new": null,
+            "direction": "declined",
+            "text": "Cash declined by 13.8%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": -13.77777777777778
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "present_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_rev_018",
+      "category": "financial_report_generation",
+      "difficulty": "medium",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 29.33,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 30.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 150.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 172.5,
+                "unit": "cr",
+                "count": 2
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 2,
+            "generated_claim_count": 2,
+            "valid_generated_claim_count": 1,
+            "invalid_generated_claim_count": 1,
+            "matched_expected_claim_count": 1,
+            "unmatched_expected_claim_count": 1,
+            "numeric_precision": 0.5,
+            "numeric_recall": 0.5
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_ERROR",
+          "passed": false,
+          "message": "revenue calculation failed source-grounded validation: PERCENTAGE_MATH_ERROR.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "revenue",
+            "value": 14.7,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "Revenue increased by 14.7%",
+            "valid": false,
+            "code": "PERCENTAGE_MATH_ERROR",
+            "details": {
+              "recomputed": [
+                15.0
+              ]
+            },
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "operating_profit calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "operating_profit",
+            "value": -2.2,
+            "old": null,
+            "new": null,
+            "direction": "declined",
+            "text": "Operating profit declined by 2.2%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": -2.2333333333333387
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: revenue.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "revenue",
+              "value": 15.0,
+              "old": null,
+              "new": null,
+              "direction": "increased",
+              "text": "Revenue increased by 15.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "areas requiring further investigation",
+              "conclusion",
+              "executive summary",
+              "key observations",
+              "quantitative analysis",
+              "risks and opportunities"
+            ],
+            "present_sections": [
+              "areas requiring further investigation",
+              "conclusion",
+              "executive summary",
+              "key observations",
+              "quantitative analysis",
+              "risks and opportunities"
+            ],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_rev_019",
+      "category": "financial_explanation",
+      "difficulty": "easy",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 200.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 220.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 1,
+            "generated_claim_count": 1,
+            "valid_generated_claim_count": 1,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 1,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "revenue calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "revenue",
+            "value": 10.0,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "Revenue increased by 10.0%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 10.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [],
+            "present_sections": [],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_risk_006",
+      "category": "financial_report_generation",
+      "difficulty": "medium",
+      "reference_exact_match": true,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 40.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 200.0,
+                "unit": "cr",
+                "count": 4
+              },
+              {
+                "value": 300.0,
+                "unit": "cr",
+                "count": 2
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 2,
+            "generated_claim_count": 2,
+            "valid_generated_claim_count": 2,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 2,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "debt_to_revenue calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "debt_to_revenue",
+            "value": 0.67,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Debt-to-revenue is 0.67",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 0.6666666666666666
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "cash_to_debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "cash_to_debt",
+            "value": 0.2,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Cash-to-debt is 0.20",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 0.2
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "areas requiring further investigation",
+              "conclusion",
+              "executive summary",
+              "key observations",
+              "quantitative analysis",
+              "risks and opportunities"
+            ],
+            "present_sections": [
+              "areas requiring further investigation",
+              "conclusion",
+              "executive summary",
+              "key observations",
+              "quantitative analysis",
+              "risks and opportunities"
+            ],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_risk_013",
+      "category": "financial_explanation",
+      "difficulty": "hard",
+      "reference_exact_match": true,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 40.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 90.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 400.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 500.0,
+                "unit": "cr",
+                "count": 2
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 3,
+            "generated_claim_count": 3,
+            "valid_generated_claim_count": 3,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 3,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "debt_to_revenue calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "debt_to_revenue",
+            "value": 0.8,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Debt-to-revenue is 0.80",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 0.8
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "cash_to_debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "cash_to_debt",
+            "value": 0.1,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Cash-to-debt is 0.10",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 0.1
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "operating_margin calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "operating_margin",
+            "value": 18.0,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Operating margin is 18.0%",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 18.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "quantitative analysis"
+            ],
+            "present_sections": [
+              "quantitative analysis"
+            ],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_risk_023",
+      "category": "financial_classification",
+      "difficulty": "easy",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "label",
+          "code": "LABEL_INCORRECT",
+          "passed": false,
+          "message": "Expected High Risk; model predicted Moderate Risk.",
+          "level": "summary",
+          "details": {
+            "expected_label": "High Risk",
+            "predicted_label": "Moderate Risk"
+          }
+        },
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 300.0,
+                "unit": "cr",
+                "count": 2
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 1,
+            "generated_claim_count": 1,
+            "valid_generated_claim_count": 1,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 1,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "debt_to_revenue calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "debt_to_revenue",
+            "value": 1.0,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Debt-to-revenue is 1.00",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 1.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "present_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    }
+  ],
+  "run": {
+    "run_name": "v1.1-baseline-rerun",
+    "repo_commit": "4c5bf851d2a47f7ecf8c44ebdf69d58b5210547c",
+    "model_name": "unsloth/Qwen3-4B-Instruct-2507-unsloth-bnb-4bit",
+    "data_sha256": {
+      "train": "b9fe27b8981ed74ef5525852730c4f213578334ea1aec6240b708ad2968baa63",
+      "validation": "165c3bf024ef6f2b3f9140116216d570ec4f7ccdb7a0c04e3264a076cc336a84",
+      "test": "851220d99e6d33cfab95334ad3ee9729452860f8aac1a04f5feb22032d5ae33d"
+    },
+    "max_new_tokens": 700,
+    "decoding": "greedy",
+    "predictions": "finetuned",
+    "output_checks": {
+      "truncated": [],
+      "empty": [],
+      "junk": []
+    }
+  }
+}

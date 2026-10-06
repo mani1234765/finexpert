@@ -1,0 +1,146 @@
+{
+  "run_name": "v1.1-baseline-rerun",
+  "finished_utc": "2026-10-06T09:08:03+00:00",
+  "repo_url": "https://github.com/mani1234765/finexpert.git",
+  "repo_commit": "4c5bf851d2a47f7ecf8c44ebdf69d58b5210547c",
+  "data_sha256": {
+    "train": "b9fe27b8981ed74ef5525852730c4f213578334ea1aec6240b708ad2968baa63",
+    "validation": "165c3bf024ef6f2b3f9140116216d570ec4f7ccdb7a0c04e3264a076cc336a84",
+    "test": "851220d99e6d33cfab95334ad3ee9729452860f8aac1a04f5feb22032d5ae33d"
+  },
+  "split_sizes": {
+    "train": 240,
+    "validation": 30,
+    "test": 30
+  },
+  "token_stats": {
+    "train": {
+      "max_total": 556,
+      "mean_total": 279.0,
+      "max_answer": 377
+    },
+    "validation": {
+      "max_total": 549,
+      "mean_total": 279.0,
+      "max_answer": 373
+    },
+    "test": {
+      "max_total": 513,
+      "mean_total": 274.3,
+      "max_answer": 355
+    }
+  },
+  "model_name": "unsloth/Qwen3-4B-Instruct-2507-unsloth-bnb-4bit",
+  "training": {
+    "seed": 3407,
+    "lora_r": 16,
+    "lora_alpha": 16,
+    "lora_dropout": 0.0,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "gate_proj",
+      "up_proj",
+      "down_proj"
+    ],
+    "epochs": 3,
+    "learning_rate": 0.0002,
+    "batch_size": 2,
+    "grad_accum": 4,
+    "effective_batch": 8,
+    "warmup_ratio": 0.1,
+    "lr_scheduler": "linear",
+    "weight_decay": 0.01,
+    "optimizer": "adamw_8bit",
+    "precision": "fp16",
+    "max_seq_length": 2048,
+    "loss_masking": "assistant response only",
+    "checkpoint_selection": "best val loss (per epoch)"
+  },
+  "results": {
+    "train_minutes": 10.1,
+    "peak_vram_gb": 8.41,
+    "best_eval_loss": 0.013613869436085224,
+    "best_epoch": 3.0,
+    "test_finetuned": {
+      "Figure fidelity": 1.0,
+      "Numeric precision": 0.987012987012987,
+      "Numeric recall": 0.987012987012987,
+      "Classification acc.": 0.6,
+      "Macro F1": 0.5,
+      "Missing labels": 0,
+      "Section coverage": 1.0
+    },
+    "test_base": {
+      "Figure fidelity": 0.3333333333333333,
+      "Numeric precision": 0.7027027027027027,
+      "Numeric recall": 0.09090909090909091,
+      "Classification acc.": 0.0,
+      "Macro F1": 0.0,
+      "Missing labels": 10,
+      "Section coverage": 0.1
+    }
+  },
+  "generation": {
+    "max_new_tokens": 700,
+    "decoding": "greedy",
+    "output_checks": {
+      "finetuned": {
+        "truncated": [],
+        "empty": [],
+        "junk": []
+      },
+      "base": {
+        "truncated": [
+          "fin_cash_006",
+          "fin_cash_011",
+          "fin_cash_016",
+          "fin_comp_005",
+          "fin_comp_013",
+          "fin_comp_024",
+          "fin_debt_009",
+          "fin_debt_025",
+          "fin_eff_014",
+          "fin_eff_019",
+          "fin_eff_027",
+          "fin_liq_010",
+          "fin_liq_020",
+          "fin_liq_021",
+          "fin_multi_009",
+          "fin_multi_016",
+          "fin_multi_017",
+          "fin_opex_015",
+          "fin_profit_008",
+          "fin_profit_012",
+          "fin_profit_022",
+          "fin_rev_014",
+          "fin_rev_018",
+          "fin_risk_006",
+          "fin_risk_013"
+        ],
+        "empty": [],
+        "junk": []
+      }
+    }
+  },
+  "environment": {
+    "python": "3.13.15",
+    "cuda": "13.0",
+    "gpu": "Tesla T4",
+    "packages": {
+      "unsloth": "2026.9.14",
+      "unsloth_zoo": "2026.9.9",
+      "torch": "2.11.0+cu130",
+      "transformers": "5.5.0",
+      "trl": "0.24.0",
+      "peft": "0.21.1",
+      "accelerate": "1.15.0",
+      "bitsandbytes": "0.50.2",
+      "datasets": "4.3.0",
+      "xformers": "0.0.35",
+      "triton": "3.6.0"
+    }
+  }
+}
