@@ -45,8 +45,9 @@ def fmt_num(value: float, max_decimals: int = 4) -> str:
         text = str(int(round(value)))
         return "0" if text == "-0" else text
     text = f"{value:.{max_decimals}f}".rstrip("0").rstrip(".")
-    if text in {"0", "-0"}:  # very small non-zero value: keep significant digits
-        text = f"{value:.3g}"
+    if text in {"0", "-0"}:  # very small non-zero value: 3 significant digits, never 1e-05 style
+        decimals = -math.floor(math.log10(abs(value))) + 2
+        text = f"{value:.{decimals}f}".rstrip("0").rstrip(".")
     return text
 
 

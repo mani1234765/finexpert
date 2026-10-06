@@ -13,6 +13,7 @@ FinQA repository, and every example records whether it reproduces `exe_ans`.
 from __future__ import annotations
 
 import json
+import math
 import re
 from pathlib import Path
 from typing import Any
@@ -155,7 +156,10 @@ def answer_presentation(exe_ans: Any, written: str) -> tuple[str, bool, float | 
             if abs(stated) <= 1:
                 stated *= 100
     # Percentages to 2 dp; other values keep the same precision as the working (4 dp).
+    # Small values keep at least 3 significant digits (-0.0345%, not -0.03%).
     decimals = 2 if is_percent else 4
+    if stated != 0 and abs(stated) < 1:
+        decimals = max(decimals, -math.floor(math.log10(abs(stated))) + 2)
     text = fmt_num(stated, decimals) + ("%" if is_percent else "")
     return text, is_percent, stated
 

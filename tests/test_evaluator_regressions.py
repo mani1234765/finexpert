@@ -40,7 +40,7 @@ def _summary(findings, evaluator):
 @pytest.mark.parametrize("split", ["train", "validation", "test"])
 def test_reference_answers_score_perfectly(split):
     path = SFT_DIR / f"{split}.jsonl"
-    rows = [json.loads(line) for line in path.open(encoding="utf-8") if line.strip()]
+    rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
     predictions = {row["example_id"]: row["messages"][2]["content"] for row in rows}
 
     summary = build_report(rows, predictions)["summary"]
