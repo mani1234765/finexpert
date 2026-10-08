@@ -593,7 +593,6 @@ def generate_and_validate_examples(count=TARGET_EXAMPLES, output_file=OUTPUT_FIL
         if task_counts[task] != target:
             raise RuntimeError(f"Task balance failure for {task}: got {task_counts[task]}, expected {target}.")
 
-    difficulty_targets = get_classification_label_targets(count) if False else None
     base, rem = divmod(count, len(DIFFICULTIES))
     difficulty_targets = {d: base + (i < rem) for i, d in enumerate(DIFFICULTIES)}
     for difficulty, target in difficulty_targets.items():

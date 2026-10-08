@@ -1,7 +1,7 @@
 [project]
 name = "finexpert"
 version = "0.1.0"
-description = "Add your description here"
+description = "Fine-tuning Qwen3-4B (QLoRA) for grounded financial analysis, with audited real-report data (FinQA, TAT-QA) and deterministic evaluation"
 readme = "README.md"
 authors = [
     { name = "mani1234765", email = "manideepdasanapu2003@gmail.com" }
@@ -11,9 +11,6 @@ dependencies = [
     "pydantic>=2.13.5",
     "scikit-learn>=1.9.1",
 ]
-
-[project.scripts]
-finexpert = "finexpert:main"
 
 [build-system]
 requires = ["uv_build>=0.12.0,<0.13.0"]

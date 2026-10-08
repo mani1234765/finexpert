@@ -1,9 +1,5 @@
 from .difficulty_scenarios import build_difficulty_scenario
 
-from .classification_rules import (
-    classify_financial_health,
-)
-
 
 from .schema import ReasoningType
 

@@ -1,0 +1,83 @@
+{
+  "run_name": "v2-pilot-seed3407",
+  "platform": "kaggle",
+  "finished_utc": "2026-10-08T09:33:01+00:00",
+  "repo_url": "https://github.com/mani1234765/finexpert.git",
+  "repo_commit": "d762e5ee122f213adb6c0431e598c76344b67526",
+  "mix_file": "data/external/train_mix_v2_pilot.json",
+  "eval_subset": "data/external/eval_subset_v1.json",
+  "data": {
+    "train_examples": 1040,
+    "train_dropped_over_length": [],
+    "train_tokens": 723617,
+    "monitor_examples": 226,
+    "qa_eval": 600
+  },
+  "model_name": "unsloth/Qwen3-4B-Instruct-2507-unsloth-bnb-4bit",
+  "training": {
+    "seed": 3407,
+    "lora_r": 16,
+    "lora_alpha": 16,
+    "lora_dropout": 0.0,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "gate_proj",
+      "up_proj",
+      "down_proj"
+    ],
+    "epochs": 1,
+    "learning_rate": 0.0002,
+    "batch_size": 2,
+    "grad_accum": 4,
+    "warmup_ratio": 0.05,
+    "lr_scheduler": "linear",
+    "weight_decay": 0.01,
+    "max_seq_length": 2048,
+    "precision": "fp16",
+    "loss_masking": "assistant only"
+  },
+  "timing": {
+    "train_minutes": 31.92,
+    "tokens_per_second": 378,
+    "peak_vram_gb": 11.69,
+    "finetuned_eval_minutes": 29.34
+  },
+  "results": {
+    "finetuned": {
+      "finqa_accuracy": 0.5966666666666667,
+      "finqa_ci95": [
+        0.5402701497811767,
+        0.6506187870859278
+      ],
+      "tatqa_em": 0.6466666666666666,
+      "tatqa_f1": 0.7269333333333333,
+      "tatqa_f1_ci95": [
+        0.6769,
+        0.7735333333333333
+      ],
+      "synthetic_numeric_recall": 0.948051948051948,
+      "synthetic_classification": 0.8
+    },
+    "base": null
+  },
+  "environment": {
+    "python": "3.13.15",
+    "cuda": "12.8",
+    "gpu": "Tesla T4",
+    "packages": {
+      "unsloth": "2026.10.2",
+      "unsloth_zoo": "2026.10.2",
+      "torch": "2.11.0+cu128",
+      "transformers": "5.16.1",
+      "trl": "1.13.0",
+      "peft": "0.20.0",
+      "accelerate": "1.14.0",
+      "bitsandbytes": "0.50.2",
+      "datasets": "4.8.5",
+      "pandas": "2.3.3"
+    }
+  }
+}

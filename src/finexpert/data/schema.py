@@ -29,16 +29,3 @@ class FinancialExample(BaseModel):
     reasoning_type: list[ReasoningType] = Field(min_length=1)
     source_type: SourceType | None = None
     company: str | None = None
-
-
-example = FinancialExample(
-    example_id="fin_exp_1",
-    instruction="Explain the change in revenue and operating profit.",
-    input="Revenue increased from ₹100 Cr to ₹130 Cr, while operating profit decreased from ₹20 Cr to ₹15 Cr.",
-    expected_output="Revenue increased by 30%, while operating profit decreased by 25%, indicating pressure on profitability.",
-    category=Category.FINANCIAL_EXPLANATION,
-    difficulty=Difficulty.EASY,
-    reasoning_type=[ReasoningType.TREND_ANALYSIS],
-    source_type=SourceType.SYNTHETIC,
-    company="ABC Industries"
-)
