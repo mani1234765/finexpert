@@ -20,6 +20,7 @@ import importlib
 import json
 import re
 import sys
+import warnings
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
@@ -72,7 +73,9 @@ def _official_tatqa(tatqa_dir: str):
     if tatqa_dir not in sys.path:
         sys.path.insert(0, tatqa_dir)
     try:
-        return importlib.import_module("tatqa_metric")
+        with warnings.catch_warnings():  # their regexes use non-raw strings; harmless, but noisy
+            warnings.simplefilter("ignore", SyntaxWarning)
+            return importlib.import_module("tatqa_metric")
     except ModuleNotFoundError as error:
         raise ModuleNotFoundError(
             f"The official TAT-QA scorer needs {error.name}; run `uv sync` (it is a dev dependency)."
@@ -101,10 +104,9 @@ def score_tatqa(prediction: str | None, annotation: dict[str, Any], tatqa_dir: s
         metric = module.TaTQAEmAndF1()
         metric(ground_truth=annotation, prediction=answers if answers else None, pred_scale=scale)
         exact_match, f1, scale_match, _ = metric.get_overall_metric()
-        if (exact_match, f1) > (best["em"], best["f1"]):
+        # Best reading = highest EM, then F1, then a correct scale (ties broken toward the right scale).
+        if (exact_match, f1, scale_match) > (best["em"], best["f1"], best["scale_correct"]):
             best = {"em": float(exact_match), "f1": float(f1), "scale": scale, "scale_correct": bool(scale_match)}
-        elif not answers and scale == "" and not best["scale_correct"]:
-            best["scale_correct"] = bool(scale_match)
     return {"extracted": extracted.text, "method": extracted.method, "pred_scale": best["scale"],
             "em": best["em"], "f1": best["f1"], "scale_correct": best["scale_correct"],
             "correct": bool(best["em"])}

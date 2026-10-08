@@ -106,5 +106,7 @@ def test_reference_answers_score_perfectly_on_official_scorers():
                    for line in (ROOT / "data" / "external" / source / f"{split}.jsonl").read_text(encoding="utf-8").splitlines()]
         report = build_qa_report(records, {r["example_id"]: r["messages"][2]["content"] for r in records}, str(TATQA))
         assert report["summary"]["finqa"]["strict"]["accuracy"] == 1.0
+        if split == "test":  # tie-break regression: perfect answers must also get the scale right
+            assert report["summary"]["tatqa"]["official"]["scale_accuracy"] == 1.0
         # One TAT-QA validation gold answer contains a stray backtick ("`70.07"); everything else is exact.
         assert report["summary"]["tatqa"]["strict"]["n"] - report["summary"]["tatqa"]["strict"]["correct"] <= 1

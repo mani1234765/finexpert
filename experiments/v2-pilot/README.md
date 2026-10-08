@@ -37,5 +37,11 @@ Re-computing the model's free-text working with Python and rebuilding its answer
 - Pipeline validated on Kaggle; speed measured.
 - Next: a prompted base-model baseline on the same questions, then v2-A (800 FinQA + 1,200 TAT-QA + 240 synthetic, ≈1.73M tokens, ≈76 min training per run) with 3 seeds.
 
+## Correction (8 Oct 2026)
+`finetuned_qa_report.*` show TAT-QA **scale accuracy 72.3%**. That figure came from a tie-break bug in our scorer: when two
+readings of an answer scored the same EM/F1, the scale of the wrong reading could be kept. Rescoring the same predictions with
+the fixed scorer gives **97.7%**; official EM (64.7%) and F1 (72.7%) are unchanged. The original report files are kept as
+produced; the fix and its regression test are in the commit that added this note.
+
 ## Files
 `finetuned_qa_*` QA predictions and report · `finetuned_synthetic_*` synthetic test predictions and report · `train_log.json`, `loss_curve.png` training history · `run_manifest.json` config, versions, timings · `requirements-kaggle.txt` pinned versions. The LoRA adapter is not stored in git.
