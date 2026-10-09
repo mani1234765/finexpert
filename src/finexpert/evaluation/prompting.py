@@ -11,6 +11,9 @@ Baselines
 ---------
 * zero-shot: the base model gets the same system prompt and instructions the
   fine-tuned model was trained with. Measures what the model can do "as is".
+* format rules (optional, QA only): the benchmarks' answer conventions spelled
+  out (scale words, "; " between items, % with 2 decimals), so a baseline is not
+  penalised for conventions only the fine-tuned model learned from its targets.
 * few-shot: the same, preceded by worked examples written as earlier chat
   turns (user question -> assistant answer). This is the standard way to show
   an instruction-tuned model the expected format and reasoning style without
@@ -96,9 +99,26 @@ def select_few_shot(train_records: list[Record], max_chars_per_example: int = 60
     return selected
 
 
-def build_messages(record: Record, shots: list[Record] | None = None) -> list[dict[str, str]]:
+# Answer conventions the QA benchmarks score on. The training prompt does not
+# state them (the fine-tuned model learns them from its targets); the
+# format-rules baseline adds them so the base model is not penalised for
+# conventions it was never told. Applied to FinQA / TAT-QA questions only.
+QA_FORMAT_RULES = (
+    "Answer format rules for the final line:\n"
+    "- Give only the value after \"Answer:\", no sentence.\n"
+    "- If the figures are stated in thousands, millions or billions, keep that unit and write it after the number "
+    "(for example \"Answer: 12.6 million\"); do not convert to a different unit.\n"
+    "- Write percentages with a % sign and at least 2 decimal places (for example \"Answer: 14.46%\").\n"
+    "- If the answer has several items, separate them with \"; \" (for example \"Answer: 2019; 2018\").\n"
+    "- For a yes/no question, answer \"yes\" or \"no\"."
+)
+
+
+def build_messages(record: Record, shots: list[Record] | None = None,
+                   format_rules: bool = False) -> list[dict[str, str]]:
     """Chat messages for one question: system, then worked examples as earlier
-    turns, then the question. With no shots this is exactly the training prompt."""
+    turns, then the question. With no shots and no format rules this is exactly
+    the training prompt."""
     parts = _messages(record)
     messages = [{"role": "system", "content": parts["system"]}]
     for shot in shots or []:
@@ -107,7 +127,10 @@ def build_messages(record: Record, shots: list[Record] | None = None) -> list[di
         shot_parts = _messages(shot)
         messages += [{"role": "user", "content": shot_parts["user"]},
                      {"role": "assistant", "content": shot_parts["assistant"]}]
-    messages.append({"role": "user", "content": parts["user"]})
+    question = parts["user"]
+    if format_rules and source_key(record) in ("finqa", "tatqa"):
+        question = f"{question}\n\n{QA_FORMAT_RULES}"
+    messages.append({"role": "user", "content": question})
     return messages
 
 

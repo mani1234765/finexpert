@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 from finexpert.evaluation.prompting import (
-    FEW_SHOT_SLOTS, answer_line_complete, document_key, build_messages, select_few_shot, source_key, to_chatml, training_text,
+    FEW_SHOT_SLOTS, QA_FORMAT_RULES, answer_line_complete, document_key, build_messages, select_few_shot, source_key, to_chatml, training_text,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -87,3 +87,13 @@ def test_few_shot_selection_on_real_data_is_deterministic_and_leak_free():
     synthetic_test = {r["example_id"] for r in _read(ROOT / "data" / "sft" / "test.jsonl")}
     chosen = {e["example_id"] for examples in shots.values() for e in examples}
     assert not chosen & (held_out | synthetic_test)
+
+
+def test_format_rules_only_change_the_final_qa_question():
+    qa = _record("q1", user="QA question", source_type="finqa")
+    synthetic = _record("s1", user="Synthetic task", source_type="synthetic", category="financial_explanation")
+    with_rules = build_messages(qa, format_rules=True)
+    assert with_rules[-1]["content"] == "QA question\n\n" + QA_FORMAT_RULES
+    assert with_rules[:-1] == build_messages(qa)[:-1]
+    assert build_messages(synthetic, format_rules=True) == build_messages(synthetic)   # synthetic untouched
+    assert build_messages(qa, format_rules=False) == build_messages(qa)                # default = training prompt

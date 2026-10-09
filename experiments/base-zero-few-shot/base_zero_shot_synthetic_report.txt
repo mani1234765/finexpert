@@ -1,0 +1,130 @@
+============================================================
+                  FINEXPERT EVALUATION
+============================================================
+
+Examples: 30
+Figure fidelity:      30.00%
+Numeric precision:    76.32%
+Numeric recall:       10.39%
+Classification acc.:  0.00%
+Section coverage:     10.00%
+Semantic evaluation:  deferred
+Verbatim ref. match: 0.00%  (diagnostic, not a quality score)
+
+------------ CLASSIFICATION ------------
+Accuracy:     0.00%  (0/10, 95% CI 0.0-27.8%)
+Macro    P/R/F1: 0.000 / 0.000 / 0.000
+Weighted P/R/F1: 0.000 / 0.000 / 0.000
+
+  label                P      R     F1  support
+  Healthy          0.000  0.000  0.000        4
+  Moderate Risk    0.000  0.000  0.000        2
+  High Risk        0.000  0.000  0.000        4
+
+  Confusion matrix (rows = expected, cols = predicted)
+                    Healthy  Moderate      High   Missing
+  Healthy                 0         0         0         4
+  Moderate Risk           0         0         0         2
+  High Risk               0         0         0         4
+
+---------------- BY TASK ----------------
+
+financial_classification
+  Examples:            10
+  Figure fidelity:     30.00%
+  Numeric precision:   80.00%
+  Numeric recall:      7.69%
+  Classification acc.: 0.00%
+  Section coverage:    0.00%
+
+financial_explanation
+  Examples:            10
+  Figure fidelity:     30.00%
+  Numeric precision:   81.82%
+  Numeric recall:      12.00%
+  Section coverage:    30.00%
+
+financial_report_generation
+  Examples:            10
+  Figure fidelity:     30.00%
+  Numeric precision:   66.67%
+  Numeric recall:      11.54%
+  Section coverage:    0.00%
+
+------------- BY DIFFICULTY -------------
+easy    n=10  fidelity=30.0%  num_recall=18.8%  cls_acc=0.0%
+hard    n=10  fidelity=50.0%  num_recall=13.5%  cls_acc=0.0%
+medium  n=10  fidelity=10.0%  num_recall=0.0%  cls_acc=0.0%
+
+------- CLASSIFICATION: DIFFICULTY x LABEL -------
+easy | High Risk          0/1
+easy | Moderate Risk      0/2
+hard | Healthy            0/3
+hard | High Risk          0/2
+medium | Healthy          0/1
+medium | High Risk        0/1
+
+------------- ERROR BREAKDOWN -------------
+MISSING_EXPECTED_METRIC                 69
+PERCENTAGE_SOURCE_NOT_FOUND             1
+RATIO_MATH_ERROR                        2
+RATIO_SOURCE_NOT_FOUND                  1
+VALUE_CHANGE_NOT_GROUNDED               5
+
+Missing expected quantitative metrics:
+asset_turnover                3
+cash                          4
+cash_flow                     3
+cash_to_debt                  6
+current_ratio                 2
+debt                          11
+debt_to_revenue               6
+operating_expenses            2
+operating_margin              3
+operating_profit              5
+profit                        9
+return_on_assets              2
+revenue                       13
+
+Classification errors:
+fin_cash_011: Moderate Risk -> None
+fin_comp_005: Healthy -> None
+fin_debt_017: Moderate Risk -> None
+fin_eff_014: Healthy -> None
+fin_liq_020: Healthy -> None
+fin_multi_017: High Risk -> None
+fin_opex_023: Healthy -> None
+fin_profit_008: High Risk -> None
+fin_rev_014: High Risk -> None
+fin_risk_023: High Risk -> None
+
+Structural errors:
+fin_cash_006: missing=['areas requiring further investigation', 'conclusion', 'executive summary', 'key observations', 'quantitative analysis', 'risks and opportunities'] coverage=0.00
+fin_cash_011: missing=['basis', 'classification', 'evidence'] coverage=0.00
+fin_cash_016: missing=['quantitative analysis'] coverage=0.00
+fin_comp_005: missing=['basis', 'classification', 'evidence'] coverage=0.00
+fin_comp_013: missing=['quantitative analysis'] coverage=0.00
+fin_comp_024: missing=['conclusion', 'executive summary', 'key observations'] coverage=0.00
+fin_debt_009: missing=['areas requiring further investigation', 'conclusion', 'executive summary', 'key observations', 'quantitative analysis', 'risks and opportunities'] coverage=0.00
+fin_debt_017: missing=['basis', 'classification', 'evidence'] coverage=0.00
+fin_debt_025: missing=['quantitative analysis'] coverage=0.00
+fin_eff_014: missing=['basis', 'classification', 'evidence'] coverage=0.00
+fin_eff_027: missing=['areas requiring further investigation', 'conclusion', 'executive summary', 'key observations', 'quantitative analysis', 'risks and opportunities'] coverage=0.00
+fin_liq_010: missing=['quantitative analysis'] coverage=0.00
+fin_liq_020: missing=['basis', 'classification', 'evidence'] coverage=0.00
+fin_liq_021: missing=['conclusion', 'executive summary', 'key observations'] coverage=0.00
+fin_multi_009: missing=['conclusion', 'executive summary', 'key observations'] coverage=0.00
+fin_multi_016: missing=['quantitative analysis'] coverage=0.00
+fin_multi_017: missing=['basis', 'classification', 'evidence'] coverage=0.00
+fin_opex_015: missing=['areas requiring further investigation', 'conclusion', 'executive summary', 'key observations', 'quantitative analysis', 'risks and opportunities'] coverage=0.00
+fin_opex_023: missing=['basis', 'classification', 'evidence'] coverage=0.00
+fin_profit_008: missing=['basis', 'classification', 'evidence'] coverage=0.00
+fin_profit_012: missing=['conclusion', 'executive summary', 'key observations'] coverage=0.00
+fin_profit_022: missing=['quantitative analysis'] coverage=0.00
+fin_rev_014: missing=['basis', 'classification', 'evidence'] coverage=0.00
+fin_rev_018: missing=['areas requiring further investigation', 'conclusion', 'executive summary', 'key observations', 'quantitative analysis', 'risks and opportunities'] coverage=0.00
+fin_risk_006: missing=['areas requiring further investigation', 'conclusion', 'executive summary', 'key observations', 'quantitative analysis', 'risks and opportunities'] coverage=0.00
+fin_risk_013: missing=['quantitative analysis'] coverage=0.00
+fin_risk_023: missing=['basis', 'classification', 'evidence'] coverage=0.00
+
+============================================================
