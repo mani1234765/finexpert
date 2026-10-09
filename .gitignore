@@ -39,3 +39,5 @@ mlruns/
 # scripts/build_external_dataset.py (audit.json and SAMPLES.md are committed)
 data/external/raw/
 data/external/**/*.jsonl
+# ...except distilled targets: produced by an expensive GPU run, so they are committed
+!data/external/distilled/*.jsonl

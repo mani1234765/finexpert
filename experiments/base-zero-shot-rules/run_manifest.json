@@ -1,0 +1,83 @@
+{
+  "run_name": "base-zero-shot-rules",
+  "run_mode": "baseline",
+  "platform": "kaggle",
+  "finished_utc": "2026-10-09T08:17:46+00:00",
+  "repo_url": "https://github.com/mani1234765/finexpert.git",
+  "repo_commit": "f8f073c5f1a6a9b4dcada4175b73ed8248c6a9b8",
+  "eval_subset": "data/external/eval_subset_v1.json",
+  "model_name": "unsloth/Qwen3-4B-Instruct-2507-unsloth-bnb-4bit",
+  "evaluation": {
+    "qa_questions": 600,
+    "synthetic_test": 30
+  },
+  "results": {
+    "base_zero_shot_rules": {
+      "finqa_strict": 0.6333333333333333,
+      "finqa_lenient": 0.6333333333333333,
+      "finqa_ci95": [
+        0.5774356684994387,
+        0.6858594168344984
+      ],
+      "tatqa_em": 0.6133333333333333,
+      "tatqa_f1": 0.6720333333333334,
+      "tatqa_lenient_em": 0.6133333333333333,
+      "tatqa_f1_ci95": [
+        0.6182333333333333,
+        0.7204
+      ],
+      "answer_line_rate": 0.9650000000000001,
+      "synthetic_numeric_recall": 0.1038961038961039,
+      "synthetic_classification": 0.0,
+      "synthetic_classification_missing": 10,
+      "eval_minutes": 163.03
+    }
+  },
+  "environment": {
+    "python": "3.13.15",
+    "cuda": "12.8",
+    "gpu": "Tesla T4",
+    "packages": {
+      "unsloth": "2026.10.3",
+      "unsloth_zoo": "2026.10.3",
+      "torch": "2.11.0+cu128",
+      "transformers": "5.16.1",
+      "trl": "1.13.0",
+      "peft": "0.20.0",
+      "accelerate": "1.14.0",
+      "bitsandbytes": "0.50.2",
+      "datasets": "4.8.5",
+      "pandas": "2.3.3"
+    }
+  },
+  "baseline": {
+    "variants": [
+      "zero_shot_rules"
+    ],
+    "max_new_tokens": 1024,
+    "max_seq_length": 8192,
+    "stop_after_answer": true,
+    "few_shot_examples": {
+      "finqa": [
+        "finqa_train_05405",
+        "finqa_train_05355"
+      ],
+      "tatqa": [
+        "tatqa_train_fea9fc8d-84e2-4c79-bbdf-69417d648201",
+        "tatqa_train_3403e8e2-4057-40c3-8f39-1ed454fc1d27"
+      ],
+      "financial_explanation": [
+        "fin_cash_004"
+      ],
+      "financial_classification": [
+        "fin_cash_002"
+      ],
+      "financial_report_generation": [
+        "fin_cash_018"
+      ]
+    }
+  },
+  "timing": {
+    "peak_vram_gb": 15.34
+  }
+}

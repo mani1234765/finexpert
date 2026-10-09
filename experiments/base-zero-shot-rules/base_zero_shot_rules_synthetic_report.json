@@ -1,0 +1,5977 @@
+{
+  "evaluation_config": {
+    "framework": "Finding-based deterministic evaluators",
+    "evaluators": [
+      "label",
+      "grounding",
+      "numerical",
+      "structural"
+    ],
+    "semantic_evaluation": {
+      "status": "deferred",
+      "reason": "No validated semantic rubric is implemented yet. An LLM-as-judge or similar proxy could appear to measure meaning while mainly measuring style or agreement, so semantic scoring is deferred until a testable rubric and validation protocol exist."
+    },
+    "number_validation": "recompute-from-input",
+    "section_validation": "reference-template coverage with canonical aliases"
+  },
+  "summary": {
+    "examples": 30,
+    "grounding": {
+      "n": 30,
+      "figure_fidelity": 0.3
+    },
+    "numerical": {
+      "expected_claims": 77,
+      "generated_claims": 38,
+      "valid_generated_claims": 29,
+      "matched_expected_claims": 8,
+      "numeric_precision": 0.7631578947368421,
+      "numeric_recall": 0.1038961038961039
+    },
+    "classification": {
+      "n": 10,
+      "accuracy": 0.0
+    },
+    "structure": {
+      "n": 30,
+      "section_coverage": 0.1,
+      "complete_reports": 0.1
+    },
+    "by_category": {
+      "financial_classification": {
+        "examples": 10,
+        "grounding": {
+          "n": 10,
+          "figure_fidelity": 0.3
+        },
+        "numerical": {
+          "expected_claims": 26,
+          "generated_claims": 15,
+          "valid_generated_claims": 12,
+          "matched_expected_claims": 2,
+          "numeric_precision": 0.8,
+          "numeric_recall": 0.07692307692307693
+        },
+        "structure": {
+          "n": 10,
+          "section_coverage": 0.0,
+          "complete_reports": 0.0
+        },
+        "classification": {
+          "n": 10,
+          "accuracy": 0.0
+        }
+      },
+      "financial_explanation": {
+        "examples": 10,
+        "grounding": {
+          "n": 10,
+          "figure_fidelity": 0.3
+        },
+        "numerical": {
+          "expected_claims": 25,
+          "generated_claims": 11,
+          "valid_generated_claims": 9,
+          "matched_expected_claims": 3,
+          "numeric_precision": 0.8181818181818182,
+          "numeric_recall": 0.12
+        },
+        "structure": {
+          "n": 10,
+          "section_coverage": 0.3,
+          "complete_reports": 0.3
+        },
+        "classification": null
+      },
+      "financial_report_generation": {
+        "examples": 10,
+        "grounding": {
+          "n": 10,
+          "figure_fidelity": 0.3
+        },
+        "numerical": {
+          "expected_claims": 26,
+          "generated_claims": 12,
+          "valid_generated_claims": 8,
+          "matched_expected_claims": 3,
+          "numeric_precision": 0.6666666666666666,
+          "numeric_recall": 0.11538461538461539
+        },
+        "structure": {
+          "n": 10,
+          "section_coverage": 0.0,
+          "complete_reports": 0.0
+        },
+        "classification": null
+      }
+    },
+    "by_difficulty": {
+      "easy": {
+        "examples": 10,
+        "grounding": {
+          "n": 10,
+          "figure_fidelity": 0.3
+        },
+        "numerical": {
+          "expected_claims": 16,
+          "generated_claims": 10,
+          "valid_generated_claims": 6,
+          "matched_expected_claims": 3,
+          "numeric_precision": 0.6,
+          "numeric_recall": 0.1875
+        },
+        "structure": {
+          "n": 10,
+          "section_coverage": 0.3,
+          "complete_reports": 0.3
+        },
+        "classification": {
+          "n": 3,
+          "accuracy": 0.0
+        }
+      },
+      "hard": {
+        "examples": 10,
+        "grounding": {
+          "n": 10,
+          "figure_fidelity": 0.5
+        },
+        "numerical": {
+          "expected_claims": 37,
+          "generated_claims": 23,
+          "valid_generated_claims": 19,
+          "matched_expected_claims": 5,
+          "numeric_precision": 0.8260869565217391,
+          "numeric_recall": 0.13513513513513514
+        },
+        "structure": {
+          "n": 10,
+          "section_coverage": 0.0,
+          "complete_reports": 0.0
+        },
+        "classification": {
+          "n": 5,
+          "accuracy": 0.0
+        }
+      },
+      "medium": {
+        "examples": 10,
+        "grounding": {
+          "n": 10,
+          "figure_fidelity": 0.1
+        },
+        "numerical": {
+          "expected_claims": 24,
+          "generated_claims": 5,
+          "valid_generated_claims": 4,
+          "matched_expected_claims": 0,
+          "numeric_precision": 0.8,
+          "numeric_recall": 0.0
+        },
+        "structure": {
+          "n": 10,
+          "section_coverage": 0.0,
+          "complete_reports": 0.0
+        },
+        "classification": {
+          "n": 2,
+          "accuracy": 0.0
+        }
+      }
+    },
+    "by_category_and_difficulty": {
+      "financial_classification | easy": {
+        "examples": 3,
+        "grounding": {
+          "n": 3,
+          "figure_fidelity": 0.3333333333333333
+        },
+        "numerical": {
+          "expected_claims": 3,
+          "generated_claims": 2,
+          "valid_generated_claims": 1,
+          "matched_expected_claims": 1,
+          "numeric_precision": 0.5,
+          "numeric_recall": 0.3333333333333333
+        },
+        "structure": {
+          "n": 3,
+          "section_coverage": 0.0,
+          "complete_reports": 0.0
+        },
+        "classification": {
+          "n": 3,
+          "accuracy": 0.0
+        }
+      },
+      "financial_classification | hard": {
+        "examples": 5,
+        "grounding": {
+          "n": 5,
+          "figure_fidelity": 0.4
+        },
+        "numerical": {
+          "expected_claims": 18,
+          "generated_claims": 11,
+          "valid_generated_claims": 9,
+          "matched_expected_claims": 1,
+          "numeric_precision": 0.8181818181818182,
+          "numeric_recall": 0.05555555555555555
+        },
+        "structure": {
+          "n": 5,
+          "section_coverage": 0.0,
+          "complete_reports": 0.0
+        },
+        "classification": {
+          "n": 5,
+          "accuracy": 0.0
+        }
+      },
+      "financial_classification | medium": {
+        "examples": 2,
+        "grounding": {
+          "n": 2,
+          "figure_fidelity": 0.0
+        },
+        "numerical": {
+          "expected_claims": 5,
+          "generated_claims": 2,
+          "valid_generated_claims": 2,
+          "matched_expected_claims": 0,
+          "numeric_precision": 1.0,
+          "numeric_recall": 0.0
+        },
+        "structure": {
+          "n": 2,
+          "section_coverage": 0.0,
+          "complete_reports": 0.0
+        },
+        "classification": {
+          "n": 2,
+          "accuracy": 0.0
+        }
+      },
+      "financial_explanation | easy": {
+        "examples": 3,
+        "grounding": {
+          "n": 3,
+          "figure_fidelity": 0.3333333333333333
+        },
+        "numerical": {
+          "expected_claims": 4,
+          "generated_claims": 2,
+          "valid_generated_claims": 2,
+          "matched_expected_claims": 1,
+          "numeric_precision": 1.0,
+          "numeric_recall": 0.25
+        },
+        "structure": {
+          "n": 3,
+          "section_coverage": 1.0,
+          "complete_reports": 1.0
+        },
+        "classification": null
+      },
+      "financial_explanation | hard": {
+        "examples": 3,
+        "grounding": {
+          "n": 3,
+          "figure_fidelity": 0.6666666666666666
+        },
+        "numerical": {
+          "expected_claims": 11,
+          "generated_claims": 9,
+          "valid_generated_claims": 7,
+          "matched_expected_claims": 2,
+          "numeric_precision": 0.7777777777777778,
+          "numeric_recall": 0.18181818181818182
+        },
+        "structure": {
+          "n": 3,
+          "section_coverage": 0.0,
+          "complete_reports": 0.0
+        },
+        "classification": null
+      },
+      "financial_explanation | medium": {
+        "examples": 4,
+        "grounding": {
+          "n": 4,
+          "figure_fidelity": 0.0
+        },
+        "numerical": {
+          "expected_claims": 10,
+          "generated_claims": 0,
+          "valid_generated_claims": 0,
+          "matched_expected_claims": 0,
+          "numeric_precision": null,
+          "numeric_recall": 0.0
+        },
+        "structure": {
+          "n": 4,
+          "section_coverage": 0.0,
+          "complete_reports": 0.0
+        },
+        "classification": null
+      },
+      "financial_report_generation | easy": {
+        "examples": 4,
+        "grounding": {
+          "n": 4,
+          "figure_fidelity": 0.25
+        },
+        "numerical": {
+          "expected_claims": 9,
+          "generated_claims": 6,
+          "valid_generated_claims": 3,
+          "matched_expected_claims": 1,
+          "numeric_precision": 0.5,
+          "numeric_recall": 0.1111111111111111
+        },
+        "structure": {
+          "n": 4,
+          "section_coverage": 0.0,
+          "complete_reports": 0.0
+        },
+        "classification": null
+      },
+      "financial_report_generation | hard": {
+        "examples": 2,
+        "grounding": {
+          "n": 2,
+          "figure_fidelity": 0.5
+        },
+        "numerical": {
+          "expected_claims": 8,
+          "generated_claims": 3,
+          "valid_generated_claims": 3,
+          "matched_expected_claims": 2,
+          "numeric_precision": 1.0,
+          "numeric_recall": 0.25
+        },
+        "structure": {
+          "n": 2,
+          "section_coverage": 0.0,
+          "complete_reports": 0.0
+        },
+        "classification": null
+      },
+      "financial_report_generation | medium": {
+        "examples": 4,
+        "grounding": {
+          "n": 4,
+          "figure_fidelity": 0.25
+        },
+        "numerical": {
+          "expected_claims": 9,
+          "generated_claims": 3,
+          "valid_generated_claims": 2,
+          "matched_expected_claims": 0,
+          "numeric_precision": 0.6666666666666666,
+          "numeric_recall": 0.0
+        },
+        "structure": {
+          "n": 4,
+          "section_coverage": 0.0,
+          "complete_reports": 0.0
+        },
+        "classification": null
+      }
+    },
+    "classification_metrics": {
+      "n": 10,
+      "correct": 0,
+      "accuracy": 0.0,
+      "accuracy_ci95": [
+        0.0,
+        0.2775401687666166
+      ],
+      "macro": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "weighted": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      },
+      "per_label": {
+        "Healthy": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 4,
+          "predicted": 0
+        },
+        "Moderate Risk": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 2,
+          "predicted": 0
+        },
+        "High Risk": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 4,
+          "predicted": 0
+        }
+      },
+      "confusion_matrix": {
+        "rows_expected": [
+          "Healthy",
+          "Moderate Risk",
+          "High Risk"
+        ],
+        "columns_predicted": [
+          "Healthy",
+          "Moderate Risk",
+          "High Risk",
+          "<missing>"
+        ],
+        "counts": [
+          [
+            0,
+            0,
+            0,
+            4
+          ],
+          [
+            0,
+            0,
+            0,
+            2
+          ],
+          [
+            0,
+            0,
+            0,
+            4
+          ]
+        ]
+      },
+      "missing_predictions": 10
+    },
+    "classification_breakdown": {
+      "by_expected_label": {
+        "Healthy": {
+          "n": 4,
+          "correct": 0,
+          "accuracy": 0.0
+        },
+        "High Risk": {
+          "n": 4,
+          "correct": 0,
+          "accuracy": 0.0
+        },
+        "Moderate Risk": {
+          "n": 2,
+          "correct": 0,
+          "accuracy": 0.0
+        }
+      },
+      "by_difficulty_and_label": {
+        "easy | High Risk": {
+          "n": 1,
+          "correct": 0,
+          "accuracy": 0.0
+        },
+        "easy | Moderate Risk": {
+          "n": 2,
+          "correct": 0,
+          "accuracy": 0.0
+        },
+        "hard | Healthy": {
+          "n": 3,
+          "correct": 0,
+          "accuracy": 0.0
+        },
+        "hard | High Risk": {
+          "n": 2,
+          "correct": 0,
+          "accuracy": 0.0
+        },
+        "medium | Healthy": {
+          "n": 1,
+          "correct": 0,
+          "accuracy": 0.0
+        },
+        "medium | High Risk": {
+          "n": 1,
+          "correct": 0,
+          "accuracy": 0.0
+        }
+      }
+    },
+    "reference_exact_match_rate": 0.0,
+    "failure_breakdown": {
+      "finding_codes": {
+        "MISSING_EXPECTED_METRIC": 69,
+        "VALUE_CHANGE_NOT_GROUNDED": 5,
+        "RATIO_SOURCE_NOT_FOUND": 1,
+        "RATIO_MATH_ERROR": 2,
+        "PERCENTAGE_SOURCE_NOT_FOUND": 1
+      },
+      "missing_expected_metrics": {
+        "cash_flow": 3,
+        "debt_to_revenue": 6,
+        "cash_to_debt": 6,
+        "operating_margin": 3,
+        "revenue": 13,
+        "profit": 9,
+        "debt": 11,
+        "cash": 4,
+        "operating_profit": 5,
+        "asset_turnover": 3,
+        "return_on_assets": 2,
+        "current_ratio": 2,
+        "operating_expenses": 2
+      },
+      "classification_errors": [
+        {
+          "example_id": "fin_cash_011",
+          "expected": "Moderate Risk",
+          "generated": null
+        },
+        {
+          "example_id": "fin_comp_005",
+          "expected": "Healthy",
+          "generated": null
+        },
+        {
+          "example_id": "fin_debt_017",
+          "expected": "Moderate Risk",
+          "generated": null
+        },
+        {
+          "example_id": "fin_eff_014",
+          "expected": "Healthy",
+          "generated": null
+        },
+        {
+          "example_id": "fin_liq_020",
+          "expected": "Healthy",
+          "generated": null
+        },
+        {
+          "example_id": "fin_multi_017",
+          "expected": "High Risk",
+          "generated": null
+        },
+        {
+          "example_id": "fin_opex_023",
+          "expected": "Healthy",
+          "generated": null
+        },
+        {
+          "example_id": "fin_profit_008",
+          "expected": "High Risk",
+          "generated": null
+        },
+        {
+          "example_id": "fin_rev_014",
+          "expected": "High Risk",
+          "generated": null
+        },
+        {
+          "example_id": "fin_risk_023",
+          "expected": "High Risk",
+          "generated": null
+        }
+      ],
+      "structural_errors": [
+        {
+          "example_id": "fin_cash_006",
+          "missing_sections": [
+            "areas requiring further investigation",
+            "conclusion",
+            "executive summary",
+            "key observations",
+            "quantitative analysis",
+            "risks and opportunities"
+          ],
+          "coverage": 0.0
+        },
+        {
+          "example_id": "fin_cash_011",
+          "missing_sections": [
+            "basis",
+            "classification",
+            "evidence"
+          ],
+          "coverage": 0.0
+        },
+        {
+          "example_id": "fin_cash_016",
+          "missing_sections": [
+            "quantitative analysis"
+          ],
+          "coverage": 0.0
+        },
+        {
+          "example_id": "fin_comp_005",
+          "missing_sections": [
+            "basis",
+            "classification",
+            "evidence"
+          ],
+          "coverage": 0.0
+        },
+        {
+          "example_id": "fin_comp_013",
+          "missing_sections": [
+            "quantitative analysis"
+          ],
+          "coverage": 0.0
+        },
+        {
+          "example_id": "fin_comp_024",
+          "missing_sections": [
+            "conclusion",
+            "executive summary",
+            "key observations"
+          ],
+          "coverage": 0.0
+        },
+        {
+          "example_id": "fin_debt_009",
+          "missing_sections": [
+            "areas requiring further investigation",
+            "conclusion",
+            "executive summary",
+            "key observations",
+            "quantitative analysis",
+            "risks and opportunities"
+          ],
+          "coverage": 0.0
+        },
+        {
+          "example_id": "fin_debt_017",
+          "missing_sections": [
+            "basis",
+            "classification",
+            "evidence"
+          ],
+          "coverage": 0.0
+        },
+        {
+          "example_id": "fin_debt_025",
+          "missing_sections": [
+            "quantitative analysis"
+          ],
+          "coverage": 0.0
+        },
+        {
+          "example_id": "fin_eff_014",
+          "missing_sections": [
+            "basis",
+            "classification",
+            "evidence"
+          ],
+          "coverage": 0.0
+        },
+        {
+          "example_id": "fin_eff_027",
+          "missing_sections": [
+            "areas requiring further investigation",
+            "conclusion",
+            "executive summary",
+            "key observations",
+            "quantitative analysis",
+            "risks and opportunities"
+          ],
+          "coverage": 0.0
+        },
+        {
+          "example_id": "fin_liq_010",
+          "missing_sections": [
+            "quantitative analysis"
+          ],
+          "coverage": 0.0
+        },
+        {
+          "example_id": "fin_liq_020",
+          "missing_sections": [
+            "basis",
+            "classification",
+            "evidence"
+          ],
+          "coverage": 0.0
+        },
+        {
+          "example_id": "fin_liq_021",
+          "missing_sections": [
+            "conclusion",
+            "executive summary",
+            "key observations"
+          ],
+          "coverage": 0.0
+        },
+        {
+          "example_id": "fin_multi_009",
+          "missing_sections": [
+            "conclusion",
+            "executive summary",
+            "key observations"
+          ],
+          "coverage": 0.0
+        },
+        {
+          "example_id": "fin_multi_016",
+          "missing_sections": [
+            "quantitative analysis"
+          ],
+          "coverage": 0.0
+        },
+        {
+          "example_id": "fin_multi_017",
+          "missing_sections": [
+            "basis",
+            "classification",
+            "evidence"
+          ],
+          "coverage": 0.0
+        },
+        {
+          "example_id": "fin_opex_015",
+          "missing_sections": [
+            "areas requiring further investigation",
+            "conclusion",
+            "executive summary",
+            "key observations",
+            "quantitative analysis",
+            "risks and opportunities"
+          ],
+          "coverage": 0.0
+        },
+        {
+          "example_id": "fin_opex_023",
+          "missing_sections": [
+            "basis",
+            "classification",
+            "evidence"
+          ],
+          "coverage": 0.0
+        },
+        {
+          "example_id": "fin_profit_008",
+          "missing_sections": [
+            "basis",
+            "classification",
+            "evidence"
+          ],
+          "coverage": 0.0
+        },
+        {
+          "example_id": "fin_profit_012",
+          "missing_sections": [
+            "conclusion",
+            "executive summary",
+            "key observations"
+          ],
+          "coverage": 0.0
+        },
+        {
+          "example_id": "fin_profit_022",
+          "missing_sections": [
+            "quantitative analysis"
+          ],
+          "coverage": 0.0
+        },
+        {
+          "example_id": "fin_rev_014",
+          "missing_sections": [
+            "basis",
+            "classification",
+            "evidence"
+          ],
+          "coverage": 0.0
+        },
+        {
+          "example_id": "fin_rev_018",
+          "missing_sections": [
+            "areas requiring further investigation",
+            "conclusion",
+            "executive summary",
+            "key observations",
+            "quantitative analysis",
+            "risks and opportunities"
+          ],
+          "coverage": 0.0
+        },
+        {
+          "example_id": "fin_risk_006",
+          "missing_sections": [
+            "areas requiring further investigation",
+            "conclusion",
+            "executive summary",
+            "key observations",
+            "quantitative analysis",
+            "risks and opportunities"
+          ],
+          "coverage": 0.0
+        },
+        {
+          "example_id": "fin_risk_013",
+          "missing_sections": [
+            "quantitative analysis"
+          ],
+          "coverage": 0.0
+        },
+        {
+          "example_id": "fin_risk_023",
+          "missing_sections": [
+            "basis",
+            "classification",
+            "evidence"
+          ],
+          "coverage": 0.0
+        }
+      ]
+    },
+    "semantic_evaluation": {
+      "status": "deferred",
+      "reason": "No validated semantic rubric is implemented yet. An LLM-as-judge or similar proxy could appear to measure meaning while mainly measuring style or agreement, so semantic scoring is deferred until a testable rubric and validation protocol exist."
+    }
+  },
+  "examples": [
+    {
+      "example_id": "fin_cash_006",
+      "category": "financial_report_generation",
+      "difficulty": "hard",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 10.0,
+                "unit": "cr",
+                "count": 4
+              },
+              {
+                "value": 14.0,
+                "unit": "cr",
+                "count": 7
+              },
+              {
+                "value": 15.0,
+                "unit": "cr",
+                "count": 5
+              },
+              {
+                "value": 20.0,
+                "unit": "cr",
+                "count": 5
+              },
+              {
+                "value": 40.0,
+                "unit": "cr",
+                "count": 6
+              },
+              {
+                "value": 100.0,
+                "unit": "cr",
+                "count": 4
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 4,
+            "generated_claim_count": 0,
+            "valid_generated_claim_count": 0,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 0,
+            "unmatched_expected_claim_count": 4,
+            "numeric_precision": null,
+            "numeric_recall": 0.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: cash_flow.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "cash_flow",
+              "value": -30.0,
+              "old": null,
+              "new": null,
+              "direction": "declined",
+              "text": "Cash flow declined by 30.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: debt_to_revenue.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "ratio",
+              "metric": "debt_to_revenue",
+              "value": 0.4,
+              "old": null,
+              "new": null,
+              "direction": null,
+              "text": "Debt-to-revenue is 0.40"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: cash_to_debt.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "ratio",
+              "metric": "cash_to_debt",
+              "value": 0.25,
+              "old": null,
+              "new": null,
+              "direction": null,
+              "text": "Cash-to-debt is 0.25"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: operating_margin.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "ratio",
+              "metric": "operating_margin",
+              "value": 15.0,
+              "old": null,
+              "new": null,
+              "direction": null,
+              "text": "Operating margin is 15.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/6 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "areas requiring further investigation",
+              "conclusion",
+              "executive summary",
+              "key observations",
+              "quantitative analysis",
+              "risks and opportunities"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "areas requiring further investigation",
+              "conclusion",
+              "executive summary",
+              "key observations",
+              "quantitative analysis",
+              "risks and opportunities"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_cash_011",
+      "category": "financial_classification",
+      "difficulty": "easy",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "label",
+          "code": "LABEL_MISSING",
+          "passed": false,
+          "message": "Model output does not contain a valid classification label.",
+          "level": "summary",
+          "details": {
+            "expected_label": "Moderate Risk",
+            "predicted_label": null
+          }
+        },
+        {
+          "evaluator": "grounding",
+          "code": "INVENTED_FIGURE",
+          "passed": false,
+          "message": "One or more generated currency figures are not present in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 6.0,
+                "unit": "cr",
+                "count": 3
+              },
+              {
+                "value": 54.0,
+                "unit": "cr",
+                "count": 4
+              },
+              {
+                "value": 60.0,
+                "unit": "cr",
+                "count": 5
+              }
+            ],
+            "unsupported_figures": [
+              {
+                "value": 6.0,
+                "unit": "cr",
+                "count": 3
+              }
+            ]
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 1,
+            "generated_claim_count": 1,
+            "valid_generated_claim_count": 0,
+            "invalid_generated_claim_count": 1,
+            "matched_expected_claim_count": 0,
+            "unmatched_expected_claim_count": 1,
+            "numeric_precision": 0.0,
+            "numeric_recall": 0.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "VALUE_CHANGE_NOT_GROUNDED",
+          "passed": false,
+          "message": "cash_flow calculation failed source-grounded validation: VALUE_CHANGE_NOT_GROUNDED.",
+          "level": "detail",
+          "details": {
+            "type": "value_change",
+            "metric": "cash_flow",
+            "value": null,
+            "old": 60.0,
+            "new": 54.0,
+            "direction": "changed",
+            "text": "Cash flow changed from ₹60 Cr to ₹54 Cr",
+            "valid": false,
+            "code": "VALUE_CHANGE_NOT_GROUNDED",
+            "details": {},
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: cash_flow.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "cash_flow",
+              "value": -10.0,
+              "old": null,
+              "new": null,
+              "direction": "declined",
+              "text": "Cash flow declined by 10.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/3 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_cash_016",
+      "category": "financial_explanation",
+      "difficulty": "medium",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "INVENTED_FIGURE",
+          "passed": false,
+          "message": "One or more generated currency figures are not present in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 8.0,
+                "unit": "cr",
+                "count": 4
+              },
+              {
+                "value": 30.0,
+                "unit": "cr",
+                "count": 5
+              },
+              {
+                "value": 32.0,
+                "unit": "cr",
+                "count": 3
+              },
+              {
+                "value": 40.0,
+                "unit": "cr",
+                "count": 3
+              },
+              {
+                "value": 200.0,
+                "unit": "cr",
+                "count": 3
+              }
+            ],
+            "unsupported_figures": [
+              {
+                "value": 8.0,
+                "unit": "cr",
+                "count": 4
+              }
+            ]
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 2,
+            "generated_claim_count": 0,
+            "valid_generated_claim_count": 0,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 0,
+            "unmatched_expected_claim_count": 2,
+            "numeric_precision": null,
+            "numeric_recall": 0.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: cash_flow.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "cash_flow",
+              "value": -20.0,
+              "old": null,
+              "new": null,
+              "direction": "declined",
+              "text": "Cash flow declined by 20.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: operating_margin.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "ratio",
+              "metric": "operating_margin",
+              "value": 15.0,
+              "old": null,
+              "new": null,
+              "direction": null,
+              "text": "Operating margin is 15.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/1 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "quantitative analysis"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "quantitative analysis"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_comp_005",
+      "category": "financial_classification",
+      "difficulty": "hard",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "label",
+          "code": "LABEL_MISSING",
+          "passed": false,
+          "message": "Model output does not contain a valid classification label.",
+          "level": "summary",
+          "details": {
+            "expected_label": "Healthy",
+            "predicted_label": null
+          }
+        },
+        {
+          "evaluator": "grounding",
+          "code": "INVENTED_FIGURE",
+          "passed": false,
+          "message": "One or more generated currency figures are not present in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 20.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 25.5,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 49.5,
+                "unit": "cr",
+                "count": 4
+              },
+              {
+                "value": 75.0,
+                "unit": "cr",
+                "count": 4
+              },
+              {
+                "value": 100.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 120.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 135.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 150.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 500.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 550.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": [
+              {
+                "value": 20.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 25.5,
+                "unit": "cr",
+                "count": 2
+              }
+            ]
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 4,
+            "generated_claim_count": 3,
+            "valid_generated_claim_count": 2,
+            "invalid_generated_claim_count": 1,
+            "matched_expected_claim_count": 0,
+            "unmatched_expected_claim_count": 4,
+            "numeric_precision": 0.6666666666666666,
+            "numeric_recall": 0.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "VALUE_CHANGE_NOT_GROUNDED",
+          "passed": false,
+          "message": "net_profit calculation failed source-grounded validation: VALUE_CHANGE_NOT_GROUNDED.",
+          "level": "detail",
+          "details": {
+            "type": "value_change",
+            "metric": "net_profit",
+            "value": null,
+            "old": 100.0,
+            "new": 120.0,
+            "direction": "increased",
+            "text": "Net profit increased from ₹100 Cr to ₹120 Cr",
+            "valid": false,
+            "code": "VALUE_CHANGE_NOT_GROUNDED",
+            "details": {},
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "VALUE_CHANGE_GROUNDED",
+          "passed": true,
+          "message": "cash calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "value_change",
+            "metric": "cash",
+            "value": null,
+            "old": 75.0,
+            "new": 49.5,
+            "direction": "decreased",
+            "text": "cash decreased from ₹75 Cr to ₹49.5 Cr",
+            "valid": true,
+            "code": "VALUE_CHANGE_GROUNDED",
+            "details": {
+              "expected_old": 75.0,
+              "expected_new": 49.5
+            },
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "VALUE_CHANGE_GROUNDED",
+          "passed": true,
+          "message": "debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "value_change",
+            "metric": "debt",
+            "value": null,
+            "old": 150.0,
+            "new": 135.0,
+            "direction": "decreased",
+            "text": "Debt decreased from ₹150 Cr to ₹135 Cr",
+            "valid": true,
+            "code": "VALUE_CHANGE_GROUNDED",
+            "details": {
+              "expected_old": 150.0,
+              "expected_new": 135.0
+            },
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: revenue.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "revenue",
+              "value": 10.0,
+              "old": null,
+              "new": null,
+              "direction": "increased",
+              "text": "Revenue increased by 10.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: profit.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "profit",
+              "value": 20.0,
+              "old": null,
+              "new": null,
+              "direction": "increased",
+              "text": "Profit increased by 20.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: debt.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "debt",
+              "value": -10.0,
+              "old": null,
+              "new": null,
+              "direction": "declined",
+              "text": "debt declined by 10.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: cash.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "cash",
+              "value": -34.0,
+              "old": null,
+              "new": null,
+              "direction": "declined",
+              "text": "Cash declined by 34.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/3 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_comp_013",
+      "category": "financial_explanation",
+      "difficulty": "medium",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "INVENTED_FIGURE",
+          "passed": false,
+          "message": "One or more generated currency figures are not present in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 12.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 20.0,
+                "unit": "cr",
+                "count": 4
+              },
+              {
+                "value": 75.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 108.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 120.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 180.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 200.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 500.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 575.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": [
+              {
+                "value": 12.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 20.0,
+                "unit": "cr",
+                "count": 4
+              },
+              {
+                "value": 75.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ]
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 3,
+            "generated_claim_count": 0,
+            "valid_generated_claim_count": 0,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 0,
+            "unmatched_expected_claim_count": 3,
+            "numeric_precision": null,
+            "numeric_recall": 0.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: revenue.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "revenue",
+              "value": 15.0,
+              "old": null,
+              "new": null,
+              "direction": "increased",
+              "text": "Revenue increased by 15.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: profit.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "profit",
+              "value": -10.0,
+              "old": null,
+              "new": null,
+              "direction": "declined",
+              "text": "Profit declined by 10.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: debt.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "debt",
+              "value": -10.0,
+              "old": null,
+              "new": null,
+              "direction": "declined",
+              "text": "debt declined by 10.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/1 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "quantitative analysis"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "quantitative analysis"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_comp_024",
+      "category": "financial_report_generation",
+      "difficulty": "easy",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "INVENTED_FIGURE",
+          "passed": false,
+          "message": "One or more generated currency figures are not present in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 22.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 72.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 80.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 200.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 220.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 600.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 690.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": [
+              {
+                "value": 22.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ]
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 3,
+            "generated_claim_count": 2,
+            "valid_generated_claim_count": 0,
+            "invalid_generated_claim_count": 2,
+            "matched_expected_claim_count": 0,
+            "unmatched_expected_claim_count": 3,
+            "numeric_precision": 0.0,
+            "numeric_recall": 0.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "VALUE_CHANGE_NOT_GROUNDED",
+          "passed": false,
+          "message": "net_profit calculation failed source-grounded validation: VALUE_CHANGE_NOT_GROUNDED.",
+          "level": "detail",
+          "details": {
+            "type": "value_change",
+            "metric": "net_profit",
+            "value": null,
+            "old": 80.0,
+            "new": 72.0,
+            "direction": "falling",
+            "text": "net profit falling from ₹80 Crore to ₹72 Cr",
+            "valid": false,
+            "code": "VALUE_CHANGE_NOT_GROUNDED",
+            "details": {},
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_SOURCE_NOT_FOUND",
+          "passed": false,
+          "message": "current_ratio calculation failed source-grounded validation: RATIO_SOURCE_NOT_FOUND.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "current_ratio",
+            "value": 220.0,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Current Ratio = 220",
+            "valid": false,
+            "code": "RATIO_SOURCE_NOT_FOUND",
+            "details": {},
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: revenue.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "revenue",
+              "value": 15.0,
+              "old": null,
+              "new": null,
+              "direction": "increased",
+              "text": "Revenue increased by 15.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: profit.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "profit",
+              "value": -10.0,
+              "old": null,
+              "new": null,
+              "direction": "declined",
+              "text": "Profit declined by 10.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: debt.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "debt",
+              "value": 10.0,
+              "old": null,
+              "new": null,
+              "direction": "increased",
+              "text": "debt increased by 10.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/3 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "conclusion",
+              "executive summary",
+              "key observations"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "conclusion",
+              "executive summary",
+              "key observations"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_debt_009",
+      "category": "financial_report_generation",
+      "difficulty": "medium",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "INVENTED_FIGURE",
+          "passed": false,
+          "message": "One or more generated currency figures are not present in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 45.0,
+                "unit": "cr",
+                "count": 3
+              },
+              {
+                "value": 54.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 150.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 195.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 375.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 400.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 429.0,
+                "unit": "cr",
+                "count": 2
+              }
+            ],
+            "unsupported_figures": [
+              {
+                "value": 45.0,
+                "unit": "cr",
+                "count": 3
+              },
+              {
+                "value": 54.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ]
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 2,
+            "generated_claim_count": 1,
+            "valid_generated_claim_count": 1,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 0,
+            "unmatched_expected_claim_count": 2,
+            "numeric_precision": 1.0,
+            "numeric_recall": 0.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "VALUE_CHANGE_GROUNDED",
+          "passed": true,
+          "message": "debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "value_change",
+            "metric": "debt",
+            "value": null,
+            "old": 150.0,
+            "new": 195.0,
+            "direction": "increasing",
+            "text": "debt increasing from ₹150 Cr to ₹195 Cr",
+            "valid": true,
+            "code": "VALUE_CHANGE_GROUNDED",
+            "details": {
+              "expected_old": 150.0,
+              "expected_new": 195.0
+            },
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: revenue.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "revenue",
+              "value": 14.4,
+              "old": null,
+              "new": null,
+              "direction": "increased",
+              "text": "Revenue increased by 14.4%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: debt.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "debt",
+              "value": 30.0,
+              "old": null,
+              "new": null,
+              "direction": "increased",
+              "text": "debt increased by 30.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/6 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "areas requiring further investigation",
+              "conclusion",
+              "executive summary",
+              "key observations",
+              "quantitative analysis",
+              "risks and opportunities"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "areas requiring further investigation",
+              "conclusion",
+              "executive summary",
+              "key observations",
+              "quantitative analysis",
+              "risks and opportunities"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_debt_017",
+      "category": "financial_classification",
+      "difficulty": "easy",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "label",
+          "code": "LABEL_MISSING",
+          "passed": false,
+          "message": "Model output does not contain a valid classification label.",
+          "level": "summary",
+          "details": {
+            "expected_label": "Moderate Risk",
+            "predicted_label": null
+          }
+        },
+        {
+          "evaluator": "grounding",
+          "code": "INVENTED_FIGURE",
+          "passed": false,
+          "message": "One or more generated currency figures are not present in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 60.0,
+                "unit": "cr",
+                "count": 3
+              },
+              {
+                "value": 240.0,
+                "unit": "cr",
+                "count": 4
+              },
+              {
+                "value": 300.0,
+                "unit": "cr",
+                "count": 7
+              }
+            ],
+            "unsupported_figures": [
+              {
+                "value": 60.0,
+                "unit": "cr",
+                "count": 3
+              }
+            ]
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 1,
+            "generated_claim_count": 0,
+            "valid_generated_claim_count": 0,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 0,
+            "unmatched_expected_claim_count": 1,
+            "numeric_precision": null,
+            "numeric_recall": 0.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: debt.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "debt",
+              "value": -20.0,
+              "old": null,
+              "new": null,
+              "direction": "declined",
+              "text": "debt declined by 20.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/3 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_debt_025",
+      "category": "financial_explanation",
+      "difficulty": "hard",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "INVENTED_FIGURE",
+          "passed": false,
+          "message": "One or more generated currency figures are not present in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 4.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 7.95,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 58.5,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 62.5,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 75.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 85.8,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 93.75,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 250.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 325.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 625.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 715.0,
+                "unit": "cr",
+                "count": 2
+              }
+            ],
+            "unsupported_figures": [
+              {
+                "value": 4.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 7.95,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 75.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ]
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 4,
+            "generated_claim_count": 5,
+            "valid_generated_claim_count": 5,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 2,
+            "unmatched_expected_claim_count": 2,
+            "numeric_precision": 1.0,
+            "numeric_recall": 0.5
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "VALUE_CHANGE_GROUNDED",
+          "passed": true,
+          "message": "revenue calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "value_change",
+            "metric": "revenue",
+            "value": null,
+            "old": 625.0,
+            "new": 715.0,
+            "direction": "increased",
+            "text": "Revenue increased from ₹625 Cr to ₹715 Cr",
+            "valid": true,
+            "code": "VALUE_CHANGE_GROUNDED",
+            "details": {
+              "expected_old": 625.0,
+              "expected_new": 715.0
+            },
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "VALUE_CHANGE_GROUNDED",
+          "passed": true,
+          "message": "operating_profit calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "value_change",
+            "metric": "operating_profit",
+            "value": null,
+            "old": 93.75,
+            "new": 85.8,
+            "direction": "dropped",
+            "text": "operating profit dropped from ₹93.75 Cr to ₹85.8 Cr",
+            "valid": true,
+            "code": "VALUE_CHANGE_GROUNDED",
+            "details": {
+              "expected_old": 93.75,
+              "expected_new": 85.8
+            },
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "VALUE_CHANGE_GROUNDED",
+          "passed": true,
+          "message": "debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "value_change",
+            "metric": "debt",
+            "value": null,
+            "old": 250.0,
+            "new": 325.0,
+            "direction": "rose",
+            "text": "debt rose from ₹250 Cr to ₹325 Cr",
+            "valid": true,
+            "code": "VALUE_CHANGE_GROUNDED",
+            "details": {
+              "expected_old": 250.0,
+              "expected_new": 325.0
+            },
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "debt",
+            "value": 30.0,
+            "old": null,
+            "new": null,
+            "direction": "increased",
+            "text": "Debt Increased by 30%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 30.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "cash calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "cash",
+            "value": -6.4,
+            "old": null,
+            "new": null,
+            "direction": "decreased",
+            "text": "Cash Decreased by 6.4%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": -6.4
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: revenue.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "revenue",
+              "value": 14.4,
+              "old": null,
+              "new": null,
+              "direction": "increased",
+              "text": "Revenue increased by 14.4%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: operating_profit.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "operating_profit",
+              "value": -8.5,
+              "old": null,
+              "new": null,
+              "direction": "declined",
+              "text": "Operating profit declined by 8.5%"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/1 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "quantitative analysis"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "quantitative analysis"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_eff_014",
+      "category": "financial_classification",
+      "difficulty": "hard",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "label",
+          "code": "LABEL_MISSING",
+          "passed": false,
+          "message": "Model output does not contain a valid classification label.",
+          "level": "summary",
+          "details": {
+            "expected_label": "Healthy",
+            "predicted_label": null
+          }
+        },
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 34.0,
+                "unit": "cr",
+                "count": 3
+              },
+              {
+                "value": 40.0,
+                "unit": "cr",
+                "count": 5
+              },
+              {
+                "value": 180.0,
+                "unit": "cr",
+                "count": 3
+              },
+              {
+                "value": 400.0,
+                "unit": "cr",
+                "count": 5
+              },
+              {
+                "value": 440.0,
+                "unit": "cr",
+                "count": 5
+              },
+              {
+                "value": 720.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 800.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 4,
+            "generated_claim_count": 0,
+            "valid_generated_claim_count": 0,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 0,
+            "unmatched_expected_claim_count": 4,
+            "numeric_precision": null,
+            "numeric_recall": 0.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: asset_turnover.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "ratio",
+              "metric": "asset_turnover",
+              "value": 2.0,
+              "old": null,
+              "new": null,
+              "direction": null,
+              "text": "Asset turnover is 2.00"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: return_on_assets.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "ratio",
+              "metric": "return_on_assets",
+              "value": 10.0,
+              "old": null,
+              "new": null,
+              "direction": null,
+              "text": "Return on assets is 10.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: debt_to_revenue.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "ratio",
+              "metric": "debt_to_revenue",
+              "value": 0.23,
+              "old": null,
+              "new": null,
+              "direction": null,
+              "text": "Debt-to-revenue is 0.23"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: cash_to_debt.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "ratio",
+              "metric": "cash_to_debt",
+              "value": 0.22,
+              "old": null,
+              "new": null,
+              "direction": null,
+              "text": "Cash-to-debt is 0.22"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/3 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_eff_019",
+      "category": "financial_explanation",
+      "difficulty": "easy",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 50.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 200.0,
+                "unit": "cr",
+                "count": 3
+              },
+              {
+                "value": 800.0,
+                "unit": "cr",
+                "count": 3
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 2,
+            "generated_claim_count": 2,
+            "valid_generated_claim_count": 2,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 1,
+            "unmatched_expected_claim_count": 1,
+            "numeric_precision": 1.0,
+            "numeric_recall": 0.5
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "net_profit_margin calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "net_profit_margin",
+            "value": 6.25,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "net profit margin of 6.25%",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 6.25
+            },
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "return_on_assets calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "return_on_assets",
+            "value": 25.0,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "return on assets of 25%",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 25.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: asset_turnover.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "ratio",
+              "metric": "asset_turnover",
+              "value": 4.0,
+              "old": null,
+              "new": null,
+              "direction": null,
+              "text": "Asset turnover is 4.00"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [],
+            "present_sections": [],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_eff_027",
+      "category": "financial_report_generation",
+      "difficulty": "medium",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "INVENTED_FIGURE",
+          "passed": false,
+          "message": "One or more generated currency figures are not present in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 50.0,
+                "unit": "cr",
+                "count": 6
+              },
+              {
+                "value": 180.0,
+                "unit": "cr",
+                "count": 5
+              },
+              {
+                "value": 220.0,
+                "unit": "cr",
+                "count": 4
+              },
+              {
+                "value": 400.0,
+                "unit": "cr",
+                "count": 9
+              }
+            ],
+            "unsupported_figures": [
+              {
+                "value": 220.0,
+                "unit": "cr",
+                "count": 4
+              }
+            ]
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 3,
+            "generated_claim_count": 1,
+            "valid_generated_claim_count": 1,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 0,
+            "unmatched_expected_claim_count": 3,
+            "numeric_precision": 1.0,
+            "numeric_recall": 0.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "net_profit_margin calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "net_profit_margin",
+            "value": 12.5,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "net profit margin is 12.5%",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 12.5
+            },
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: asset_turnover.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "ratio",
+              "metric": "asset_turnover",
+              "value": 1.0,
+              "old": null,
+              "new": null,
+              "direction": null,
+              "text": "Asset turnover is 1.00"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: return_on_assets.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "ratio",
+              "metric": "return_on_assets",
+              "value": 12.5,
+              "old": null,
+              "new": null,
+              "direction": null,
+              "text": "Return on assets is 12.5%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: debt_to_revenue.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "ratio",
+              "metric": "debt_to_revenue",
+              "value": 0.45,
+              "old": null,
+              "new": null,
+              "direction": null,
+              "text": "Debt-to-revenue is 0.45"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/6 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "areas requiring further investigation",
+              "conclusion",
+              "executive summary",
+              "key observations",
+              "quantitative analysis",
+              "risks and opportunities"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "areas requiring further investigation",
+              "conclusion",
+              "executive summary",
+              "key observations",
+              "quantitative analysis",
+              "risks and opportunities"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_liq_010",
+      "category": "financial_explanation",
+      "difficulty": "medium",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "INVENTED_FIGURE",
+          "passed": false,
+          "message": "One or more generated currency figures are not present in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 41.25,
+                "unit": "cr",
+                "count": 3
+              },
+              {
+                "value": 130.0,
+                "unit": "cr",
+                "count": 3
+              },
+              {
+                "value": 160.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 165.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 325.0,
+                "unit": "cr",
+                "count": 5
+              },
+              {
+                "value": 455.0,
+                "unit": "cr",
+                "count": 5
+              }
+            ],
+            "unsupported_figures": [
+              {
+                "value": 130.0,
+                "unit": "cr",
+                "count": 3
+              },
+              {
+                "value": 160.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ]
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 2,
+            "generated_claim_count": 0,
+            "valid_generated_claim_count": 0,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 0,
+            "unmatched_expected_claim_count": 2,
+            "numeric_precision": null,
+            "numeric_recall": 0.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: current_ratio.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "ratio",
+              "metric": "current_ratio",
+              "value": 0.51,
+              "old": null,
+              "new": null,
+              "direction": null,
+              "text": "Current ratio is 0.51"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: cash_to_debt.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "ratio",
+              "metric": "cash_to_debt",
+              "value": 0.09,
+              "old": null,
+              "new": null,
+              "direction": null,
+              "text": "Cash-to-debt is 0.09"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/1 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "quantitative analysis"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "quantitative analysis"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_liq_020",
+      "category": "financial_classification",
+      "difficulty": "hard",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "label",
+          "code": "LABEL_MISSING",
+          "passed": false,
+          "message": "Model output does not contain a valid classification label.",
+          "level": "summary",
+          "details": {
+            "expected_label": "Healthy",
+            "predicted_label": null
+          }
+        },
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 43.2,
+                "unit": "cr",
+                "count": 3
+              },
+              {
+                "value": 60.0,
+                "unit": "cr",
+                "count": 8
+              },
+              {
+                "value": 70.0,
+                "unit": "cr",
+                "count": 7
+              },
+              {
+                "value": 98.0,
+                "unit": "cr",
+                "count": 3
+              },
+              {
+                "value": 240.0,
+                "unit": "cr",
+                "count": 2
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 2,
+            "generated_claim_count": 1,
+            "valid_generated_claim_count": 0,
+            "invalid_generated_claim_count": 1,
+            "matched_expected_claim_count": 0,
+            "unmatched_expected_claim_count": 2,
+            "numeric_precision": 0.0,
+            "numeric_recall": 0.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_ERROR",
+          "passed": false,
+          "message": "current_ratio calculation failed source-grounded validation: RATIO_MATH_ERROR.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "current_ratio",
+            "value": 240.0,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Current Ratio = 240",
+            "valid": false,
+            "code": "RATIO_MATH_ERROR",
+            "details": {
+              "recomputed": [
+                3.4285714285714284
+              ]
+            },
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: current_ratio.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "ratio",
+              "metric": "current_ratio",
+              "value": 3.43,
+              "old": null,
+              "new": null,
+              "direction": null,
+              "text": "Current ratio is 3.43"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: cash_to_debt.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "ratio",
+              "metric": "cash_to_debt",
+              "value": 0.61,
+              "old": null,
+              "new": null,
+              "direction": null,
+              "text": "Cash-to-debt is 0.61"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/3 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_liq_021",
+      "category": "financial_report_generation",
+      "difficulty": "easy",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "INVENTED_FIGURE",
+          "passed": false,
+          "message": "One or more generated currency figures are not present in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 90.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 285.0,
+                "unit": "cr",
+                "count": 3
+              },
+              {
+                "value": 375.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": [
+              {
+                "value": 285.0,
+                "unit": "cr",
+                "count": 3
+              }
+            ]
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 1,
+            "generated_claim_count": 1,
+            "valid_generated_claim_count": 1,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 1,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "current_ratio calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "current_ratio",
+            "value": 4.17,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "Current Ratio = 4.17",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 4.166666666666667
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/3 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "conclusion",
+              "executive summary",
+              "key observations"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "conclusion",
+              "executive summary",
+              "key observations"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_multi_009",
+      "category": "financial_report_generation",
+      "difficulty": "easy",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "INVENTED_FIGURE",
+          "passed": false,
+          "message": "One or more generated currency figures are not present in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 15.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 48.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 60.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 150.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 165.0,
+                "unit": "cr",
+                "count": 3
+              },
+              {
+                "value": 300.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 360.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": [
+              {
+                "value": 15.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ]
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 3,
+            "generated_claim_count": 1,
+            "valid_generated_claim_count": 0,
+            "invalid_generated_claim_count": 1,
+            "matched_expected_claim_count": 0,
+            "unmatched_expected_claim_count": 3,
+            "numeric_precision": 0.0,
+            "numeric_recall": 0.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_SOURCE_NOT_FOUND",
+          "passed": false,
+          "message": "net_profit calculation failed source-grounded validation: PERCENTAGE_SOURCE_NOT_FOUND.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "net_profit",
+            "value": -20.0,
+            "old": null,
+            "new": null,
+            "direction": "fell",
+            "text": "net profit fell by 20%",
+            "valid": false,
+            "code": "PERCENTAGE_SOURCE_NOT_FOUND",
+            "details": {},
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: revenue.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "revenue",
+              "value": 20.0,
+              "old": null,
+              "new": null,
+              "direction": "increased",
+              "text": "Revenue increased by 20.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: profit.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "profit",
+              "value": -20.0,
+              "old": null,
+              "new": null,
+              "direction": "declined",
+              "text": "Profit declined by 20.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: debt.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "debt",
+              "value": 10.0,
+              "old": null,
+              "new": null,
+              "direction": "increased",
+              "text": "debt increased by 10.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/3 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "conclusion",
+              "executive summary",
+              "key observations"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "conclusion",
+              "executive summary",
+              "key observations"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_multi_016",
+      "category": "financial_explanation",
+      "difficulty": "medium",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "INVENTED_FIGURE",
+          "passed": false,
+          "message": "One or more generated currency figures are not present in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 16.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 30.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 60.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 64.0,
+                "unit": "cr",
+                "count": 3
+              },
+              {
+                "value": 80.0,
+                "unit": "cr",
+                "count": 3
+              },
+              {
+                "value": 150.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 180.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 300.0,
+                "unit": "cr",
+                "count": 3
+              },
+              {
+                "value": 360.0,
+                "unit": "cr",
+                "count": 3
+              }
+            ],
+            "unsupported_figures": [
+              {
+                "value": 16.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 30.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 60.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ]
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 3,
+            "generated_claim_count": 0,
+            "valid_generated_claim_count": 0,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 0,
+            "unmatched_expected_claim_count": 3,
+            "numeric_precision": null,
+            "numeric_recall": 0.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: revenue.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "revenue",
+              "value": 20.0,
+              "old": null,
+              "new": null,
+              "direction": "increased",
+              "text": "Revenue increased by 20.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: profit.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "profit",
+              "value": -20.0,
+              "old": null,
+              "new": null,
+              "direction": "declined",
+              "text": "Profit declined by 20.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: debt.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "debt",
+              "value": 20.0,
+              "old": null,
+              "new": null,
+              "direction": "increased",
+              "text": "debt increased by 20.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/1 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "quantitative analysis"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "quantitative analysis"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_multi_017",
+      "category": "financial_classification",
+      "difficulty": "hard",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "label",
+          "code": "LABEL_MISSING",
+          "passed": false,
+          "message": "Model output does not contain a valid classification label.",
+          "level": "summary",
+          "details": {
+            "expected_label": "High Risk",
+            "predicted_label": null
+          }
+        },
+        {
+          "evaluator": "grounding",
+          "code": "INVENTED_FIGURE",
+          "passed": false,
+          "message": "One or more generated currency figures are not present in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 9.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 12.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 36.0,
+                "unit": "cr",
+                "count": 4
+              },
+              {
+                "value": 45.0,
+                "unit": "cr",
+                "count": 4
+              },
+              {
+                "value": 48.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 60.0,
+                "unit": "cr",
+                "count": 4
+              },
+              {
+                "value": 150.0,
+                "unit": "cr",
+                "count": 4
+              },
+              {
+                "value": 165.0,
+                "unit": "cr",
+                "count": 4
+              },
+              {
+                "value": 300.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 360.0,
+                "unit": "cr",
+                "count": 2
+              }
+            ],
+            "unsupported_figures": [
+              {
+                "value": 9.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 12.0,
+                "unit": "cr",
+                "count": 2
+              }
+            ]
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 4,
+            "generated_claim_count": 4,
+            "valid_generated_claim_count": 4,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 1,
+            "unmatched_expected_claim_count": 3,
+            "numeric_precision": 1.0,
+            "numeric_recall": 0.25
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "VALUE_CHANGE_GROUNDED",
+          "passed": true,
+          "message": "profit calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "value_change",
+            "metric": "profit",
+            "value": null,
+            "old": 60.0,
+            "new": 48.0,
+            "direction": "decreased",
+            "text": "Profit decreased from ₹60 to ₹48",
+            "valid": true,
+            "code": "VALUE_CHANGE_GROUNDED",
+            "details": {
+              "expected_old": 60.0,
+              "expected_new": 48.0
+            },
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "VALUE_CHANGE_GROUNDED",
+          "passed": true,
+          "message": "cash calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "value_change",
+            "metric": "cash",
+            "value": null,
+            "old": 45.0,
+            "new": 36.0,
+            "direction": "decreased",
+            "text": "Cash decreased from ₹45 to ₹36",
+            "valid": true,
+            "code": "VALUE_CHANGE_GROUNDED",
+            "details": {
+              "expected_old": 45.0,
+              "expected_new": 36.0
+            },
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "VALUE_CHANGE_GROUNDED",
+          "passed": true,
+          "message": "debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "value_change",
+            "metric": "debt",
+            "value": null,
+            "old": 150.0,
+            "new": 165.0,
+            "direction": "increased",
+            "text": "Debt Increased from ₹150 Cr to ₹165 Cr",
+            "valid": true,
+            "code": "VALUE_CHANGE_GROUNDED",
+            "details": {
+              "expected_old": 150.0,
+              "expected_new": 165.0
+            },
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "revenue calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "revenue",
+            "value": 20.0,
+            "old": null,
+            "new": null,
+            "direction": "grew",
+            "text": "Revenue grew by 20%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 20.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: profit.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "profit",
+              "value": -20.0,
+              "old": null,
+              "new": null,
+              "direction": "declined",
+              "text": "Profit declined by 20.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: debt.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "debt",
+              "value": 10.0,
+              "old": null,
+              "new": null,
+              "direction": "increased",
+              "text": "debt increased by 10.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: cash.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "cash",
+              "value": -20.0,
+              "old": null,
+              "new": null,
+              "direction": "declined",
+              "text": "Cash declined by 20.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/3 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_opex_013",
+      "category": "financial_explanation",
+      "difficulty": "easy",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "INVENTED_FIGURE",
+          "passed": false,
+          "message": "One or more generated currency figures are not present in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 12.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 108.0,
+                "unit": "cr",
+                "count": 3
+              },
+              {
+                "value": 120.0,
+                "unit": "cr",
+                "count": 3
+              },
+              {
+                "value": 180.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 192.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 300.0,
+                "unit": "cr",
+                "count": 5
+              }
+            ],
+            "unsupported_figures": [
+              {
+                "value": 12.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 180.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 192.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ]
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 1,
+            "generated_claim_count": 0,
+            "valid_generated_claim_count": 0,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 0,
+            "unmatched_expected_claim_count": 1,
+            "numeric_precision": null,
+            "numeric_recall": 0.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: operating_expenses.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "operating_expenses",
+              "value": -10.0,
+              "old": null,
+              "new": null,
+              "direction": "declined",
+              "text": "Operating expenses declined by 10.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [],
+            "present_sections": [],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_opex_015",
+      "category": "financial_report_generation",
+      "difficulty": "hard",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "INVENTED_FIGURE",
+          "passed": false,
+          "message": "One or more generated currency figures are not present in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 30.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 60.0,
+                "unit": "cr",
+                "count": 5
+              },
+              {
+                "value": 120.0,
+                "unit": "cr",
+                "count": 3
+              },
+              {
+                "value": 150.0,
+                "unit": "cr",
+                "count": 3
+              },
+              {
+                "value": 210.0,
+                "unit": "cr",
+                "count": 5
+              },
+              {
+                "value": 450.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 480.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 600.0,
+                "unit": "cr",
+                "count": 5
+              }
+            ],
+            "unsupported_figures": [
+              {
+                "value": 30.0,
+                "unit": "cr",
+                "count": 2
+              }
+            ]
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 4,
+            "generated_claim_count": 3,
+            "valid_generated_claim_count": 3,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 2,
+            "unmatched_expected_claim_count": 2,
+            "numeric_precision": 1.0,
+            "numeric_recall": 0.5
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "VALUE_CHANGE_GROUNDED",
+          "passed": true,
+          "message": "operating_expenses calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "value_change",
+            "metric": "operating_expenses",
+            "value": null,
+            "old": 120.0,
+            "new": 150.0,
+            "direction": "increased",
+            "text": "Operating expenses increased from ₹120 Crore to ₹150 Cr",
+            "valid": true,
+            "code": "VALUE_CHANGE_GROUNDED",
+            "details": {
+              "expected_old": 120.0,
+              "expected_new": 150.0
+            },
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "PERCENTAGE_MATH_MATCH",
+          "passed": true,
+          "message": "operating_expenses calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "percentage_change",
+            "metric": "operating_expenses",
+            "value": 25.0,
+            "old": null,
+            "new": null,
+            "direction": "rising",
+            "text": "operating expenses rising by 25%",
+            "valid": true,
+            "code": "PERCENTAGE_MATH_MATCH",
+            "details": {
+              "recomputed": 25.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "cash_to_debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "cash_to_debt",
+            "value": 0.286,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "cash-to-debt ratio of 0.286",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 0.2857142857142857
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: operating_profit.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "operating_profit",
+              "value": -6.2,
+              "old": null,
+              "new": null,
+              "direction": "declined",
+              "text": "Operating profit declined by 6.2%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: debt_to_revenue.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "ratio",
+              "metric": "debt_to_revenue",
+              "value": 0.35,
+              "old": null,
+              "new": null,
+              "direction": null,
+              "text": "Debt-to-revenue is 0.35"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/6 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "areas requiring further investigation",
+              "conclusion",
+              "executive summary",
+              "key observations",
+              "quantitative analysis",
+              "risks and opportunities"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "areas requiring further investigation",
+              "conclusion",
+              "executive summary",
+              "key observations",
+              "quantitative analysis",
+              "risks and opportunities"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_opex_023",
+      "category": "financial_classification",
+      "difficulty": "medium",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "label",
+          "code": "LABEL_MISSING",
+          "passed": false,
+          "message": "Model output does not contain a valid classification label.",
+          "level": "summary",
+          "details": {
+            "expected_label": "Healthy",
+            "predicted_label": null
+          }
+        },
+        {
+          "evaluator": "grounding",
+          "code": "INVENTED_FIGURE",
+          "passed": false,
+          "message": "One or more generated currency figures are not present in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 10.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 90.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 100.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 200.0,
+                "unit": "cr",
+                "count": 4
+              },
+              {
+                "value": 210.0,
+                "unit": "cr",
+                "count": 5
+              },
+              {
+                "value": 300.0,
+                "unit": "cr",
+                "count": 3
+              }
+            ],
+            "unsupported_figures": [
+              {
+                "value": 10.0,
+                "unit": "cr",
+                "count": 2
+              }
+            ]
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 2,
+            "generated_claim_count": 2,
+            "valid_generated_claim_count": 2,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 0,
+            "unmatched_expected_claim_count": 2,
+            "numeric_precision": 1.0,
+            "numeric_recall": 0.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "VALUE_CHANGE_GROUNDED",
+          "passed": true,
+          "message": "operating_expenses calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "value_change",
+            "metric": "operating_expenses",
+            "value": null,
+            "old": 100.0,
+            "new": 90.0,
+            "direction": "decreased",
+            "text": "Operating expenses decreased from ₹100 Cr to ₹90 Cr",
+            "valid": true,
+            "code": "VALUE_CHANGE_GROUNDED",
+            "details": {
+              "expected_old": 100.0,
+              "expected_new": 90.0
+            },
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "VALUE_CHANGE_GROUNDED",
+          "passed": true,
+          "message": "operating_profit calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "value_change",
+            "metric": "operating_profit",
+            "value": null,
+            "old": 200.0,
+            "new": 210.0,
+            "direction": "increased",
+            "text": "Operating profit increased from ₹200 Cr to ₹210 Cr",
+            "valid": true,
+            "code": "VALUE_CHANGE_GROUNDED",
+            "details": {
+              "expected_old": 200.0,
+              "expected_new": 210.0
+            },
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: operating_profit.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "operating_profit",
+              "value": 5.0,
+              "old": null,
+              "new": null,
+              "direction": "increased",
+              "text": "Operating profit increased by 5.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: operating_expenses.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "operating_expenses",
+              "value": -10.0,
+              "old": null,
+              "new": null,
+              "direction": "declined",
+              "text": "Operating expenses declined by 10.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/3 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_profit_008",
+      "category": "financial_classification",
+      "difficulty": "medium",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "label",
+          "code": "LABEL_MISSING",
+          "passed": false,
+          "message": "Model output does not contain a valid classification label.",
+          "level": "summary",
+          "details": {
+            "expected_label": "High Risk",
+            "predicted_label": null
+          }
+        },
+        {
+          "evaluator": "grounding",
+          "code": "INVENTED_FIGURE",
+          "passed": false,
+          "message": "One or more generated currency figures are not present in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 15.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 40.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 45.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 60.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 78.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 120.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 198.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 400.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 440.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": [
+              {
+                "value": 15.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 40.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 78.0,
+                "unit": "cr",
+                "count": 2
+              }
+            ]
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 3,
+            "generated_claim_count": 0,
+            "valid_generated_claim_count": 0,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 0,
+            "unmatched_expected_claim_count": 3,
+            "numeric_precision": null,
+            "numeric_recall": 0.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: revenue.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "revenue",
+              "value": 10.0,
+              "old": null,
+              "new": null,
+              "direction": "increased",
+              "text": "Revenue increased by 10.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: profit.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "profit",
+              "value": -25.0,
+              "old": null,
+              "new": null,
+              "direction": "declined",
+              "text": "Profit declined by 25.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: debt.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "debt",
+              "value": 65.0,
+              "old": null,
+              "new": null,
+              "direction": "increased",
+              "text": "debt increased by 65.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/3 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_profit_012",
+      "category": "financial_report_generation",
+      "difficulty": "easy",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 50.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 62.5,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 300.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 330.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 2,
+            "generated_claim_count": 2,
+            "valid_generated_claim_count": 2,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 0,
+            "unmatched_expected_claim_count": 2,
+            "numeric_precision": 1.0,
+            "numeric_recall": 0.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "VALUE_CHANGE_GROUNDED",
+          "passed": true,
+          "message": "revenue calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "value_change",
+            "metric": "revenue",
+            "value": null,
+            "old": 300.0,
+            "new": 330.0,
+            "direction": "increased",
+            "text": "Revenue increased from ₹300 Crore to ₹330 Cr",
+            "valid": true,
+            "code": "VALUE_CHANGE_GROUNDED",
+            "details": {
+              "expected_old": 300.0,
+              "expected_new": 330.0
+            },
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "VALUE_CHANGE_GROUNDED",
+          "passed": true,
+          "message": "profit calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "value_change",
+            "metric": "profit",
+            "value": null,
+            "old": 50.0,
+            "new": 62.5,
+            "direction": "increased",
+            "text": "Profit increased from ₹50 Crore to ₹62.5 Cr",
+            "valid": true,
+            "code": "VALUE_CHANGE_GROUNDED",
+            "details": {
+              "expected_old": 50.0,
+              "expected_new": 62.5
+            },
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: revenue.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "revenue",
+              "value": 10.0,
+              "old": null,
+              "new": null,
+              "direction": "increased",
+              "text": "Revenue increased by 10.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: profit.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "profit",
+              "value": 25.0,
+              "old": null,
+              "new": null,
+              "direction": "increased",
+              "text": "Profit increased by 25.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/3 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "conclusion",
+              "executive summary",
+              "key observations"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "conclusion",
+              "executive summary",
+              "key observations"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_profit_022",
+      "category": "financial_explanation",
+      "difficulty": "hard",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 27.6,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 36.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 51.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 60.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 90.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 155.25,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 300.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 345.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 4,
+            "generated_claim_count": 4,
+            "valid_generated_claim_count": 2,
+            "invalid_generated_claim_count": 2,
+            "matched_expected_claim_count": 0,
+            "unmatched_expected_claim_count": 4,
+            "numeric_precision": 0.5,
+            "numeric_recall": 0.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "VALUE_CHANGE_GROUNDED",
+          "passed": true,
+          "message": "revenue calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "value_change",
+            "metric": "revenue",
+            "value": null,
+            "old": 300.0,
+            "new": 345.0,
+            "direction": "increased",
+            "text": "Revenue increased from ₹300 Cr to ₹345 Cr",
+            "valid": true,
+            "code": "VALUE_CHANGE_GROUNDED",
+            "details": {
+              "expected_old": 300.0,
+              "expected_new": 345.0
+            },
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "VALUE_CHANGE_NOT_GROUNDED",
+          "passed": false,
+          "message": "net_profit calculation failed source-grounded validation: VALUE_CHANGE_NOT_GROUNDED.",
+          "level": "detail",
+          "details": {
+            "type": "value_change",
+            "metric": "net_profit",
+            "value": null,
+            "old": 60.0,
+            "new": 51.0,
+            "direction": "dropped",
+            "text": "net profit dropped from ₹60 Cr to ₹51 Cr",
+            "valid": false,
+            "code": "VALUE_CHANGE_NOT_GROUNDED",
+            "details": {},
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "VALUE_CHANGE_GROUNDED",
+          "passed": true,
+          "message": "debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "value_change",
+            "metric": "debt",
+            "value": null,
+            "old": 90.0,
+            "new": 155.25,
+            "direction": "rose",
+            "text": "Debt rose from ₹90 Cr to ₹155.25 Cr",
+            "valid": true,
+            "code": "VALUE_CHANGE_GROUNDED",
+            "details": {
+              "expected_old": 90.0,
+              "expected_new": 155.25
+            },
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "VALUE_CHANGE_NOT_GROUNDED",
+          "passed": false,
+          "message": "cash_flow calculation failed source-grounded validation: VALUE_CHANGE_NOT_GROUNDED.",
+          "level": "detail",
+          "details": {
+            "type": "value_change",
+            "metric": "cash_flow",
+            "value": null,
+            "old": 36.0,
+            "new": 27.6,
+            "direction": "declined",
+            "text": "cash flow declined from ₹36 Cr to ₹27.6 Cr",
+            "valid": false,
+            "code": "VALUE_CHANGE_NOT_GROUNDED",
+            "details": {},
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: revenue.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "revenue",
+              "value": 15.0,
+              "old": null,
+              "new": null,
+              "direction": "increased",
+              "text": "Revenue increased by 15.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: profit.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "profit",
+              "value": -15.0,
+              "old": null,
+              "new": null,
+              "direction": "declined",
+              "text": "Profit declined by 15.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: debt.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "debt",
+              "value": 72.5,
+              "old": null,
+              "new": null,
+              "direction": "increased",
+              "text": "debt increased by 72.5%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: cash.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "cash",
+              "value": -23.3,
+              "old": null,
+              "new": null,
+              "direction": "declined",
+              "text": "Cash declined by 23.3%"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/1 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "quantitative analysis"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "quantitative analysis"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_rev_014",
+      "category": "financial_classification",
+      "difficulty": "hard",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "label",
+          "code": "LABEL_MISSING",
+          "passed": false,
+          "message": "Model output does not contain a valid classification label.",
+          "level": "summary",
+          "details": {
+            "expected_label": "High Risk",
+            "predicted_label": null
+          }
+        },
+        {
+          "evaluator": "grounding",
+          "code": "INVENTED_FIGURE",
+          "passed": false,
+          "message": "One or more generated currency figures are not present in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 0.67,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 2.48,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 15.52,
+                "unit": "cr",
+                "count": 4
+              },
+              {
+                "value": 18.0,
+                "unit": "cr",
+                "count": 4
+              },
+              {
+                "value": 24.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 29.33,
+                "unit": "cr",
+                "count": 3
+              },
+              {
+                "value": 30.0,
+                "unit": "cr",
+                "count": 3
+              },
+              {
+                "value": 45.0,
+                "unit": "cr",
+                "count": 4
+              },
+              {
+                "value": 69.0,
+                "unit": "cr",
+                "count": 4
+              },
+              {
+                "value": 150.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 172.5,
+                "unit": "cr",
+                "count": 2
+              }
+            ],
+            "unsupported_figures": [
+              {
+                "value": 0.67,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 2.48,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 24.0,
+                "unit": "cr",
+                "count": 1
+              }
+            ]
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 4,
+            "generated_claim_count": 3,
+            "valid_generated_claim_count": 3,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 0,
+            "unmatched_expected_claim_count": 4,
+            "numeric_precision": 1.0,
+            "numeric_recall": 0.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "VALUE_CHANGE_GROUNDED",
+          "passed": true,
+          "message": "cash calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "value_change",
+            "metric": "cash",
+            "value": null,
+            "old": 18.0,
+            "new": 15.52,
+            "direction": "decreased",
+            "text": "Cash decreased from ₹18 Cr to ₹15.52 Cr",
+            "valid": true,
+            "code": "VALUE_CHANGE_GROUNDED",
+            "details": {
+              "expected_old": 18.0,
+              "expected_new": 15.52
+            },
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "VALUE_CHANGE_GROUNDED",
+          "passed": true,
+          "message": "operating_profit calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "value_change",
+            "metric": "operating_profit",
+            "value": null,
+            "old": 30.0,
+            "new": 29.33,
+            "direction": "declined",
+            "text": "operating profit declined from ₹30 Cr to ₹29.33 Cr",
+            "valid": true,
+            "code": "VALUE_CHANGE_GROUNDED",
+            "details": {
+              "expected_old": 30.0,
+              "expected_new": 29.33
+            },
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "VALUE_CHANGE_GROUNDED",
+          "passed": true,
+          "message": "debt calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "value_change",
+            "metric": "debt",
+            "value": null,
+            "old": 45.0,
+            "new": 69.0,
+            "direction": "increased",
+            "text": "Debt increased from ₹45 Cr to ₹69 Cr",
+            "valid": true,
+            "code": "VALUE_CHANGE_GROUNDED",
+            "details": {
+              "expected_old": 45.0,
+              "expected_new": 69.0
+            },
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: revenue.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "revenue",
+              "value": 15.0,
+              "old": null,
+              "new": null,
+              "direction": "increased",
+              "text": "Revenue increased by 15.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: operating_profit.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "operating_profit",
+              "value": -2.2,
+              "old": null,
+              "new": null,
+              "direction": "declined",
+              "text": "Operating profit declined by 2.2%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: debt.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "debt",
+              "value": 53.3,
+              "old": null,
+              "new": null,
+              "direction": "increased",
+              "text": "debt increased by 53.3%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: cash.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "cash",
+              "value": -13.8,
+              "old": null,
+              "new": null,
+              "direction": "declined",
+              "text": "Cash declined by 13.8%"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/3 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_rev_018",
+      "category": "financial_report_generation",
+      "difficulty": "medium",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "INVENTED_FIGURE",
+          "passed": false,
+          "message": "One or more generated currency figures are not present in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 0.67,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 22.5,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 29.33,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 30.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 150.0,
+                "unit": "cr",
+                "count": 1
+              },
+              {
+                "value": 172.5,
+                "unit": "cr",
+                "count": 1
+              }
+            ],
+            "unsupported_figures": [
+              {
+                "value": 0.67,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 22.5,
+                "unit": "cr",
+                "count": 2
+              }
+            ]
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 2,
+            "generated_claim_count": 0,
+            "valid_generated_claim_count": 0,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 0,
+            "unmatched_expected_claim_count": 2,
+            "numeric_precision": null,
+            "numeric_recall": 0.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: revenue.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "revenue",
+              "value": 15.0,
+              "old": null,
+              "new": null,
+              "direction": "increased",
+              "text": "Revenue increased by 15.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: operating_profit.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "operating_profit",
+              "value": -2.2,
+              "old": null,
+              "new": null,
+              "direction": "declined",
+              "text": "Operating profit declined by 2.2%"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/6 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "areas requiring further investigation",
+              "conclusion",
+              "executive summary",
+              "key observations",
+              "quantitative analysis",
+              "risks and opportunities"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "areas requiring further investigation",
+              "conclusion",
+              "executive summary",
+              "key observations",
+              "quantitative analysis",
+              "risks and opportunities"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_rev_019",
+      "category": "financial_explanation",
+      "difficulty": "easy",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "INVENTED_FIGURE",
+          "passed": false,
+          "message": "One or more generated currency figures are not present in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 20.0,
+                "unit": "cr",
+                "count": 2
+              },
+              {
+                "value": 200.0,
+                "unit": "cr",
+                "count": 4
+              },
+              {
+                "value": 220.0,
+                "unit": "cr",
+                "count": 3
+              }
+            ],
+            "unsupported_figures": [
+              {
+                "value": 20.0,
+                "unit": "cr",
+                "count": 2
+              }
+            ]
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 1,
+            "generated_claim_count": 0,
+            "valid_generated_claim_count": 0,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 0,
+            "unmatched_expected_claim_count": 1,
+            "numeric_precision": null,
+            "numeric_recall": 0.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: revenue.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "percentage_change",
+              "metric": "revenue",
+              "value": 10.0,
+              "old": null,
+              "new": null,
+              "direction": "increased",
+              "text": "Revenue increased by 10.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_COVERAGE_COMPLETE",
+          "passed": true,
+          "message": "Report contains every expected section.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [],
+            "present_sections": [],
+            "missing_sections": [],
+            "extra_sections": [],
+            "coverage": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_risk_006",
+      "category": "financial_report_generation",
+      "difficulty": "medium",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 40.0,
+                "unit": "cr",
+                "count": 6
+              },
+              {
+                "value": 200.0,
+                "unit": "cr",
+                "count": 4
+              },
+              {
+                "value": 300.0,
+                "unit": "cr",
+                "count": 4
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 2,
+            "generated_claim_count": 1,
+            "valid_generated_claim_count": 0,
+            "invalid_generated_claim_count": 1,
+            "matched_expected_claim_count": 0,
+            "unmatched_expected_claim_count": 2,
+            "numeric_precision": 0.0,
+            "numeric_recall": 0.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_ERROR",
+          "passed": false,
+          "message": "debt_to_revenue calculation failed source-grounded validation: RATIO_MATH_ERROR.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "debt_to_revenue",
+            "value": 66.7,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "debt-to-revenue ratio of 66.7%",
+            "valid": false,
+            "code": "RATIO_MATH_ERROR",
+            "details": {
+              "recomputed": [
+                0.6666666666666666
+              ]
+            },
+            "matched_expected": false
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: debt_to_revenue.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "ratio",
+              "metric": "debt_to_revenue",
+              "value": 0.67,
+              "old": null,
+              "new": null,
+              "direction": null,
+              "text": "Debt-to-revenue is 0.67"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: cash_to_debt.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "ratio",
+              "metric": "cash_to_debt",
+              "value": 0.2,
+              "old": null,
+              "new": null,
+              "direction": null,
+              "text": "Cash-to-debt is 0.20"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/6 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "areas requiring further investigation",
+              "conclusion",
+              "executive summary",
+              "key observations",
+              "quantitative analysis",
+              "risks and opportunities"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "areas requiring further investigation",
+              "conclusion",
+              "executive summary",
+              "key observations",
+              "quantitative analysis",
+              "risks and opportunities"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_risk_013",
+      "category": "financial_explanation",
+      "difficulty": "hard",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 40.0,
+                "unit": "cr",
+                "count": 5
+              },
+              {
+                "value": 90.0,
+                "unit": "cr",
+                "count": 12
+              },
+              {
+                "value": 400.0,
+                "unit": "cr",
+                "count": 6
+              },
+              {
+                "value": 500.0,
+                "unit": "cr",
+                "count": 6
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": false,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 3,
+            "generated_claim_count": 0,
+            "valid_generated_claim_count": 0,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 0,
+            "unmatched_expected_claim_count": 3,
+            "numeric_precision": null,
+            "numeric_recall": 0.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: debt_to_revenue.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "ratio",
+              "metric": "debt_to_revenue",
+              "value": 0.8,
+              "old": null,
+              "new": null,
+              "direction": null,
+              "text": "Debt-to-revenue is 0.80"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: cash_to_debt.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "ratio",
+              "metric": "cash_to_debt",
+              "value": 0.1,
+              "old": null,
+              "new": null,
+              "direction": null,
+              "text": "Cash-to-debt is 0.10"
+            }
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "MISSING_EXPECTED_METRIC",
+          "passed": false,
+          "message": "Expected quantitative claim is missing: operating_margin.",
+          "level": "detail",
+          "details": {
+            "claim": {
+              "type": "ratio",
+              "metric": "operating_margin",
+              "value": 18.0,
+              "old": null,
+              "new": null,
+              "direction": null,
+              "text": "Operating margin is 18.0%"
+            }
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/1 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "quantitative analysis"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "quantitative analysis"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "example_id": "fin_risk_023",
+      "category": "financial_classification",
+      "difficulty": "easy",
+      "reference_exact_match": false,
+      "findings": [
+        {
+          "evaluator": "label",
+          "code": "LABEL_MISSING",
+          "passed": false,
+          "message": "Model output does not contain a valid classification label.",
+          "level": "summary",
+          "details": {
+            "expected_label": "High Risk",
+            "predicted_label": null
+          }
+        },
+        {
+          "evaluator": "grounding",
+          "code": "FIGURES_GROUNDED",
+          "passed": true,
+          "message": "All generated currency figures are grounded in the source or reference evidence.",
+          "level": "summary",
+          "details": {
+            "predicted_figures": [
+              {
+                "value": 300.0,
+                "unit": "cr",
+                "count": 4
+              }
+            ],
+            "unsupported_figures": []
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "NUMERICAL_SUMMARY",
+          "passed": true,
+          "message": "Numerical claims were recomputed from the source input.",
+          "level": "summary",
+          "details": {
+            "expected_claim_count": 1,
+            "generated_claim_count": 1,
+            "valid_generated_claim_count": 1,
+            "invalid_generated_claim_count": 0,
+            "matched_expected_claim_count": 1,
+            "unmatched_expected_claim_count": 0,
+            "numeric_precision": 1.0,
+            "numeric_recall": 1.0
+          }
+        },
+        {
+          "evaluator": "numerical",
+          "code": "RATIO_MATH_MATCH",
+          "passed": true,
+          "message": "debt_to_revenue calculation is source-grounded.",
+          "level": "detail",
+          "details": {
+            "type": "ratio",
+            "metric": "debt_to_revenue",
+            "value": 1.0,
+            "old": null,
+            "new": null,
+            "direction": null,
+            "text": "debt-to-revenue ratio of 1.0",
+            "valid": true,
+            "code": "RATIO_MATH_MATCH",
+            "details": {
+              "recomputed": 1.0
+            },
+            "matched_expected": true
+          }
+        },
+        {
+          "evaluator": "structural",
+          "code": "SECTION_MISSING",
+          "passed": false,
+          "message": "Report covers 0/3 expected sections.",
+          "level": "summary",
+          "details": {
+            "expected_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "present_sections": [],
+            "missing_sections": [
+              "basis",
+              "classification",
+              "evidence"
+            ],
+            "extra_sections": [],
+            "coverage": 0.0
+          }
+        }
+      ]
+    }
+  ],
+  "run": {
+    "run_name": "base-zero-shot-rules",
+    "repo_commit": "f8f073c5f1a6a9b4dcada4175b73ed8248c6a9b8",
+    "model": "base_zero_shot_rules",
+    "stop_after_answer": true,
+    "max_new_tokens": {
+      "qa": 1024,
+      "synthetic": 1024
+    },
+    "qa_token_limit_hits": [
+      "finqa_validation_00078",
+      "finqa_validation_00162",
+      "finqa_validation_00215",
+      "finqa_validation_00272",
+      "finqa_validation_00365",
+      "finqa_validation_00384",
+      "finqa_validation_00431",
+      "finqa_validation_00547",
+      "finqa_validation_00697",
+      "finqa_validation_00707",
+      "finqa_validation_00750",
+      "tatqa_validation_ba6783f3-8207-419a-b407-3f688682caef",
+      "tatqa_validation_29aed76e-30b8-4d76-be8c-b7a58731646b",
+      "tatqa_validation_01dedbe0-7d7e-4db1-ac51-eb84b4eb7d98",
+      "tatqa_validation_b688d135-b29a-4e76-9593-138c3e2812e7",
+      "tatqa_validation_6261416c-9061-4088-aeb1-9653477f6526",
+      "tatqa_validation_6fbcd1ee-5060-442b-a2d2-8d62ac822942",
+      "tatqa_validation_01ba4058-8e2c-461e-8400-78be688442bf",
+      "tatqa_validation_31233774-d5c8-4c6e-8c2d-25e921b1ba7e",
+      "tatqa_validation_0a33f097-00c0-4048-86cb-685dabed09c8",
+      "tatqa_validation_95307fa4-6c14-4d86-ba45-cd2c278a22ce"
+    ],
+    "synthetic_token_limit_hits": [
+      "fin_cash_006",
+      "fin_comp_005",
+      "fin_comp_024",
+      "fin_debt_009",
+      "fin_debt_025",
+      "fin_eff_014",
+      "fin_eff_027",
+      "fin_liq_010",
+      "fin_liq_020",
+      "fin_multi_009",
+      "fin_opex_015",
+      "fin_profit_022",
+      "fin_rev_014",
+      "fin_rev_018",
+      "fin_risk_006",
+      "fin_risk_013"
+    ],
+    "qa_minutes": 154.19,
+    "synthetic_minutes": 8.84
+  }
+}
