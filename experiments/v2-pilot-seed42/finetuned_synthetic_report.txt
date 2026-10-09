@@ -1,0 +1,79 @@
+============================================================
+                  FINEXPERT EVALUATION
+============================================================
+
+Examples: 30
+Figure fidelity:      100.00%
+Numeric precision:    100.00%
+Numeric recall:       98.70%
+Classification acc.:  60.00%
+Section coverage:     100.00%
+Semantic evaluation:  deferred
+Verbatim ref. match: 53.33%  (diagnostic, not a quality score)
+
+------------ CLASSIFICATION ------------
+Accuracy:     60.00%  (6/10, 95% CI 31.3-83.2%)
+Macro    P/R/F1: 0.500 / 0.500 / 0.500
+Weighted P/R/F1: 0.600 / 0.600 / 0.600
+
+  label                P      R     F1  support
+  Healthy          0.750  0.750  0.750        4
+  Moderate Risk    0.000  0.000  0.000        2
+  High Risk        0.750  0.750  0.750        4
+
+  Confusion matrix (rows = expected, cols = predicted)
+                    Healthy  Moderate      High
+  Healthy                 3         1         0
+  Moderate Risk           1         0         1
+  High Risk               0         1         3
+
+---------------- BY TASK ----------------
+
+financial_classification
+  Examples:            10
+  Figure fidelity:     100.00%
+  Numeric precision:   100.00%
+  Numeric recall:      100.00%
+  Classification acc.: 60.00%
+  Section coverage:    100.00%
+
+financial_explanation
+  Examples:            10
+  Figure fidelity:     100.00%
+  Numeric precision:   100.00%
+  Numeric recall:      100.00%
+  Section coverage:    100.00%
+
+financial_report_generation
+  Examples:            10
+  Figure fidelity:     100.00%
+  Numeric precision:   100.00%
+  Numeric recall:      96.15%
+  Section coverage:    100.00%
+
+------------- BY DIFFICULTY -------------
+easy    n=10  fidelity=100.0%  num_recall=100.0%  cls_acc=0.0%
+hard    n=10  fidelity=100.0%  num_recall=97.3%  cls_acc=80.0%
+medium  n=10  fidelity=100.0%  num_recall=100.0%  cls_acc=100.0%
+
+------- CLASSIFICATION: DIFFICULTY x LABEL -------
+easy | High Risk          0/1
+easy | Moderate Risk      0/2
+hard | Healthy            2/3
+hard | High Risk          2/2
+medium | Healthy          1/1
+medium | High Risk        1/1
+
+------------- ERROR BREAKDOWN -------------
+MISSING_EXPECTED_METRIC                 1
+
+Missing expected quantitative metrics:
+operating_margin              1
+
+Classification errors:
+fin_cash_011: Moderate Risk -> High Risk
+fin_debt_017: Moderate Risk -> Healthy
+fin_eff_014: Healthy -> Moderate Risk
+fin_risk_023: High Risk -> Moderate Risk
+
+============================================================

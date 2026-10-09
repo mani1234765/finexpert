@@ -1,0 +1,20 @@
+================================================================
+FINEXPERT QA EVALUATION
+================================================================
+
+[finqa]  n=300  missing predictions=0
+  Accuracy (strict):   60.0%  95% CI 54.4%-65.4%
+  Accuracy (lenient):  60.0%
+  'Answer:' line rate: 100.0%
+  by answer type: arithmetic 60.4% (n=293), yes_no 42.9% (n=7)
+  by difficulty: easy 65.3% (n=170), hard 25.9% (n=27), medium 60.2% (n=103)
+  by program steps: 1 65.3% (n=170), 2 60.2% (n=103), 3 41.2% (n=17), 4 0.0% (n=6), 5 0.0% (n=4)
+
+[tatqa]  n=300  missing predictions=0
+  Accuracy (strict):   66.0%  95% CI 60.5%-71.1%
+  Accuracy (lenient):  66.0%
+  'Answer:' line rate: 100.0%
+  Official EM / F1:    66.0% / 73.8%  (F1 95% CI 69.0%-78.1%)
+  Scale accuracy:      96.7%
+  by answer type: arithmetic 62.4% (n=117), count 63.6% (n=22), multi-span 78.7% (n=47), span 64.9% (n=114)
+  by difficulty: easy 69.8% (n=179), hard 22.2% (n=9), medium 63.4% (n=112)
