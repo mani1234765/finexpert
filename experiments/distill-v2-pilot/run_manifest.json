@@ -1,0 +1,64 @@
+{
+  "run_name": "distill-v2-pilot",
+  "run_mode": "distill",
+  "platform": "kaggle",
+  "finished_utc": "2026-10-09T16:29:31+00:00",
+  "repo_url": "https://github.com/mani1234765/finexpert.git",
+  "repo_commit": "3dc34cdbc2e04a1846dc385edc58d7ed3261668e",
+  "eval_subset": "data/external/eval_subset_v1.json",
+  "model_name": "unsloth/Qwen3-4B-Instruct-2507-unsloth-bnb-4bit",
+  "evaluation": {
+    "qa_questions": 600,
+    "synthetic_test": 30
+  },
+  "results": {},
+  "environment": {
+    "python": "3.13.15",
+    "cuda": "12.8",
+    "gpu": "Tesla T4",
+    "packages": {
+      "unsloth": "2026.10.3",
+      "unsloth_zoo": "2026.10.3",
+      "torch": "2.11.0+cu128",
+      "transformers": "5.16.1",
+      "trl": "1.13.0",
+      "peft": "0.20.0",
+      "accelerate": "1.14.0",
+      "bitsandbytes": "0.50.2",
+      "datasets": "4.8.5",
+      "pandas": "2.3.3"
+    }
+  },
+  "distill": {
+    "questions": 800,
+    "accepted": 490,
+    "minutes": 168.34,
+    "accepted_by_source": {
+      "finqa": 214,
+      "tatqa": 276
+    },
+    "total_by_source": {
+      "finqa": 300,
+      "tatqa": 500
+    },
+    "rejections": {
+      "wrong_answer": 280,
+      "hit_token_limit": 21,
+      "multiple_answer_lines": 5,
+      "no_reasoning": 4
+    },
+    "accepted_by_answer_type": {
+      "arithmetic": 355,
+      "yes_no": 6,
+      "multi-span": 45,
+      "span": 56,
+      "count": 28
+    },
+    "prompt": "zero_shot_rules",
+    "max_new_tokens": 1024,
+    "acceptance": "lenient answer correct by the evaluation scorers + quality checks"
+  },
+  "timing": {
+    "peak_vram_gb": 15.38
+  }
+}

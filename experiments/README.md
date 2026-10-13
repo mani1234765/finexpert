@@ -10,6 +10,7 @@ Every training run is recorded here with its configuration, predictions, reports
 | [base-zero-few-shot](base-zero-few-shot/) | 8–9 Oct 2026 | Kaggle T4 | none (base model) | What does prompting alone achieve? | TAT-QA: fine-tuned far ahead (EM 64.7% vs 32.3%, p < 0.0001). FinQA: base zero-shot 65.0% vs fine-tuned 59.7% (p = 0.09, no fine-tuning gain) | Test a format-rules baseline; make reasoning-rich targets (v2-B) the central experiment |
 | [base-zero-shot-rules](base-zero-shot-rules/) | 9 Oct 2026 | Kaggle T4 | none (base model) | Fair baseline: answer conventions stated in the prompt | TAT-QA EM 32.3% → 61.3%; vs fine-tuned pilot: no significant difference on FinQA (p = 0.28) or TAT-QA (p = 0.33) | Fine-tuning's QA gain was conventions; test self-distilled reasoning (v2-B) |
 | [v2-pilot-seed42](v2-pilot-seed42/) | 9 Oct 2026 | Kaggle T4 | Same as v2-pilot | Second seed: run-to-run variance | FinQA 60.0%, TAT-QA EM/F1 66.0/73.8; vs seed 3407 p = 1.00 / 0.58; classification 6/10 (vs 8/10) | QA results stable across seeds; 10-example classification is not |
+| [distill-v2-pilot](distill-v2-pilot/) | 9 Oct 2026 | Kaggle T4 | none (generation only) | Self-distilled reasoning targets for v2-B | 490/800 answers verified correct and kept (FinQA 71%, TAT-QA 55%) | Train v2-B on them, 2 seeds |
 
 ## Findings so far
 1. **Evaluate the evaluator.** Scoring reference answers against themselves exposed three evaluator bugs that under-scored v1 (76.6% → 100% numeric). The same invariant now guards every evaluator ([v1-baseline](v1-baseline/README.md)).
