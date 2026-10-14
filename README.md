@@ -1,2 +1,89 @@
-# finexpert
-Fine Tuning the Qwen3:4B model to expertise in financial analysis, reasoning, classification, report generation  
+# FinExpert: fine-tuning a 4B model for grounded financial analysis
+
+FinExpert fine-tunes **Qwen3-4B-Instruct** with QLoRA on a free Tesla T4 to answer numerical questions over real company reports (FinQA, TAT-QA) and to produce structured financial explanations, risk classifications and reports. Every result is measured against prompted baselines on fixed evaluation questions, with paired significance tests, multiple seeds and a pre-registered model-selection rule.
+
+**Headline (validation subset, 600 questions):** a well-prompted base model and the fine-tuned model reach the **same QA accuracy**, but the fine-tuned model does it in **about 1/6 of the tokens** and is the only one that produces the structured domain outputs. Training on the base model's own verified reasoning (**self-distillation**) more than doubled accuracy on 3+ step FinQA questions, at the cost of 2-step accuracy and 3× longer answers.
+
+## Results
+
+Validation subset: 300 FinQA + 300 TAT-QA questions (`data/external/eval_subset_v1.json`, never trained on) + 30 synthetic test examples. 95% confidence intervals and paired McNemar tests are in each experiment's README.
+
+| Model | FinQA accuracy | TAT-QA EM / F1 | Synthetic classification | Synthetic numeric recall | Answer length |
+|---|---|---|---|---|---|
+| Base, zero-shot | 65.0% | 32.3% / 41.5% | 0/10 | 10% | 308 tokens |
+| Base, zero-shot + answer-format rules | 63.3% | 61.3% / 67.2% | 0/10 | 10% | 268 tokens |
+| **v2-A** fine-tuned, template targets (mean of 2 seeds) | 59.8% | 65.3% / 73.2% | 7/10 | 97% | **48 tokens** |
+| **v2-B** fine-tuned, distilled reasoning (seed 3407; seed 42 pending) | 59.0% | 61.3% / 69.2% | 7/10 | 88% | 157 tokens |
+
+**Final model (v3), official test sets:** pending (selected by the [pre-registered rule](experiments/README.md#pre-registered-selection-rule-for-v3)).
+
+FinQA by number of calculation steps:
+
+| Steps | 1 (n=170) | 2 (n=103) | 3+ (n=27) |
+|---|---|---|---|
+| Base + rules | 68% | 56% | 63% |
+| v2-A (seeds 3407 / 42) | 65% / 65% | 60% / 60% | 22% / 26% |
+| v2-B (seed 3407) | 66% | 50% | 52% |
+
+## What the experiments showed
+
+1. **Evaluate the evaluator.** Scoring the reference answers against themselves exposed three bugs that under-scored the first model (76.6% → 100% numeric). The same invariant now guards every scorer ([v1-baseline](experiments/v1-baseline/README.md)).
+2. **Audit the data.** About 13% of FinQA's written answers disagree with their own executed calculation; the executed result is used as gold and those examples are excluded from training (`data/external/audit.json`).
+3. **One run is not a result.** The same recipe gave 80% and 60% on a 10-example classification test ([v1.1-rerun](experiments/v1.1-rerun/README.md)); QA results on 300 questions were stable across seeds ([v2-pilot-seed42](experiments/v2-pilot-seed42/README.md)).
+4. **Beat a fair baseline.** Fine-tuning first appeared to win TAT-QA by 32 points; once the base model was told the answer conventions, the gap disappeared (p = 0.33) ([base-zero-shot-rules](experiments/base-zero-shot-rules/README.md)).
+5. **What fine-tuning actually bought:** structured domain outputs the base model cannot produce, and the same QA accuracy in about 1/6 of the tokens (5× faster evaluation).
+6. **Terse targets cost multi-step reasoning; distilled reasoning recovers it.** On 3+ step FinQA questions, self-distillation solved 7–8 questions the terse model never solved and lost none (p ≤ 0.016), but 2-step accuracy fell and the model learned a mixture of answer styles ([v2b-pilot-seed3407](experiments/v2b-pilot-seed3407/README.md)).
+
+The full record (setup, results, analysis and decision for every run) is in **[experiments/](experiments/README.md)**.
+
+## Method
+
+| Stage | What | Where |
+|---|---|---|
+| Synthetic data | 300 generated examples for explanation, risk classification (Healthy / Moderate / High Risk) and report generation, rule-based labels | `src/finexpert/data/`, `data/sft/` |
+| Real-report data | FinQA and TAT-QA converted to the same chat format; FinQA programs re-executed (reproduces gold on all 8,281 examples), TAT-QA derivations re-checked; working first, `Answer:` last | `src/finexpert/data/external/`, `scripts/build_external_dataset.py` |
+| Training mix | 300 FinQA + 500 TAT-QA (calculation-heavy, max 2 questions per document) + 240 synthetic, committed as an id list | `data/external/train_mix_v2_pilot.json` |
+| Training | QLoRA (4-bit base, LoRA r 16 / alpha 16 on all projections), LR 2e-4, effective batch 8, loss on the answer only, Unsloth on a Kaggle T4 | `notebooks/finexpert_v2_train.ipynb` |
+| Self-distillation | The base model answers the training questions; answers verified correct by the scorers become reasoning targets (490/800 accepted) | `src/finexpert/data/distill.py` |
+| Evaluation | Deterministic scorers (figure grounding, numeric claims, labels, sections); FinQA answer accuracy; TAT-QA's official EM/F1 scorer; strict and lenient answer extraction | `src/finexpert/evaluation/` |
+| Statistics | Wilson and bootstrap 95% CIs; paired McNemar exact tests | `src/finexpert/evaluation/compare.py`, `scripts/compare_runs.py` |
+
+## Reproduce
+
+```bash
+uv sync                                   # Python 3.12+, installs dev dependencies (pytest, pandas)
+git clone https://github.com/czyssrs/FinQA.git data/external/raw/FinQA
+git clone https://github.com/NExTplusplus/TAT-QA.git data/external/raw/TAT-QA
+uv run python scripts/build_external_dataset.py   # byte-identical to data/external/audit.json
+uv run pytest
+
+# Score any predictions file on the fixed validation subset
+uv run python scripts/evaluate_qa.py --predictions experiments/v2-pilot/finetuned_qa_predictions.jsonl \
+    --split validation --subset data/external/eval_subset_v1.json
+
+# Paired comparison of two runs
+uv run python scripts/compare_runs.py --a experiments/base-zero-shot-rules/base_zero_shot_rules_qa_report.json \
+    --b experiments/v2-pilot/finetuned_qa_report.json
+```
+
+GPU runs use `notebooks/finexpert_v2_train.ipynb` on Kaggle or Colab (T4). Set `RUN_MODE` to `train`, `baseline`, `distill` or `test`; each run writes predictions, reports and a manifest with the exact configuration, package versions and timings.
+
+## Limitations
+
+- **Validation subset, not yet the official test sets** for most comparisons; the selected model is scored on the official tests once (v3).
+- **Small groups:** classification uses 10 test examples; the 3+ step FinQA group has 27 questions.
+- **Two seeds per recipe**, one training-mix size (1,040 examples), one base model.
+- **Synthetic tasks use rule-based labels**, so classification measures agreement with those rules.
+- **FinQA scoring checks final answers** (with rounding-aware tolerance), whereas published FinQA results usually score generated programs; numbers are not directly comparable.
+
+## Next steps
+
+- Reasoning-only distillation (several samples per question) to remove the answer-style mixture seen in v2-B.
+- A larger training mix and a larger labelled classification test set.
+- Structured calculations executed by Python to remove arithmetic slips (a post-hoc version was tried and rejected; see [v2-pilot](experiments/v2-pilot/README.md)).
+
+## Data and licences
+
+- **FinQA**: Chen et al., *FinQA: A Dataset of Numerical Reasoning over Financial Data*, EMNLP 2021. Data CC BY 4.0.
+- **TAT-QA**: Zhu et al., *TAT-QA: A Question Answering Benchmark on a Hybrid of Tabular and Textual Content in Finance*, ACL 2021. Data CC BY 4.0. The official TAT-QA scorer is used unmodified from its repository.
+- Base model: Qwen3-4B-Instruct-2507 (4-bit build by Unsloth).
