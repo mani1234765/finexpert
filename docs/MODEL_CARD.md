@@ -35,14 +35,14 @@ Validation subset (300 FinQA + 300 TAT-QA, never trained on):
 | Model | FinQA accuracy | TAT-QA EM / F1 |
 |---|---|---|
 | Base model + answer-format rules (no training) | 63.3% | 61.3% / 67.2% |
-| This adapter | pending | pending |
+| This adapter (v2-A, seed 42) | 60.0% | 66.0% / 73.8% |
 
 Official test sets (scored once for the selected adapter): pending.
 
-On these QA benchmarks the adapter matches a well-prompted base model (no significant difference) while answering in about 1/6 of the tokens; it also produces the structured synthetic-task outputs the base model cannot (classification 6–8/10 vs 0/10).
+Selected among four fine-tuned runs by a rule registered before the final run (see the repository's experiment log). On these QA benchmarks the adapter matches a well-prompted base model (no significant difference) while answering in about 1/6 of the tokens; it also produces the structured synthetic-task outputs the base model cannot (classification 6–8/10 vs 0/10).
 
 ## Limitations
-- Accuracy falls on multi-step calculations (3+ steps) for the template-trained variant; arithmetic slips occur even when the right figures are chosen.
+- Accuracy falls on multi-step calculations: 26% on 3+ step FinQA validation questions (a reasoning-trained variant reached 52–59% at about 4× the answer length). Arithmetic slips occur even when the right figures are chosen.
 - Classification labels come from a rule-based scheme and were evaluated on only 10 examples.
 - English, US-company reports (FinQA, TAT-QA) and synthetic ₹ Cr scenarios; not evaluated on other markets or formats.
 
