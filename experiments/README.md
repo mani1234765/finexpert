@@ -11,6 +11,7 @@ Every training run is recorded here with its configuration, predictions, reports
 | [base-zero-shot-rules](base-zero-shot-rules/) | 9 Oct 2026 | Kaggle T4 | none (base model) | Fair baseline: answer conventions stated in the prompt | TAT-QA EM 32.3% → 61.3%; vs fine-tuned pilot: no significant difference on FinQA (p = 0.28) or TAT-QA (p = 0.33) | Fine-tuning's QA gain was conventions; test self-distilled reasoning (v2-B) |
 | [v2-pilot-seed42](v2-pilot-seed42/) | 9 Oct 2026 | Kaggle T4 | Same as v2-pilot | Second seed: run-to-run variance | FinQA 60.0%, TAT-QA EM/F1 66.0/73.8; vs seed 3407 p = 1.00 / 0.58; classification 6/10 (vs 8/10) | QA results stable across seeds; 10-example classification is not |
 | [distill-v2-pilot](distill-v2-pilot/) | 9 Oct 2026 | Kaggle T4 | none (generation only) | Self-distilled reasoning targets for v2-B | 490/800 answers verified correct and kept (FinQA 71%, TAT-QA 55%) | Train v2-B on them, 2 seeds |
+| [v2b-pilot-seed3407](v2b-pilot-seed3407/) | 9 Oct 2026 | Kaggle T4 | Pilot mix, 490/800 QA targets distilled reasoning | Do reasoning targets fix multi-step FinQA? | Overall no change (FinQA 59.0%, TAT-QA EM 61.3%); 3+ step FinQA 22–26% → 52% (p ≤ 0.016) but 2-step 60% → 50% | Second seed; reasoning-only targets as next step |
 
 ## Findings so far
 1. **Evaluate the evaluator.** Scoring reference answers against themselves exposed three evaluator bugs that under-scored v1 (76.6% → 100% numeric). The same invariant now guards every evaluator ([v1-baseline](v1-baseline/README.md)).
@@ -19,6 +20,18 @@ Every training run is recorded here with its configuration, predictions, reports
 4. **Arithmetic is a large share of errors.** Up to a quarter of FinQA errors and ~40% of TAT-QA calculation errors are miscalculations on correctly chosen figures ([v2-pilot](v2-pilot/README.md)).
 5. **Beat a fair prompted baseline, not just the base model.** Fine-tuning appeared to win TAT-QA by 32 points; once the base model was told the answer conventions, the gap vanished (61.3% vs 64.7%, p = 0.33), and on FinQA the pilot never beat prompting ([base-zero-shot-rules](base-zero-shot-rules/README.md)). What fine-tuning did add: structured domain outputs (classification 8/10 vs 0/10) and the same QA accuracy in about 1/6 of the tokens.
 6. **Terse targets may cost reasoning.** On 3+ step FinQA questions the base model (about 300 tokens of reasoning) scored 59% vs 22% for the fine-tuned model (about 48 tokens); few-shot examples in the terse format also hurt the base model (p = 0.044).
+
+## Pre-registered selection rule for v3
+Recorded on 9 Oct 2026 **before** the v2-B seed 42 result was available (see this file's git history).
+
+| Rule | |
+|---|---|
+| Primary metric | Mean of FinQA accuracy and TAT-QA EM on the validation subset, averaged over the 2 seeds of each recipe |
+| If the recipes' difference is not statistically significant | Choose the cheaper recipe (shorter answers) |
+| Seed within the winning recipe | The seed with the higher primary metric on validation |
+| Test sets | Scored once, for the selected adapter only; test results are never used for selection |
+
+Standing at registration: v2-A 62.6% (seeds 3407 and 42), v2-B 60.2% (seed 3407 only).
 
 ## Conventions
 - Each run folder: `README.md` (setup, results, analysis, decision), predictions (`*.jsonl`), reports (`*.json`/`*.txt`), `run_manifest.json` (exact config, versions, timings).
