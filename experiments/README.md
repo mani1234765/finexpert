@@ -13,6 +13,7 @@ Every training run is recorded here with its configuration, predictions, reports
 | [distill-v2-pilot](distill-v2-pilot/) | 9 Oct 2026 | Kaggle T4 | none (generation only) | Self-distilled reasoning targets for v2-B | 490/800 answers verified correct and kept (FinQA 71%, TAT-QA 55%) | Train v2-B on them, 2 seeds |
 | [v2b-pilot-seed3407](v2b-pilot-seed3407/) | 9 Oct 2026 | Kaggle T4 | Pilot mix, 490/800 QA targets distilled reasoning | Do reasoning targets fix multi-step FinQA? | Overall no change (FinQA 59.0%, TAT-QA EM 61.3%); 3+ step FinQA 22–26% → 52% (p ≤ 0.016) but 2-step 60% → 50% | Second seed; reasoning-only targets as next step |
 | [v2b-pilot-seed42](v2b-pilot-seed42/) | 9 Oct 2026 | Kaggle T4 | Same as v2b-pilot-seed3407 | Second seed of v2-B | FinQA 64.0%, TAT-QA EM 63.7%; 3+ step FinQA 59% (vs 22–26% for v2-A, p ≤ 0.004); 2-step drop not replicated | Rule outcome: v2-A selected (62.6% vs 62.0%, p = 0.72); v3 = v2-pilot-seed42 |
+| [v3-test](v3-test/) | 14–15 Oct 2026 | Kaggle T4 | none (evaluation of the v2-pilot-seed42 adapter) | Final model on the official test sets, once | FinQA 62.0% (n=1,147); TAT-QA EM/F1 62.1% / 70.2% (n=1,663; TAGOP 50.1 / 58.0, GPT-4 zero-shot 71.9 / 79.7) | Project complete; next steps in the main README |
 
 ## Findings so far
 1. **Evaluate the evaluator.** Scoring reference answers against themselves exposed three evaluator bugs that under-scored v1 (76.6% → 100% numeric). The same invariant now guards every evaluator ([v1-baseline](v1-baseline/README.md)).

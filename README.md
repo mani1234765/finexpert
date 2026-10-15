@@ -2,6 +2,8 @@
 
 FinExpert fine-tunes **Qwen3-4B-Instruct** with QLoRA on a free Tesla T4 to answer numerical questions over real company reports (FinQA, TAT-QA) and to produce structured financial explanations, risk classifications and reports. Every result is measured against prompted baselines on fixed evaluation questions, with paired significance tests, multiple seeds and a pre-registered model-selection rule.
 
+**Final model on the official test sets:** FinQA **62.0%** answer accuracy (n=1,147) and TAT-QA **62.1% EM / 70.2% F1** (n=1,663), 12 F1 points above the TAT-QA paper's model, trained in 35 minutes on one free T4.
+
 **Headline (validation subset, 600 questions):** a well-prompted base model and the fine-tuned model reach the **same QA accuracy**, but the fine-tuned model does it in **about 1/6 of the tokens** and is the only one that produces the structured domain outputs. Training on the base model's own verified reasoning (**self-distillation**) more than doubled accuracy on 3+ step FinQA questions (22–26% → 52–59%, replicated across two seeds) at no cost in overall accuracy, but with about 4× longer answers.
 
 ## Results
@@ -15,7 +17,13 @@ Validation subset: 300 FinQA + 300 TAT-QA questions (`data/external/eval_subset_
 | **v2-A** fine-tuned, template targets (mean of 2 seeds) | 59.8% | 65.3% / 73.2% | 7/10 | 97% | **48 tokens** |
 | **v2-B** fine-tuned, distilled reasoning (mean of 2 seeds) | 61.5% | 62.5% / 69.7% | 7/10 | 89% | 183 tokens |
 
-**Final model (v3):** v2-A seed 42, selected by the [pre-registered rule](experiments/README.md#pre-registered-selection-rule-for-v3) (v2-A 62.6% vs v2-B 62.0% on the primary metric, p = 0.72, so the cheaper recipe). Official test-set results: pending.
+**Final model (v3):** v2-A seed 42, selected by the [pre-registered rule](experiments/README.md#pre-registered-selection-rule-for-v3) (v2-A 62.6% vs v2-B 62.0% on the primary metric, p = 0.72, so the cheaper recipe), then scored once on the official test sets ([v3-test](experiments/v3-test/README.md)):
+
+| Official test set | FinQA answer accuracy | TAT-QA EM / F1 |
+|---|---|---|
+| **FinExpert v3** | **62.0%** (95% CI 59.1–64.8, n=1,147) | **62.1% / 70.2%** (n=1,663) |
+
+For context on TAT-QA (same test set and official scorer): TAGOP, the paper's model, 50.1% / 58.0%; GPT-4 zero-shot 71.9% / 79.7%; TAT-LLM 7B 74.6% / 82.9%; human experts 84.1% / 90.8%. FinQA is not compared with published results, which usually score generated programs rather than final answers.
 
 FinQA by number of calculation steps:
 
@@ -72,7 +80,7 @@ GPU runs use `notebooks/finexpert_v2_train.ipynb` on Kaggle or Colab (T4). Set `
 
 ## Limitations
 
-- **Validation subset, not yet the official test sets** for most comparisons; the selected model is scored on the official tests once (v3).
+- **Model comparisons use the validation subset**; only the selected model was scored on the official test sets (once).
 - **Small groups:** classification uses 10 test examples; the 3+ step FinQA group has 27 questions.
 - **Two seeds per recipe**, one training-mix size (1,040 examples), one base model; the 3+ step finding rests on 27 questions.
 - **Synthetic tasks use rule-based labels**, so classification measures agreement with those rules.

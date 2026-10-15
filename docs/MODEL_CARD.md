@@ -37,7 +37,14 @@ Validation subset (300 FinQA + 300 TAT-QA, never trained on):
 | Base model + answer-format rules (no training) | 63.3% | 61.3% / 67.2% |
 | This adapter (v2-A, seed 42) | 60.0% | 66.0% / 73.8% |
 
-Official test sets (scored once for the selected adapter): pending.
+Official test sets (scored once for this adapter):
+
+| Test set | Result |
+|---|---|
+| FinQA (1,147 questions) | 62.0% answer accuracy (95% CI 59.1–64.8) |
+| TAT-QA (1,663 questions, official scorer) | 62.1% EM / 70.2% F1 |
+
+For reference on TAT-QA: TAGOP (the dataset paper's model) 50.1 / 58.0; GPT-4 zero-shot 71.9 / 79.7; human experts 84.1 / 90.8.
 
 Selected among four fine-tuned runs by a rule registered before the final run (see the repository's experiment log). On these QA benchmarks the adapter matches a well-prompted base model (no significant difference) while answering in about 1/6 of the tokens; it also produces the structured synthetic-task outputs the base model cannot (classification 6–8/10 vs 0/10).
 

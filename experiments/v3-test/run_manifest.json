@@ -1,0 +1,120 @@
+{
+  "run_name": "test-v2-pilot-seed42-finqa-tatqa",
+  "run_mode": "test",
+  "platform": "kaggle",
+  "finished_utc": "2026-10-15T08:28:47+00:00",
+  "repo_url": "https://github.com/mani1234765/finexpert.git",
+  "repo_commit": "704205e32f20eab5c3460684a693e5efca70a4f1",
+  "eval_subset": "data/external/eval_subset_v1.json",
+  "model_name": "unsloth/Qwen3-4B-Instruct-2507-unsloth-bnb-4bit",
+  "evaluation": {
+    "qa_questions": 600,
+    "synthetic_test": 30
+  },
+  "results": {
+    "test": {
+      "finqa_strict": 0.6198779424585876,
+      "finqa_lenient": 0.6198779424585876,
+      "finqa_ci95": [
+        0.5914294428535928,
+        0.6475261180159483
+      ],
+      "tatqa_em": 0.6205652435357787,
+      "tatqa_f1": 0.7016596512327119,
+      "tatqa_lenient_em": 0.6205652435357787,
+      "tatqa_f1_ci95": [
+        0.6800541190619362,
+        0.722086590499098
+      ],
+      "answer_line_rate": 0.9995640802092415,
+      "synthetic_numeric_recall": 0.987012987012987,
+      "synthetic_classification": 0.6,
+      "synthetic_classification_missing": 0,
+      "eval_minutes": 124.64
+    }
+  },
+  "environment": {
+    "python": "3.13.15",
+    "cuda": "12.8",
+    "gpu": "Tesla T4",
+    "packages": {
+      "unsloth": "2026.10.5",
+      "unsloth_zoo": "2026.10.5",
+      "torch": "2.11.0+cu128",
+      "transformers": "5.16.1",
+      "trl": "1.15.0",
+      "peft": "0.20.0",
+      "accelerate": "1.14.0",
+      "bitsandbytes": "0.50.2",
+      "datasets": "4.8.5",
+      "pandas": "2.3.3"
+    }
+  },
+  "test": {
+    "adapter_run": "v2-pilot-seed42",
+    "adapter_dir": "/kaggle/input/notebooks/manivarma0013/notebookf63e59d067/runs/v2-pilot-seed42/adapter",
+    "adapter_config": {
+      "alora_invocation_tokens": null,
+      "alpha_pattern": {},
+      "arrow_config": null,
+      "auto_mapping": {
+        "base_model_class": "Qwen3ForCausalLM",
+        "parent_library": "transformers.models.qwen3.modeling_qwen3",
+        "unsloth_fixed": true
+      },
+      "base_model_name_or_path": "unsloth/Qwen3-4B-Instruct-2507-unsloth-bnb-4bit",
+      "bias": "none",
+      "corda_config": null,
+      "ensure_weight_tying": false,
+      "eva_config": null,
+      "exclude_modules": null,
+      "fan_in_fan_out": false,
+      "inference_mode": true,
+      "init_lora_weights": true,
+      "layer_replication": null,
+      "layers_pattern": null,
+      "layers_to_transform": null,
+      "loftq_config": {},
+      "lora_alpha": 16,
+      "lora_bias": false,
+      "lora_dropout": 0.0,
+      "lora_ga_config": null,
+      "megatron_config": null,
+      "megatron_core": "megatron.core",
+      "modules_to_save": null,
+      "monteclora_config": null,
+      "peft_type": "LORA",
+      "peft_version": "0.20.0",
+      "qalora_group_size": 16,
+      "r": 16,
+      "rank_pattern": {},
+      "revision": null,
+      "target_modules": [
+        "v_proj",
+        "down_proj",
+        "up_proj",
+        "k_proj",
+        "o_proj",
+        "q_proj",
+        "gate_proj"
+      ],
+      "target_parameters": null,
+      "task_type": "CAUSAL_LM",
+      "trainable_token_indices": null,
+      "use_bdlora": null,
+      "use_dora": false,
+      "use_qalora": false,
+      "use_rslora": false,
+      "velora_config": null
+    },
+    "sources": [
+      "finqa",
+      "tatqa"
+    ],
+    "questions": 2810,
+    "reasoning_style": false
+  },
+  "timing": {
+    "peak_vram_gb": 15.45
+  }
+}
