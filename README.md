@@ -1,5 +1,7 @@
 # FinExpert: fine-tuning a 4B model for grounded financial analysis
 
+**Model:** [ManideepVarma003/finexpert-qwen3-4b-lora](https://huggingface.co/ManideepVarma003/finexpert-qwen3-4b-lora) on Hugging Face (the exact adapter scored on the test sets, with a quick-start snippet).
+
 FinExpert fine-tunes **Qwen3-4B-Instruct** with QLoRA on a free Tesla T4 to answer numerical questions over real company reports (FinQA, TAT-QA) and to produce structured financial explanations, risk classifications and reports. Every result is measured against prompted baselines on fixed evaluation questions, with paired significance tests, multiple seeds and a pre-registered model-selection rule.
 
 **Final model on the official test sets:** FinQA **62.0%** answer accuracy (n=1,147) and TAT-QA **62.1% EM / 70.2% F1** (n=1,663), 12 F1 points above the TAT-QA paper's model, trained in 35 minutes on one free T4.

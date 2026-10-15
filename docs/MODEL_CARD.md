@@ -9,7 +9,38 @@ datasets: [FinQA, TAT-QA]
 
 # FinExpert (Qwen3-4B, QLoRA adapter)
 
-A LoRA adapter for **Qwen3-4B-Instruct-2507** that answers numerical questions over financial report excerpts (tables and text) and writes structured financial explanations, risk classifications and reports from supplied figures. Training code, data pipeline, evaluation and the full experiment log: <https://github.com/mani1234765/finexpert>.
+A LoRA adapter for **Qwen3-4B-Instruct-2507** that answers numerical questions over financial report excerpts (tables and text) and writes structured financial explanations, risk classifications and reports from supplied figures. Training code, data pipeline, evaluation and the full experiment log: <https://github.com/mani1234765/finexpert>. This is the exact adapter scored on the official test sets (run `v2-pilot-seed42`).
+
+## Quick start
+Requires a CUDA GPU (the base model is a 4-bit bitsandbytes build): `pip install transformers peft accelerate bitsandbytes`.
+
+```python
+import torch
+from peft import AutoPeftModelForCausalLM
+from transformers import AutoTokenizer
+
+repo = "ManideepVarma003/finexpert-qwen3-4b-lora"
+model = AutoPeftModelForCausalLM.from_pretrained(repo, device_map="auto")
+tokenizer = AutoTokenizer.from_pretrained(repo)
+
+SYSTEM = ("You are FinExpert, a specialized financial analysis assistant. Use only the financial information "
+          "provided in the user input. Show relevant quantitative calculations when appropriate, distinguish "
+          "reported facts from interpretation, and avoid inventing financial information or unsupported causal claims.")
+INSTRUCTION = ('Answer the question using only the context above. Show your working first, then give the final '
+               'answer on the last line in the form "Answer: <value>".')
+
+context = "| ($ million) | 2023 | 2022 |\n|---|---|---|\n| Revenue | 1,250 | 1,100 |"
+question = "What was the percentage change in revenue from 2022 to 2023?"
+
+# Same ChatML layout as training (built by hand, no <think> block)
+prompt = (f"<|im_start|>system\n{SYSTEM}<|im_end|>\n"
+          f"<|im_start|>user\n{context}\n\nQuestion: {question}\n\n{INSTRUCTION}<|im_end|>\n"
+          f"<|im_start|>assistant\n")
+inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+with torch.no_grad():
+    out = model.generate(**inputs, max_new_tokens=384, do_sample=False)
+print(tokenizer.decode(out[0][inputs["input_ids"].shape[1]:], skip_special_tokens=True))
+```
 
 ## Intended use
 - Answering questions about figures **given in the prompt** (a report excerpt or a list of metrics): changes, ratios, percentages, comparisons.
