@@ -80,6 +80,13 @@ uv run python scripts/compare_runs.py --a experiments/base-zero-shot-rules/base_
 
 GPU runs use `notebooks/finexpert_v2_train.ipynb` on Kaggle or Colab (T4). Set `RUN_MODE` to `train`, `baseline`, `distill` or `test`; each run writes predictions, reports and a manifest with the exact configuration, package versions and timings.
 
+## Demo
+
+`demo/` is a Gradio app for a free CPU Hugging Face Space: the v3 adapter merged into the base model and converted to a 4-bit GGUF
+(`notebooks/finexpert_export_gguf.ipynb`), run with llama.cpp. The export notebook also measures how far the GGUF's answers drift
+from the evaluated adapter on 40 fixed validation questions. A test (`tests/test_demo_prompts.py`) checks that the demo's prompts
+are byte-identical to the training prompts for both tasks.
+
 ## Limitations
 
 - **Model comparisons use the validation subset**; only the selected model was scored on the official test sets (once).
