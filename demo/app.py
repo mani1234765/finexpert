@@ -30,6 +30,17 @@ CODE_PAGE = "https://github.com/mani1234765/finexpert"
 
 _state = {"ready": False, "error": None}
 
+# ZeroGPU hardware refuses to start a Space without at least one @spaces.GPU function. This demo runs on CPU through
+# llama.cpp, so the function below is only a marker and is never called. On CPU hardware `spaces` may be absent.
+try:
+    import spaces
+
+    @spaces.GPU
+    def _zerogpu_marker():
+        return None
+except ImportError:
+    pass
+
 
 def install_llama_server(dest: str = "/tmp/llama") -> str:
     """Download the pinned llama.cpp release, verify its checksum, unpack it, return the server path."""

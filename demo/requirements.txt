@@ -1,3 +1,4 @@
 # Gradio is provided by the Space (sdk_version in README.md). No compiled packages: llama.cpp's prebuilt server is
 # downloaded and checksum-verified at startup (see app.py).
 huggingface_hub>=0.30
+spaces  # only needed on ZeroGPU hardware (see app.py)
