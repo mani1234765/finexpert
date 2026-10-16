@@ -1,0 +1,48 @@
+{
+  "seed": 20261016,
+  "max_train_tokens_estimate": 2048,
+  "splits": {
+    "train": {
+      "bundles": 5973,
+      "questions": 16153,
+      "by_source": {
+        "finqa": 1421,
+        "tatqa": 4552
+      },
+      "by_size": {
+        "2": 2933,
+        "3": 1873,
+        "4": 1167
+      },
+      "sha256": "1f177b4c4293e2b7a2a1707550b95f9859fda7ad56020cfb63c7ce0feb5ed43a"
+    },
+    "validation": {
+      "bundles": 914,
+      "questions": 2494,
+      "by_source": {
+        "finqa": 314,
+        "tatqa": 600
+      },
+      "by_size": {
+        "2": 437,
+        "3": 288,
+        "4": 189
+      },
+      "sha256": "ce35a5e8a42e22b54b434d27ea2b1f188a1a0d4650de86cfb5d6f8f3082e6536"
+    },
+    "test": {
+      "bundles": 1009,
+      "questions": 2737,
+      "by_source": {
+        "finqa": 408,
+        "tatqa": 601
+      },
+      "by_size": {
+        "2": 501,
+        "3": 297,
+        "4": 211
+      },
+      "sha256": "9747da545bff953544e4cb2e3daadc06973ac3f516548fb3bcd3b4554a8c11c7"
+    }
+  }
+}
