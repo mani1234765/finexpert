@@ -19,4 +19,4 @@ Runs the FinExpert model (Qwen3-4B + QLoRA adapter, merged and converted to a 4-
 - Model card and evaluation: https://huggingface.co/ManideepVarma003/finexpert-qwen3-4b-lora
 - Code and experiment log: https://github.com/mani1234765/finexpert
 
-The first start builds `llama-cpp-python` and downloads the model, which takes several minutes.
+Nothing is compiled: at startup the app downloads llama.cpp's prebuilt server (pinned, SHA-256 verified) and the model, which takes a few minutes on the first start.

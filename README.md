@@ -82,10 +82,15 @@ GPU runs use `notebooks/finexpert_v2_train.ipynb` on Kaggle or Colab (T4). Set `
 
 ## Demo
 
-`demo/` is a Gradio app for a free CPU Hugging Face Space: the v3 adapter merged into the base model and converted to a 4-bit GGUF
-(`notebooks/finexpert_export_gguf.ipynb`), run with llama.cpp. The export notebook also measures how far the GGUF's answers drift
-from the evaluated adapter on 40 fixed validation questions. A test (`tests/test_demo_prompts.py`) checks that the demo's prompts
-are byte-identical to the training prompts for both tasks.
+`demo/` is a Gradio app for a free CPU Hugging Face Space: the v3 adapter merged into the 16-bit base model and converted to a
+4-bit GGUF ([finexpert-qwen3-4b-gguf](https://huggingface.co/ManideepVarma003/finexpert-qwen3-4b-gguf),
+`notebooks/finexpert_export_gguf.ipynb`), served by llama.cpp's prebuilt server (pinned release, SHA-256 verified at startup,
+so nothing is compiled). A test (`tests/test_demo_prompts.py`) checks that the demo's prompts are byte-identical to training.
+
+**Conversion drift, measured:** on 40 fixed validation questions the GGUF gave the same final answer as the evaluated adapter on
+25/40 (FinQA 13/20, TAT-QA 12/20), with similar accuracy (22 vs 24 correct, paired McNemar p = 0.69). Merging a QLoRA adapter into
+16-bit weights, re-quantising to Q4_K_M and switching inference engine all shift individual answers; benchmark results belong to
+the adapter, and the demo is accuracy-comparable but not answer-identical.
 
 ## Limitations
 
