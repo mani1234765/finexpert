@@ -62,6 +62,24 @@ def install_llama_server(dest: str = "/tmp/llama") -> str:
     return server
 
 
+def usable_cpus(cap: int = 8) -> int:
+    """CPUs this container may actually use (not the host's total), capped.
+
+    os.cpu_count() reports the physical machine (192 on a ZeroGPU host); running that many threads on a container
+    limited to a few CPUs makes generation crawl. Uses the CPU affinity mask and the cgroup v2 CPU quota."""
+    try:
+        cpus = len(os.sched_getaffinity(0))
+    except (AttributeError, OSError):
+        cpus = os.cpu_count() or 2
+    try:
+        quota, period = open("/sys/fs/cgroup/cpu.max").read().split()
+        if quota != "max":
+            cpus = min(cpus, max(1, int(int(quota) / int(period))))
+    except (OSError, ValueError):
+        pass
+    return max(1, min(cpus, cap))
+
+
 def _get(path: str, timeout: float = 5):
     with urllib.request.urlopen(SERVER + path, timeout=timeout) as response:
         return response.status, json.loads(response.read() or b"{}")
@@ -74,7 +92,8 @@ def start_backend() -> None:
         model = hf_hub_download(repo_id=GGUF_REPO, filename=GGUF_FILE)
         env = {**os.environ, "LD_LIBRARY_PATH": os.path.dirname(server)}
         subprocess.Popen([server, "-m", model, "--host", "127.0.0.1", "--port", "8080",
-                          "-c", "4096", "-np", "1", "-t", str(os.cpu_count() or 2)], env=env)
+                          "-c", "4096", "-np", "1", "-t", str(usable_cpus())], env=env)
+        print(f"llama-server started with {usable_cpus()} threads", flush=True)
         for _ in range(600):  # up to 10 minutes for the model to load
             try:
                 if _get("/health")[0] == 200:
