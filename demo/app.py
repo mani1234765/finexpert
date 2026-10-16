@@ -161,10 +161,12 @@ DESCRIPTION = f"""
 **FinExpert** is Qwen3-4B fine-tuned with QLoRA to answer numerical questions about financial report excerpts and to classify
 financial health from supplied figures. It shows its working, then gives the answer.
 
-This demo runs a 4-bit GGUF conversion with llama.cpp on a free 2-core CPU, so an answer takes roughly 10–60 seconds. The
+This demo runs a 4-bit GGUF conversion with llama.cpp on CPU (typically 4–8 seconds per answer). The
 conversion is accuracy-comparable to the evaluated model but not answer-identical (it matched 25 of 40 checked answers;
 22 vs 24 correct). [Model card and evaluation]({MODEL_PAGE}) · [Code and experiment log]({CODE_PAGE}).
-Use only figures you provide; this is a portfolio demo, **not financial advice**.
+Classification is the model's weakest area: it agreed with the project's labelling rules on 6 of 10 synthetic test examples,
+and its explanations may repeat a phrase about "dataset-labeling rules" left over from the training targets (a documented
+data issue). Use only figures you provide; this is a portfolio demo, **not financial advice**.
 """
 
 with gr.Blocks(title="FinExpert") as demo:

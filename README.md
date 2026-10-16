@@ -1,6 +1,6 @@
 # FinExpert: fine-tuning a 4B model for grounded financial analysis
 
-**Model:** [ManideepVarma003/finexpert-qwen3-4b-lora](https://huggingface.co/ManideepVarma003/finexpert-qwen3-4b-lora) on Hugging Face (the exact adapter scored on the test sets, with a quick-start snippet).
+**Live demo:** [ManideepVarma003/finexpert](https://huggingface.co/spaces/ManideepVarma003/finexpert) (runs on CPU, 4–8 s per answer) · **Model:** [ManideepVarma003/finexpert-qwen3-4b-lora](https://huggingface.co/ManideepVarma003/finexpert-qwen3-4b-lora) (the exact adapter scored on the test sets, with a quick-start snippet).
 
 FinExpert fine-tunes **Qwen3-4B-Instruct** with QLoRA on a free Tesla T4 to answer numerical questions over real company reports (FinQA, TAT-QA) and to produce structured financial explanations, risk classifications and reports. Every result is measured against prompted baselines on fixed evaluation questions, with paired significance tests, multiple seeds and a pre-registered model-selection rule.
 
@@ -26,6 +26,17 @@ Validation subset: 300 FinQA + 300 TAT-QA questions (`data/external/eval_subset_
 | **FinExpert v3** | **62.0%** (95% CI 59.1–64.8, n=1,147) | **62.1% / 70.2%** (n=1,663) |
 
 For context on TAT-QA (same test set and official scorer): TAGOP, the paper's model, 50.1% / 58.0%; GPT-4 zero-shot 71.9% / 79.7%; TAT-LLM 7B 74.6% / 82.9%; human experts 84.1% / 90.8%. FinQA is not compared with published results, which usually score generated programs rather than final answers.
+
+### Cost: same accuracy at about 1/6 the compute
+
+Timings from the evaluation runs (Hugging Face `generate`, batches of 8, one Tesla T4, 600 validation questions). A production server would be faster for every model, but cost scales with answer length in any setup, so the ratios carry over.
+
+| Model | Primary metric (FinQA + TAT-QA EM) | Answer length | Seconds per question | T4 GPU-hours per 1,000 questions | Relative cost |
+|---|---|---|---|---|---|
+| Base, zero-shot | 48.7% | 308 tokens | 15.1 | 4.19 | ×5.5 |
+| Base + format rules | 62.3% | 268 tokens | 15.4 | 4.28 | ×5.6 |
+| **v3 model (v2-A seed 42)** | **63.0%** | **46 tokens** | **2.75** | **0.76** | **×1.0** |
+| v2-B, seeds 3407 / 42 | 60.2% / 63.8% | 157 / 209 tokens | 12.1 / 18.7 | 3.36 / 5.19 | ×4.4 / ×6.8 |
 
 FinQA by number of calculation steps:
 
@@ -82,7 +93,7 @@ GPU runs use `notebooks/finexpert_v2_train.ipynb` on Kaggle or Colab (T4). Set `
 
 ## Demo
 
-`demo/` is a Gradio app for a free CPU Hugging Face Space: the v3 adapter merged into the 16-bit base model and converted to a
+[**Try it here.**](https://huggingface.co/spaces/ManideepVarma003/finexpert) `demo/` is the Gradio app behind it: the v3 adapter merged into the 16-bit base model and converted to a
 4-bit GGUF ([finexpert-qwen3-4b-gguf](https://huggingface.co/ManideepVarma003/finexpert-qwen3-4b-gguf),
 `notebooks/finexpert_export_gguf.ipynb`), served by llama.cpp's prebuilt server (pinned release, SHA-256 verified at startup,
 so nothing is compiled). A test (`tests/test_demo_prompts.py`) checks that the demo's prompts are byte-identical to training.
@@ -91,6 +102,8 @@ so nothing is compiled). A test (`tests/test_demo_prompts.py`) checks that the d
 25/40 (FinQA 13/20, TAT-QA 12/20), with similar accuracy (22 vs 24 correct, paired McNemar p = 0.69). Merging a QLoRA adapter into
 16-bit weights, re-quantising to Q4_K_M and switching inference engine all shift individual answers; benchmark results belong to
 the adapter, and the demo is accuracy-comparable but not answer-identical.
+
+**Demo behaviour:** about 4–8 seconds per answer on Hugging Face hardware (8 CPU threads). Report Q&A is the model's strength; classification is its weakest area (6/10 on the synthetic test), and on the demo's own Vertex Solutions example it answers Moderate Risk where the labelling rules give Healthy. The example is kept rather than swapped for one the model gets right.
 
 ## Limitations
 

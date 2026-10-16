@@ -9,7 +9,7 @@ datasets: [FinQA, TAT-QA]
 
 # FinExpert (Qwen3-4B, QLoRA adapter)
 
-A LoRA adapter for **Qwen3-4B-Instruct-2507** that answers numerical questions over financial report excerpts (tables and text) and writes structured financial explanations, risk classifications and reports from supplied figures. Training code, data pipeline, evaluation and the full experiment log: <https://github.com/mani1234765/finexpert>. This is the exact adapter scored on the official test sets (run `v2-pilot-seed42`).
+A LoRA adapter for **Qwen3-4B-Instruct-2507** that answers numerical questions over financial report excerpts (tables and text) and writes structured financial explanations, risk classifications and reports from supplied figures. Live demo (CPU, GGUF conversion): <https://huggingface.co/spaces/ManideepVarma003/finexpert>. Training code, data pipeline, evaluation and the full experiment log: <https://github.com/mani1234765/finexpert>. This is the exact adapter scored on the official test sets (run `v2-pilot-seed42`).
 
 ## Quick start
 Requires a CUDA GPU (the base model is a 4-bit bitsandbytes build): `pip install transformers peft accelerate bitsandbytes`.
