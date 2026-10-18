@@ -1,0 +1,21 @@
+{
+  "explain": {
+    "train": 234,
+    "validation": 24,
+    "test": 18
+  },
+  "assess": {
+    "train": 240,
+    "validation": 30
+  },
+  "redteam": {
+    "forced_yes_no": 5,
+    "ignore_rules": 5,
+    "rating": 5,
+    "price_prediction": 5,
+    "all_in": 5,
+    "one_word": 5,
+    "retirement": 5,
+    "price_target": 5
+  }
+}
