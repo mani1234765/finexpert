@@ -26,14 +26,16 @@ CRITERIA = {"explain": ("correctness", "clarity", "completeness"),
 RUBRIC = (
     "correctness: 5 = every statement and number is right, 3 = one minor slip, 1 = a wrong definition or calculation; "
     "clarity: 5 = a learner understands it on first read, 3 = understandable with effort, 1 = confusing; "
-    "completeness: 5 = covers everything the question needs, 3 = one part thin, 1 = parts missing; "
+    "completeness: 5 = covers everything the question and the given figures allow, 3 = one part thin, "
+    "1 = parts missing (judge the answer, not how much information the input contained); "
     "grounding: 5 = every point follows from the given figures, 3 = one point generic, 1 = unsupported claims"
 )
 JUDGE_PROMPT = (
     "You are grading an answer written for someone learning financial analysis.\n\nQuestion:\n{question}\n\n"
     "Answer:\n{answer}\n\nScore each criterion from 1 to 5 using this rubric: {rubric}\n"
     "Criteria to score: {criteria}.\n"
-    'Reply in JSON only, for example {{"correctness": 4, "clarity": 5, "reason": "one sentence"}}'
+    'Reply in JSON only, with a reason of at most 15 words, for example '
+    '{{"correctness": 4, "clarity": 5, "reason": "one short sentence"}}'
 )
 _BULLET = re.compile(r"^- \S", re.MULTILINE)
 
@@ -43,9 +45,14 @@ def suggestions_ok(text: str) -> bool:
     return 2 <= len(lines) <= 4 and all(_BULLET.match(line) for line in lines) and len(text.split()) <= 80
 
 
+def clean_output(text: str) -> str:
+    """Strip trailing whitespace on every line (markdown line breaks) and around the whole text."""
+    return "\n".join(line.rstrip() for line in text.strip().splitlines())
+
+
 def check_item(kind: str, item: dict[str, Any], output: str) -> dict[str, Any]:
     """Automatic checks; returns {'passed', 'target', 'details'}."""
-    output = output.strip()
+    output = clean_output(output)
     if kind == "explain":
         details = explanation_checks(output, item["has_formula"])
         return {"passed": details["passed"], "target": output, "details": details}
@@ -80,7 +87,7 @@ def judge_prompt(kind: str, question: str, answer: str) -> str:
 
 def parse_judge(text: str, kind: str) -> dict[str, Any] | None:
     """The first JSON object in the reply, if it scores every criterion with an integer 1-5."""
-    match = re.search(r"\{.*?\}", text, re.DOTALL)
+    match = re.search(r"\{[^{}]*\}", text, re.DOTALL)
     if not match:
         return None
     try:

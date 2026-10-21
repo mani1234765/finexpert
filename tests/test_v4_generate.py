@@ -64,3 +64,12 @@ def test_calibration_sheet_is_blind(tmp_path):
         sheet = list(csv.reader(handle))
     assert len(sheet) == 31 and all(r[4] == "" and r[5] == "" for r in sheet[1:])   # human columns empty
     assert set(json.loads((tmp_path / "key.json").read_text(encoding="utf-8"))) == set(ids)
+
+
+def test_outputs_are_cleaned_and_judge_json_in_code_fences_parses():
+    from finexpert.data.v4.generate import clean_output
+    assert clean_output("- a  \n- b  \n") == "- a\n- b"
+    fenced = '```json\n{"correctness": 5, "clarity": 5, "completeness": 4, "reason": "fine"}\n```'
+    assert parse_judge(fenced, "explain")["completeness"] == 4
+    truncated = '{"correctness": 5, "clarity": 5, "completeness": 4, "reason": "a very long reason that got cut'
+    assert parse_judge(truncated, "explain") is None

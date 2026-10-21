@@ -50,7 +50,8 @@ Meaning: <one or two sentences>
 {calculation_line}Example: <a short worked example with figures in ₹ Cr; every calculation must be arithmetically correct>
 How to read it: <what high or low values suggest, and one caveat>
 
-Rules: 80 to 180 words; plain English; Indian context where relevant; no investment advice; output only the explanation."""
+Rules: 80 to 180 words; plain English; Indian context where relevant; write amounts like ₹100 Cr (no space after ₹);
+no investment advice; output only the explanation."""
 
 
 def assessment_user(financial_data: str, question: str) -> str:
